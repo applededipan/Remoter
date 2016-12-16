@@ -10,7 +10,7 @@
 //! telemetry/usart2 driver
 
 Fifo<1024> telemetryrxFifo;
-Fifo<1024> telemetrytxFifo;
+//Fifo<1024> telemetrytxFifo;
 
 void usart2UavInit(uint32_t baudrate)
 {

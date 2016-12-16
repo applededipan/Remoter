@@ -141,9 +141,11 @@ struct Attitude
 	float roll;          
 	float pitch;          
 	float yaw;           
-	float rollspeed;       
-	float pitchspeed;
-	float yawspeed;
+	float roll_rad;       
+	float pitch_rad;
+	float yaw_rad;
+	
+	bool update;
 };
 
 

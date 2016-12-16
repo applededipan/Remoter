@@ -1279,7 +1279,7 @@ void evalFunctions();
 
 extern EEGeneral  g_eeGeneral;//added by apple 
 extern Fifo<1024> telemetryrxFifo;
-extern Fifo<1024> telemetrytxFifo;
+//extern Fifo<1024> telemetrytxFifo;
 extern Fifo<1024> usart1rxFifo;
 extern Fifo<1024> usart4rxFifo;
 extern Fifo<64>  btRxFifo;

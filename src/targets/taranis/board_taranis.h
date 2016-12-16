@@ -441,7 +441,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y);
 void displayUpdating(uint16_t x, uint16_t y);
 
 void displayTest(void);
-
+void convert_attitude(void);
 void view_information(uint16_t id);
 
 

@@ -1794,8 +1794,56 @@ void displayContectState(uint16_t x, uint16_t y)
 
 
 
+/************************************************
+gui   name: convert_attitude
+      func: convert attitude from radian to degree    
+************************************************/
+void convert_attitude(void)
+{
+	float pitchTemp = mavData.attitude.pitch_rad;
+	float rollTemp  = mavData.attitude.roll_rad;
+	float yawTemp   = mavData.attitude.yaw_rad;
+	
+	if(mavData.sysStatus.vtolState == MAV_VTOL_STATE_FW)   
+	{   // fw mode
+		float Me[3][3] = {0}, Him[3][3] = {0};
+		dcm_from_euler(Me, pitchTemp, rollTemp, yawTemp);
+		dcm_from_euler(Him, 1.57f, 0.0f, 0.0f);
 
+		float self[3][3] = {0}, other[3][3] = {0}, res[3][3] = {0};
+		memcpy(self, Me, sizeof(Me));
+		memcpy(other, (Him), sizeof(Him));
+		memset(res, 0, sizeof(res)); 
 
+		for(uint8_t i = 0; i < 3; i++) 
+		{
+			for(uint8_t k = 0; k < 3; k++) 
+			{
+				for(uint8_t j = 0; j < 3; j++) 
+				{
+					res[i][k] += self[i][j] * other[j][k];
+				}
+			}
+		}
+		dcm_to_euler(&pitchTemp, &rollTemp, &yawTemp, res);
+		mavData.attitude.pitch = pitchTemp * 57.3;        
+		mavData.attitude.roll  = rollTemp  * 57.3;
+		mavData.attitude.yaw   = (yawTemp < 0) ? yawTemp*57.3+360 : yawTemp*57.3;        
+	}
+	else if(mavData.sysStatus.vtolState == MAV_VTOL_STATE_MC) 
+	{   // mc mode
+		mavData.attitude.roll  = rollTemp  * 57.3;
+		mavData.attitude.pitch = pitchTemp * 57.3;
+		mavData.attitude.yaw   = (yawTemp < 0) ? yawTemp*57.3+360 : yawTemp*57.3;
+	}
+	else 
+	{
+		mavData.attitude.roll  = rollTemp  * 57.3;
+		mavData.attitude.pitch = pitchTemp * 57.3;
+		mavData.attitude.yaw   = (yawTemp < 0) ? yawTemp*57.3+360 : yawTemp*57.3;		
+	}			
+	
+}
 
 
 

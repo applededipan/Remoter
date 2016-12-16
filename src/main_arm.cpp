@@ -63,7 +63,7 @@ void perMain()
 
 	 	
 /********** added by apple ********************/ 
-	
+	convert_attitude();
    // displayNavigation(); 
    // displayAttitude(mavData.attitude.pitch, mavData.attitude.roll, mavData.attitude.yaw, mavData.hud.alt, mavData.sysStatus.volBat);
    // displayJoystick(g_rcChannel); //!显示手操杆

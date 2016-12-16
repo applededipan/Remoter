@@ -180,13 +180,8 @@ static inline void handle_message_attitude(const mavlink_message_t *msg)
 {
     if(msg->sysid != UAV_SYSTEM_ID) return;
     if(mavData.mavStatus.health>10) mavData.mavStatus.health--; //! 璇ユ秷鎭鐜囧お楂橈紝鏀跺埌璇ユ秷鎭笉鑳戒唬琛ㄤ俊鍙峰緢濂斤紝閫氳繃health鑷噺鐨勬柟寮忚〃绀鸿娑堟伅瀵逛簬淇″彿妫?娴嬬殑鏉冮噸
-		
 
-	// mavData.attitude.rollspeed  = mavlink_msg_attitude_get_rollspeed(msg)  * 57.3;
-	// mavData.attitude.pitchspeed = mavlink_msg_attitude_get_pitchspeed(msg) * 57.3;
-	// mavData.attitude.yawspeed   = mavlink_msg_attitude_get_yawspeed(msg)   * 57.3;
-
-	float pitchTemp = mavlink_msg_attitude_get_pitch(msg);
+/* 	float pitchTemp = mavlink_msg_attitude_get_pitch(msg);
 	float rollTemp  = mavlink_msg_attitude_get_roll(msg);
 	float yawTemp   = mavlink_msg_attitude_get_yaw(msg);
 
@@ -227,7 +222,11 @@ static inline void handle_message_attitude(const mavlink_message_t *msg)
         mavData.attitude.roll  = rollTemp  * 57.3;
         mavData.attitude.pitch = pitchTemp * 57.3;
         mavData.attitude.yaw   = (yawTemp < 0) ? yawTemp*57.3+360 : yawTemp*57.3;		
-	}
+	} */
+	
+	mavData.attitude.pitch_rad = mavlink_msg_attitude_get_pitch(msg);
+	mavData.attitude.roll_rad  = mavlink_msg_attitude_get_roll(msg);
+	mavData.attitude.yaw_rad   = mavlink_msg_attitude_get_yaw(msg);
 }
 
 
