@@ -180,49 +180,6 @@ static inline void handle_message_attitude(const mavlink_message_t *msg)
 {
     if(msg->sysid != UAV_SYSTEM_ID) return;
     if(mavData.mavStatus.health>10) mavData.mavStatus.health--; //! 璇ユ秷鎭鐜囧お楂橈紝鏀跺埌璇ユ秷鎭笉鑳戒唬琛ㄤ俊鍙峰緢濂斤紝閫氳繃health鑷噺鐨勬柟寮忚〃绀鸿娑堟伅瀵逛簬淇″彿妫?娴嬬殑鏉冮噸
-
-/* 	float pitchTemp = mavlink_msg_attitude_get_pitch(msg);
-	float rollTemp  = mavlink_msg_attitude_get_roll(msg);
-	float yawTemp   = mavlink_msg_attitude_get_yaw(msg);
-
-    if(mavData.sysStatus.vtolState == MAV_VTOL_STATE_FW)   
-    {   // fw mode
-        float Me[3][3] = {0}, Him[3][3] = {0};
-        dcm_from_euler(Me, pitchTemp, rollTemp, yawTemp);
-        dcm_from_euler(Him, 1.57f, 0.0f, 0.0f);
-
-        float self[3][3] = {0}, other[3][3] = {0}, res[3][3] = {0};
-        memcpy(self, Me, sizeof(Me));
-        memcpy(other, (Him), sizeof(Him));
-        memset(res, 0, sizeof(res));
-
-        for(uint8_t i = 0; i < 3; i++) 
-        {
-            for(uint8_t k = 0; k < 3; k++) 
-            {
-                for(uint8_t j = 0; j < 3; j++) 
-                {
-                    res[i][k] += self[i][j] * other[j][k];
-                }
-            }
-        }
-        dcm_to_euler(&pitchTemp, &rollTemp, &yawTemp, res);
-        mavData.attitude.pitch = pitchTemp * 57.3;        
-        mavData.attitude.roll  = rollTemp  * 57.3;
-        mavData.attitude.yaw   = (yawTemp < 0) ? yawTemp*57.3+360 : yawTemp*57.3;        
-    }
-    else if(mavData.sysStatus.vtolState == MAV_VTOL_STATE_MC) 
-    {   // mc mode
-        mavData.attitude.roll  = rollTemp  * 57.3;
-        mavData.attitude.pitch = pitchTemp * 57.3;
-        mavData.attitude.yaw   = (yawTemp < 0) ? yawTemp*57.3+360 : yawTemp*57.3;
-    }
-	else 
-	{
-        mavData.attitude.roll  = rollTemp  * 57.3;
-        mavData.attitude.pitch = pitchTemp * 57.3;
-        mavData.attitude.yaw   = (yawTemp < 0) ? yawTemp*57.3+360 : yawTemp*57.3;		
-	} */
 	
 	mavData.attitude.pitch_rad = mavlink_msg_attitude_get_pitch(msg);
 	mavData.attitude.roll_rad  = mavlink_msg_attitude_get_roll(msg);
