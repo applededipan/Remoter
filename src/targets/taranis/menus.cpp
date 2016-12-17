@@ -34,7 +34,7 @@ void menusProcess(uint32_t keyChoice, uint32_t keyEnter)
     }
     // else if(g_eeGeneral.key == keyEnter) //! 确认键按下
     // {
-       // g_eeGeneral.key = 0;
+	   // g_eeGeneral.key = 0;
        // if(g_eeGeneral.menus[g_eeGeneral.menuCurrent].subState == SUB_STATE_NONE)
        // {
            // g_eeGeneral.menus[g_eeGeneral.menuCurrent].subState = SUB_STATE_START; 
@@ -94,11 +94,12 @@ void menu_update(uint8_t page)
 }
 
 
-#define TITLECOLOR  LIGHTBLACK
+
 /************************************************
       name: showTitle() 显示不同菜单的名字，只在该区域内有效
       func:  
 ************************************************/
+#define TITLECOLOR  LIGHTBLACK
 static void showTitle(uint16_t x, uint16_t y, uint16_t color, const unsigned char *p, uint16_t backcolor)
 {
    lcd_DrawFillRectangle(102, 165, 378, 188, backcolor);
