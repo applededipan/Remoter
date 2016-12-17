@@ -794,7 +794,7 @@ PACK(typedef struct {
   
   uint8_t   calibState;     //!
   uint8_t   menuCurrent;    //! 当前显示的菜单
-  
+  uint8_t   comlinkState;
   uint8_t   dataLost;
    
   OpentxMenu     menus[MENU_NUMBER];  

@@ -29,7 +29,6 @@ typedef struct
 
 extern COMDATA comData;
 
-
 typedef struct 
 {
   uint16_t chan1;
@@ -168,7 +167,13 @@ enum MENUS
 };
 
 
-
+enum COMLINK_STATUS 
+{
+  COMLINK_NAN = 0,	
+  COMLINK_USB = 1,
+  COMLINK_PAI = 2,
+  COMLINK_BLH = 3,
+};
 
 
 
