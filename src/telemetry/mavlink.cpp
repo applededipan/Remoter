@@ -511,7 +511,7 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		mavlink_status_t* p_status_1 = mavlink_get_channel_status(MAVLINK_COMM_1);	
 		if(mavlink_parse_char(MAVLINK_COMM_1, c, p_rxmsg_1, p_status_1))
 		{	
-            // mavData.mavStatus.dataReadyUsb = 1;  //! received a complete message
+			g_eeGeneral.comlinkState = COMLINK_USB;
             handleMessage(p_rxmsg_1);	
 		}				
 	}
@@ -522,7 +522,7 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		mavlink_status_t* p_status_2 = mavlink_get_channel_status(MAVLINK_COMM_2);	
 		if(mavlink_parse_char(MAVLINK_COMM_2, c, p_rxmsg_2, p_status_2)) 
 		{
-            // mavData.mavStatus.dataReadyRsp = 1;	//! received a complete message
+			g_eeGeneral.comlinkState = COMLINK_RSP;
 			handleMessage(p_rxmsg_2);	
 		}
 		
@@ -534,6 +534,7 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		mavlink_status_t* p_status_3 = mavlink_get_channel_status(MAVLINK_COMM_3);	
 		if(mavlink_parse_char(MAVLINK_COMM_3, c, p_rxmsg_3, p_status_3)) 
 		{
+			g_eeGeneral.comlinkState = COMLINK_BTH;
 			handleMessage(p_rxmsg_3);	//! mavData.mavStatus.dataReadyBth = 1;		
 		}		
 	}
