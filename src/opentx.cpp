@@ -153,7 +153,6 @@ void systemTimer_10msCallBack(void)
 #elif defined (THROW_CONTROL)	
   setThrowMode(OPENTX_TR2);   //! throw mode control  use channel 8
 #endif	
-  tempDataLost(OPENTX_TL1);
   
   mavlinkSendMessage();       //! send messages to uav
   
@@ -1787,23 +1786,6 @@ void setThrowMode(uint32_t keyThrow)
   }  
 }
 
-
-void tempDataLost(uint32_t key)
-{
-  if(g_eeGeneral.key == key)  
-  {
-	if(g_eeGeneral.dataLost == 0)
-	{
-	  g_eeGeneral.dataLost = 1;
-	}
-	else
-	{
-	  g_eeGeneral.dataLost = 0;
-	}
-	
-    g_eeGeneral.key = 0;	
-  }  	
-}
 
 
 /*******************************************************

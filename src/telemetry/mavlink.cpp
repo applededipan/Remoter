@@ -527,7 +527,7 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		}
 		
 	}
-	else if(chan == MAVLINK_COMM_3) //! date from usart3BthPort
+	else if(chan == MAVLINK_COMM_3) //! date from usart3BthPort only parse file_transfer_protocol message
 	{
 		static mavlink_message_t  m_mavlink_message_3;
 		static mavlink_message_t* p_rxmsg_3 = &m_mavlink_message_3;
@@ -1259,7 +1259,7 @@ void mavlinkSendMessage(void)
 	if(streamId++ > 4) streamId = 0; //! 4
 	//! all datastreams are sent based on that the smart console has connected to uav
 	if((mavData.heartBeat.autopilot != MAV_AUTOPILOT_ARDUPILOTMEGA)&&(mavData.heartBeat.autopilot != MAV_AUTOPILOT_PX4)) return;
-    if(g_eeGeneral.dataLost) return;
+
 	switch(streamId)
 	{   
 	    

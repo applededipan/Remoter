@@ -103,7 +103,6 @@ void setGimbalMode(uint32_t key);
 void setVtolMode(uint32_t keyVtol);
 void setThrowMode(uint32_t keyThrow);
 void setFlightMode(uint32_t keyManual, uint32_t keyAuto, uint32_t keyRtl);
-void tempDataLost(uint32_t key);
 
 //! added by apple
 #if defined(PCBTARANIS)
@@ -1282,7 +1281,7 @@ extern Fifo<1024> telemetryrxFifo;
 //extern Fifo<1024> telemetrytxFifo;
 extern Fifo<1024> usart1rxFifo;
 extern Fifo<1024> usart4rxFifo;
-extern Fifo<64>  btRxFifo;
+extern Fifo<1024> btRxFifo;
 
 #if defined(CPUARM)
 uint16_t crc16(uint8_t * buf, uint32_t len);

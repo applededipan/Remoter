@@ -1907,7 +1907,6 @@ void view_information(uint16_t id)
  
 void displayTest(void)
 {	
-   lcd_ShowNum(40, 120,  RED, 24, 3, g_eeGeneral.dataLost, 0);
    #if defined APPLE_DEBUG
    	   
     // lcd_ShowNum(400, 30, RED, 24, 4, anaIn(1), 0);

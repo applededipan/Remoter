@@ -195,12 +195,8 @@ void commnTask(void *pdata)
 		    }  		  
 		 }
          
-         if(g_eeGeneral.dataLost == 0)	
-		 {
          while(usart1rxFifo.pop(tempdata)) usart2UavSendChar(tempdata); //! data form usb to uav
          while(usart4rxFifo.pop(tempdata)) usart2UavSendChar(tempdata); //! data form pai to uav				 
-		 }			 
-  
 	  }	
       
 	  if(g_eeGeneral.ftpReady) //! firmware update
