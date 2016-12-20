@@ -101,7 +101,15 @@ void ftpProcess(void)
 			 break;
 			 
 		case kCmdReboot: 
-             g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_1, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload); //! response to QGC then reboot		
+		     if(g_eeGeneral.comlinkState == COMLINK_BTH) //! if connect to bth
+			 {
+				g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_3, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload); //! response to QGC then reboot	 
+			 }
+			 else                                        //! default via usb
+			 {
+                g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_1, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload); //! response to QGC then reboot					 
+			 }
+	
 			 eepromWriteBlock(&update, E_ADDR_UPDATE, 1);   //! set the update flag which means smartconsole will update when startup!
 			 systemReboot();
 		     break;
@@ -110,7 +118,18 @@ void ftpProcess(void)
 		     break;
 	}
     //! only when wirte sdcard failed we will not response, otherwise we all have to response to the ftp message!!!
-    if(ack) g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_1, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload);
+    if(ack) 
+	{
+	    if(g_eeGeneral.comlinkState == COMLINK_BTH)
+		{
+			g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_3, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload);
+		}
+		else
+		{
+			g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_1, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload);
+		}
+	}
+		
 }
 
 

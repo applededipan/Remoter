@@ -190,7 +190,7 @@ void commnTask(void *pdata)
 		 }
 		 else if(g_eeGeneral.comlinkState == COMLINK_BTH)                               //! bth plugged in to transfer mavlink message
 		 {
-			while(telemetryrxFifo.pop(tempdata)) usart3BthSendChar(tempdata);  
+		    while(telemetryrxFifo.pop(tempdata)) usart3BthSendChar(tempdata);
 			while(usart3rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              
 		 }
 		 else                                                                           //! no one plugged in: uav connection or unconnection

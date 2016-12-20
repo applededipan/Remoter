@@ -375,8 +375,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 			}
             else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_RTGS) 
 			{
-	    	  uint8_t RTGS[] = "    RTGS    ";			  
-		      lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);				  
+	    	  uint8_t RTGS[] = "    RTGS    ";				  
 	    	  if(mavData.mavStatus.armState == 1) lcd_ShowString(x-72, y, GREEN, 24, RTGS);
 			  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, RTGS);
 			  GPIO_SetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
@@ -1565,9 +1564,10 @@ void view_information(uint16_t id)
  
 void displayTest(void)
 {  
-
+   // lcd_ShowNum(40, 120,  RED, 24, 3, g_eeGeneral.comlinkState, 0);
+   // lcd_ShowNum(40, 150,  RED, 24, 3, mavData.mavStatus.health, 0);
    #if defined APPLE_DEBUG
-   lcd_ShowNum(40, 120,  RED, 24, 3, g_eeGeneral.comlinkState, 0);
+
    lcd_ShowNum(40, 150,  RED, 24, 3, mavData.mavStatus.health, 0);   	   
     // lcd_ShowNum(400, 30, RED, 24, 4, anaIn(1), 0);
     // lcd_ShowNum(400, 60, RED, 24, 4, anaIn(0), 0);
