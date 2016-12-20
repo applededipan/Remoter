@@ -6,8 +6,6 @@
 #include "../../telemetry/mavlink.h"
 
 
-COMDATA  comData;
-
 //! usart1/connect to usb  added by apple
 
 Fifo<1024> usart1rxFifo;
@@ -100,8 +98,6 @@ extern "C" void USART1_USART_IRQHandler()
 	  data = USART_ReceiveData(USART1_USART);
 	  usart1rxFifo.push(data);
 	  mavlinkReceiver(MAVLINK_COMM_1, data); 
- 	  
-	  if((data == 0XFE)&&(comData.comStep>-COMMAX)) comData.comStep--; 
   }
 }
 

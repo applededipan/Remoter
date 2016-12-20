@@ -81,6 +81,7 @@ struct MavlinkStatus
     uint8_t  dataReadyUsb;   //! usart1UsbPort message ready  1: ok   0: not ok 
     uint8_t  dataReadyRsp;   //! usart4RspPort message ready
     uint8_t  dataReadyBth;   //! usart3BthPort message ready
+
 };
 
 struct HeartBeat   
@@ -353,6 +354,7 @@ enum PX4_CUSTOM_SUB_MODE_AUTO{
 #define PX4_FLIGHT_MODE_MISSION       ((PX4_CUSTOM_MAIN_MODE_AUTO<<16)|(PX4_CUSTOM_SUB_MODE_AUTO_MISSION<<24)) //! belong to auto
 #define PX4_FLIGHT_MODE_RTL           ((PX4_CUSTOM_MAIN_MODE_AUTO<<16)|(PX4_CUSTOM_SUB_MODE_AUTO_RTL<<24))     //! belong to auto
 #define PX4_FLIGHT_MODE_LANDING       ((PX4_CUSTOM_MAIN_MODE_AUTO<<16)|(PX4_CUSTOM_SUB_MODE_AUTO_LAND<<24))    //! belong to auto
+#define PX4_FLIGHT_MODE_RTGS          ((PX4_CUSTOM_MAIN_MODE_AUTO<<16)|(PX4_CUSTOM_SUB_MODE_AUTO_RTGS<<24))    //! belong to auto
 
 #define FLIGHT_MODE_END                 255 //! added by apple for mavlink default mode or reset mode
 #endif /* PX4_CUSTOM_MODE_H_ */

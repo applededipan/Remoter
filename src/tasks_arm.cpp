@@ -178,27 +178,47 @@ void commnTask(void *pdata)
       
 	  if(!g_eeGeneral.firmwareUpdate) //! normal operate
 	  {
-		 if(comData.comStep<0)        //! it is usb plugged in
+		 if(g_eeGeneral.comlinkState == COMLINK_USB)                                    //! usb plugged in to transfer mavlink message
 		 {
-		    while(telemetryrxFifo.pop(tempdata)) usart1UsbSendChar(tempdata); //! data from uav to usb
+		    while(telemetryrxFifo.pop(tempdata)) usart1UsbSendChar(tempdata); 
+            while(usart1rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);             			
 		 }
-		 else if(comData.comStep>0)   //! it is Raspberry Pi plugged in
+		 else if(g_eeGeneral.comlinkState == COMLINK_RSP)                               //! rsp plugged in to transfer mavlink message
 		 {
-		    while(telemetryrxFifo.pop(tempdata)) usart4RspSendChar(tempdata); //! data form uav to pai
+		    while(telemetryrxFifo.pop(tempdata)) usart4RspSendChar(tempdata); 
+            while(usart4rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              			
 		 }
-		 else                         //! not sure which one 
+		 else if(g_eeGeneral.comlinkState == COMLINK_BTH)                               //! bth plugged in to transfer mavlink message
+		 {
+			while(telemetryrxFifo.pop(tempdata)) usart3BthSendChar(tempdata);  
+			while(usart3rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              
+		 }
+		 else                                                                           //! no one plugged in: uav connection or unconnection
 		 {
 		    while(telemetryrxFifo.pop(tempdata))
-		    {
-			   usart1UsbSendChar(tempdata); //! data from uav to usb
-		       usart4RspSendChar(tempdata); //! data from uav to pai
-		    }  		  
-		 }
-         
-         while(usart1rxFifo.pop(tempdata)) usart2UavSendChar(tempdata); //! data form usb to uav
-         while(usart4rxFifo.pop(tempdata)) usart2UavSendChar(tempdata); //! data form pai to uav				 
+		    {  
+		       if(mavData.mavStatus.health == 30)                                       //! uav unconnection: for usb config the p900 
+			   {
+				  usart1UsbSendChar(tempdata);                                          
+			   }
+			   else                                                                     //! uav connection: try to connect to QGC
+			   {
+				   switch(g_rtcTime%3)
+				   {
+					  case 0: usart1UsbSendChar(tempdata); break;
+					  case 1: usart4RspSendChar(tempdata); break;
+					  case 2: usart3BthSendChar(tempdata); break;				  
+				   }				   
+			   }
+
+		    } 
+			
+            while(usart1rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              //! data form usb to uav	
+            while(usart4rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              //! data form rsp to uav
+            while(usart3rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              //! data form bth to uav 			
+		 }	 
 	  }	
-      
+	  	  
 	  if(g_eeGeneral.ftpReady) //! firmware update
       {
 	     ftpProcess();

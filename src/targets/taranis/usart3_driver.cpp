@@ -66,9 +66,7 @@
 
 
 /****************************************************************************************************/
-
-Fifo<64> btTxFifo;
-Fifo<64> btRxFifo;
+Fifo<1024> usart3rxFifo;
 
 enum BluetoothState
 {
@@ -91,11 +89,10 @@ volatile uint8_t bluetoothWriteState = BLUETOOTH_WRITE_IDLE;
 
 void usart3BthInit(uint32_t baudrate)
 {
-
+	
+  USART_DeInit(USART3_USART);
   GPIO_InitTypeDef GPIO_InitStructure;
   USART_InitTypeDef USART_InitStructure;
-
-  USART_DeInit(USART3_USART);
 
   GPIO_PinAFConfig(USART3_GPIO, USART3_GPIO_PinSource_TX, USART3_GPIO_AF);
   GPIO_PinAFConfig(USART3_GPIO, USART3_GPIO_PinSource_RX, USART3_GPIO_AF);
@@ -119,8 +116,14 @@ void usart3BthInit(uint32_t baudrate)
   USART_Cmd(USART3_USART, ENABLE);
   USART_ITConfig(USART3_USART, USART_IT_RXNE, ENABLE);
 
-  NVIC_SetPriority(USART3_USART_IRQn, 7);
+  NVIC_SetPriority(USART3_USART_IRQn, 6);
   NVIC_EnableIRQ(USART3_USART_IRQn);
+}
+
+
+void usart3BthStop(void)
+{
+	USART_DeInit(USART3_USART);
 }
 
 
@@ -181,7 +184,7 @@ void usart3BthWakeup(void)
           int index = 0;
           uint8_t c;
           bool found = false;
-          while (btRxFifo.pop(c)) {
+          while (usart3rxFifo.pop(c)) {
             if (c == ttm[index]) {
               index++;
               if (index == sizeof(ttm)-1) {
@@ -229,7 +232,7 @@ int usart3BthRead(void * buffer, int len)
   uint8_t * data = (uint8_t *)buffer;
   while (result < len) {
     uint8_t byte;
-    if (!btRxFifo.pop(byte)) {
+    if (!usart3rxFifo.pop(byte)) {
       break;
     }
     data[result++] = byte;
@@ -273,6 +276,17 @@ void usart3BthSendBuffer(uint8_t *buffer, uint16_t count)
 
 
 
+extern "C" void USART3_USART_IRQHandler()
+{
+  uint8_t data;
+  
+  if(USART_GetITStatus(USART3_USART, USART_IT_RXNE) != RESET)
+  { 
+	  data = USART_ReceiveData(USART3_USART);
+	  usart3rxFifo.push(data);
+	  mavlinkReceiver(MAVLINK_COMM_3, data); 
+  }
+}
 
 
 #if !defined(SIMU)
@@ -285,11 +299,11 @@ void usart3BthSendBuffer(uint8_t *buffer, uint16_t count)
   if(USART_GetITStatus(USART3_USART, USART_IT_RXNE) != RESET)
   {
 	  data = USART_ReceiveData(USART3_USART);
-      btRxFifo.push(data);	 	  
+      usart3rxFifo.push(data);	 	  
   }
 } */
 
-extern "C" void USART3_USART_IRQHandler()
+/* extern "C" void USART3_USART_IRQHandler()
 {
   uint32_t status;
   uint8_t data;
@@ -325,12 +339,12 @@ extern "C" void USART3_USART_IRQHandler()
     data = USART3_USART->DR;
     if(!(status & USART_FLAG_ERRORS)) 
     {
-      btRxFifo.push(data);	
+      usart3rxFifo.push(data);	
     }
     status = USART3_USART->SR;
   }
 }
-
+ */
 
 
 

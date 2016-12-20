@@ -1281,7 +1281,7 @@ extern Fifo<1024> telemetryrxFifo;
 //extern Fifo<1024> telemetrytxFifo;
 extern Fifo<1024> usart1rxFifo;
 extern Fifo<1024> usart4rxFifo;
-extern Fifo<1024> btRxFifo;
+extern Fifo<1024> usart3rxFifo;
 
 #if defined(CPUARM)
 uint16_t crc16(uint8_t * buf, uint32_t len);

@@ -181,346 +181,6 @@ void displayRunState(uint16_t x, uint16_t y, uint8_t value)
 }
 
 
-/************************************************
-gui   name: displayPilotTypeFlightmode
-      func: 显示飞控类型   PX4 APM
-	      : 显示飞行器类型 PLANE COPTER........
-		  : 显示飞行模式   MANUAL AUTO ........
-	 (x,y): 显示位置
-************************************************/
-void displayPilotTypeFlightmode(uint16_t x, uint16_t y)
-{
-	static uint8_t  pilotLast = 255;
-	static uint8_t  typeLast  = 255;
-	static uint32_t flightmodeLast = 255; 
-	
-	//! 飞控类型 
-	if(mavData.heartBeat.autopilot != pilotLast)
-	{
-       if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_PX4)
-	   {
-		   uint8_t logo_px4[]="PX4";
-		   lcd_ShowString(x, y, GREEN, 24, logo_px4);
-	   }
-	   else if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_ARDUPILOTMEGA)
-	   {
-		   uint8_t logo_apm[]="APM";
-		   lcd_ShowString(x, y, GREEN, 24, logo_apm);
-	   }	   
-	   else
-	   {
-		   uint8_t logo_none[]="   ";
-		   lcd_ShowString(x, y, BACKCOLOR, 24, logo_none);
-	   }
-	   pilotLast = mavData.heartBeat.autopilot;
-    }
-
-	
-    //! 飞行器类型
-	if(mavData.heartBeat.type != typeLast)
-	{
-	    uint8_t temp[576] = {0};
-        if(mavData.heartBeat.type == MAV_TYPE_FIXED_WING)     //! 固定翼
-		{
-	       spiFlashRead(temp, F_ADDR_FIXED, 576);
-	       lcd_DrawBmp_256(x+110, y, 24, 24, temp);		
-		}
-        else if(mavData.heartBeat.type == MAV_TYPE_QUADROTOR) //! 四旋翼
-		{
-	       spiFlashRead(temp, F_ADDR_QUADROTOR, 576);
-	       lcd_DrawBmp_256(x+110, y, 24, 24, temp);				
-		}		
-        else if(mavData.heartBeat.type == MAV_TYPE_HEXAROTOR) //! 六旋翼
-		{
-	       spiFlashRead(temp, F_ADDR_HEXAROTOR, 576);
-	       lcd_DrawBmp_256(x+110, y, 24, 24, temp);				
-		}		
-        else if(mavData.heartBeat.type == MAV_TYPE_OCTOROTOR) //! 八旋翼
-		{
-	       spiFlashRead(temp, F_ADDR_OCTOROTOR, 576);
-	       lcd_DrawBmp_256(x+110, y, 24, 24, temp);				
-		}		
-        else if(mavData.heartBeat.type == MAV_TYPE_HELICOPTER)//! 直升机
-		{
-	       spiFlashRead(temp, F_ADDR_HELI, 576);
-	       lcd_DrawBmp_256(x+110, y, 24, 24, temp);				
-		}
-        else if(mavData.heartBeat.type == MAV_TYPE_GCS)       //! 地面站
-		{
-	       spiFlashRead(temp, F_ADDR_QGC, 576);
-	       lcd_DrawBmp_256(x+110, y, 24, 24, temp);				
-		}
-        else if(mavData.heartBeat.type == MAV_TYPE_VTOL_DUOROTOR)     //! VTOL
-		{
-			if(mavData.sysStatus.vtolState == MAV_VTOL_STATE_FW)      //! fw
-			{
-			   spiFlashRead(temp, F_ADDR_FIXED, 576);
-			   lcd_DrawBmp_256(x+110, y, 24, 24, temp);					
-			}
-			else if(mavData.sysStatus.vtolState == MAV_VTOL_STATE_MC) //! mc
-			{
-			   spiFlashRead(temp, F_ADDR_QUADROTOR, 576);
-			   lcd_DrawBmp_256(x+110, y, 24, 24, temp);					
-			}
-		}			
-        else //! 未知机型
-		{
-		   uint8_t logo_none[]="  ";
-		   lcd_ShowString(x+110, y, BACKCOLOR, 24, logo_none);
-		}
-        typeLast = mavData.heartBeat.type;		
-	}	
-
-	
-	//! 飞行模式
-	if(mavData.heartBeat.custMode != flightmodeLast)
-	{
-	   if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_PX4) //! PX4
-	   {  
-            if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_MANUAL) 
-            {
-		      uint8_t MANUAL[] = "MAN";
-		      lcd_ShowString(x+45, y, GREEN, 24, MANUAL);
-			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-	        }		  
-	        else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_ACRO)
-	        {
-              uint8_t ACRO[] = "ACR";		  
-		      lcd_ShowString(x+45, y, GREEN, 24, ACRO);
-			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-	        }		  
-	        else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_STABILIZED) 
-	        {
-	    	  uint8_t STABILIZED[] = "STA";
-	    	  lcd_ShowString(x+45, y, GREEN, 24, STABILIZED);
-			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);			  
-	        }  
-	        else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_PAUSEFLIGHT)
-	        {
-	    	  uint8_t PAUSEFLIGHT[]= "PAU";
-	    	  lcd_ShowString(x+45, y, GREEN, 24, PAUSEFLIGHT); 
-			  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);			  
-	        } 
-	        else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_MISSION)  
-	        {
-	    	  uint8_t MISSION[] = "MIS";
-	    	  lcd_ShowString(x+45, y, GREEN, 24, MISSION);
-			  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-	        }
-            else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_RTL)
-			{
-	    	  uint8_t RTL[] = "RTL";
-	    	  lcd_ShowString(x+45, y, GREEN, 24, RTL);
-			  GPIO_SetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);				
-			}
-            else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_ALTITUDE)
-			{
-	    	  uint8_t ALT[] = "ALT";
-	    	  lcd_ShowString(x+45, y, GREEN, 24, ALT);
-			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				
-			}
-            else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_POSITION)
-			{
-	    	  uint8_t POS[] = "POS";
-	    	  lcd_ShowString(x+45, y, GREEN, 24, POS);
-			  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				
-			}
-            else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_RATTITUDE)	
-			{
-			  uint8_t RAT[] = "RAT";		  
-		      lcd_ShowString(x+45, y, GREEN, 24, RAT);
-			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);			  
-			}				
-            else 
-	        {	
-		      uint8_t NONE[]="   ";
-		      lcd_ShowString(x+45, y, BACKCOLOR, 24, NONE);	
-		      GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-		      GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-		      GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);			  
-	        }		  	  		   
-	   }
-	   else if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_ARDUPILOTMEGA) //! APM
-	   {
-		    //! apmcopter: QUADROTOR   HEXAROTOR   OCTOROTOR
-			if((mavData.heartBeat.type==MAV_TYPE_QUADROTOR)||(mavData.heartBeat.type==MAV_TYPE_HEXAROTOR)||(mavData.heartBeat.type==MAV_TYPE_OCTOROTOR))
-			{
-				if(mavData.heartBeat.custMode == APMCOPTER_FLIGHT_MODE_STABILIZE) 
-				{
-				  uint8_t STABILIZE[] = "STA";
-				  lcd_ShowString(x+45, y, GREEN, 24, STABILIZE);
-				}		  
-				else if(mavData.heartBeat.custMode == APMCOPTER_FLIGHT_MODE_ACRO)
-				{
-				  uint8_t ACRO[] = "ACR";		  
-				  lcd_ShowString(x+45, y, GREEN, 24, ACRO);
-				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-				}		  
-				else if(mavData.heartBeat.custMode == APMCOPTER_FLIGHT_MODE_AUTO) 
-				{
-				  uint8_t AUTO[] = "AUT";
-				  lcd_ShowString(x+45, y, GREEN, 24, AUTO);
-				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-				}  
-				else if(mavData.heartBeat.custMode == APMCOPTER_FLIGHT_MODE_LOITER)
-				{
-				  uint8_t LOITER[]= "LOI";
-				  lcd_ShowString(x+45, y, GREEN, 24, LOITER); 
-				}
-				else if(mavData.heartBeat.custMode == APMCOPTER_FLIGHT_MODE_ALT_HOLD)
-				{
-				  uint8_t ALT_HOLD[]= "ALT";
-				  lcd_ShowString(x+45, y, GREEN, 24, ALT_HOLD); 
-				}
-                else if(mavData.heartBeat.custMode == APMCOPTER_FLIGHT_MODE_RTL)
-				{
-				  uint8_t RTL[]= "RTL";
-				  lcd_ShowString(x+45, y, GREEN, 24, RTL);
-				  GPIO_SetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);				  
-				}					
-				else 
-				{
-				   //! other flightmodes
-				   uint8_t NONE[]="   ";
-		           lcd_ShowString(x+45, y, BACKCOLOR, 24, NONE);
-				   GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-				   GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-				   GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);				   
-				}				
-			}		  
-            //! apmplane
-			else if(mavData.heartBeat.type == MAV_TYPE_FIXED_WING)
-			{
-				if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_MANUAL) 
-				{
-				  uint8_t MANUAL[] = "MAN";
-				  lcd_ShowString(x+45, y, GREEN, 24, MANUAL);
-				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-				}	
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_CIRCLE)
-				{
-				  uint8_t CIRCLE[]= "CIR";
-				  lcd_ShowString(x+45, y, GREEN, 24, CIRCLE); 
-				} 				
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_STABILIZE)
-				{
-				  uint8_t STABILIZE[] = "STA";		  
-				  lcd_ShowString(x+45, y, GREEN, 24, STABILIZE);
-				}
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_TRAINING)
-				{
-				  uint8_t TRAINING[]= "TRA";
-				  lcd_ShowString(x+45, y, GREEN, 24, TRAINING); 
-				}
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_ACRO)
-				{
-				  uint8_t ACRO[]= "ACR";
-				  lcd_ShowString(x+45, y, GREEN, 24, ACRO); 
-				}
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_FLY_BY_WIRE_A)
-				{
-				  uint8_t FBA[]= "FBA";
-				  lcd_ShowString(x+45, y, GREEN, 24, FBA); 
-				}
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_FLY_BY_WIRE_B)
-				{
-				  uint8_t FBB[]= "FBB";
-				  lcd_ShowString(x+45, y, GREEN, 24, FBB); 
-				}
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_CRUISE)
-				{
-				  uint8_t CRUISE[]= "CRU";
-				  lcd_ShowString(x+45, y, GREEN, 24, CRUISE); 
-				}
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_AUTOTUNE)
-				{
-				  uint8_t TUNE[]= "TUN";
-				  lcd_ShowString(x+45, y, GREEN, 24, TUNE); 
-				}
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_AUTO) 
-				{
-				  uint8_t AUTO[] = "AUT";
-				  lcd_ShowString(x+45, y, GREEN, 24, AUTO);
-				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-				}		
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_RTL)
-				{
-				  uint8_t RTL[]= "RTL";
-				  lcd_ShowString(x+45, y, GREEN, 24, RTL); 
-				  GPIO_SetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-				}						  
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_LOITER)
-				{
-				  uint8_t LOITER[]= "LOI";
-				  lcd_ShowString(x+45, y, GREEN, 24, LOITER); 
-				} 
-				else if(mavData.heartBeat.custMode == APMPLANE_FLIGHT_MODE_GUIDED)
-				{
-				  uint8_t GUIDED[]= "GUI";
-				  lcd_ShowString(x+45, y, GREEN, 24, GUIDED); 
-				}				
-				else 
-				{
-				   //! other flightmodes
-				   uint8_t NONE[]="   ";
-		           lcd_ShowString(x+45, y, BACKCOLOR, 24, NONE);
-				   GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-				   GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-				   GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);					
-				}				
-			}
-			else
-			{
-			   //! 其他机型
-			   uint8_t NONE[]="   ";
-		       lcd_ShowString(x+45, y, BACKCOLOR, 24, NONE);
-			   GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-			   GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-			   GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);				
-			}          			
-	   }	   
-	   else //! 其他飞控
-	   {
-		  uint8_t logo_none[]="   ";
-		  lcd_ShowString(x+45, y, BACKCOLOR, 24, logo_none);	
-		  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
-		  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-		  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);		   
-	   }
-       flightmodeLast = mavData.heartBeat.custMode;       	   
-	}	
-}
-
 
 
 
@@ -712,6 +372,16 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 			  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				
+			}
+            else if(mavData.heartBeat.custMode == PX4_FLIGHT_MODE_RTGS) 
+			{
+	    	  uint8_t RTGS[] = "    RTGS    ";			  
+		      lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);				  
+	    	  if(mavData.mavStatus.armState == 1) lcd_ShowString(x-72, y, GREEN, 24, RTGS);
+			  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, RTGS);
+			  GPIO_SetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
+			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
+			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);			
 			}            
             else if(mavData.heartBeat.custMode == FLIGHT_MODE_END) //! 空模式，与unknown模式不同
 			{
@@ -720,7 +390,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				
-			}			
+			}           			
             else 
 	        {
               uint8_t UNKNOWN[] = "UNKNOWNMODE";				
@@ -1399,19 +1069,7 @@ gui   name: displayComStep
 ************************************************/
 void displayComStep(void)
 {
-	if(comData.comStep==0)
-	{
-		lcd_DrawLine(0, 28, 480, 28, LINEBLACK);		
-		return;
-	}
-	else if(abs(comData.comStep)>=COMMAX)
-	{
-		lcd_DrawLine(0, 28, 480, 28, LINEBLACK);
-	}
-    else
-	{
-		lcd_DrawLine(0, 28, abs(comData.comStep)*(480/COMMAX), 28, GREEN);
-	}			
+	// to do 		
 }
 
 
@@ -1906,9 +1564,11 @@ void view_information(uint16_t id)
 
  
 void displayTest(void)
-{	
+{  
+
    #if defined APPLE_DEBUG
-   	   
+   lcd_ShowNum(40, 120,  RED, 24, 3, g_eeGeneral.comlinkState, 0);
+   lcd_ShowNum(40, 150,  RED, 24, 3, mavData.mavStatus.health, 0);   	   
     // lcd_ShowNum(400, 30, RED, 24, 4, anaIn(1), 0);
     // lcd_ShowNum(400, 60, RED, 24, 4, anaIn(0), 0);
     // lcd_ShowNum(400, 90, RED, 24, 4, anaIn(2), 0);

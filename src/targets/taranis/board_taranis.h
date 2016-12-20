@@ -320,6 +320,7 @@ void usart2UavSendBuffer(uint8_t *buffer, uint16_t count);
 /****************************************************************************/
 //usart3/bth driver
 void usart3BthInit(uint32_t baudrate);
+void usart3BthStop(void);
 void usart3BthWriteWakeup(void);
 void usart3BthWakeup(void);
 void usart3BthSendChar(uint8_t data);
@@ -430,7 +431,6 @@ void displayRunState(uint16_t x, uint16_t y, uint8_t value);
 void displayGps(uint16_t x, uint16_t y, uint8_t gps, uint8_t fixType);
 void displayTime(uint16_t x, uint16_t y, uint8_t size);
 void displayRssi(uint16_t x, uint16_t y, uint8_t wifiRssi, uint8_t dataRssi);
-void displayPilotTypeFlightmode(uint16_t x, uint16_t y);
 void displayJoystick(RC_CHANNEL channels);
 void displayAttitude(int16_t pitch, int16_t roll, int16_t heading, int32_t alt, int8_t batRemain);
 

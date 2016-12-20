@@ -1,6 +1,6 @@
 
 
-//usart4/connect to pai       added by apple
+//usart4/connect to rsp       added by apple
 
 #include "../../opentx.h"
 #include "../../global.h"
@@ -83,8 +83,6 @@ extern "C" void UART4_USART_IRQHandler()
 	  data = USART_ReceiveData(UART4_USART);
       usart4rxFifo.push(data); 	 
 	  mavlinkReceiver(MAVLINK_COMM_2, data);
-	  
-	  if((data == 0XFE)&&(comData.comStep<COMMAX)) comData.comStep++;
   }
 }
 

@@ -505,12 +505,15 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		}					
 	}
 	else if(chan == MAVLINK_COMM_1) //! date from usart1UsbPort only parse file_transfer_protocol message
-	{
+	{   
 		static mavlink_message_t  m_mavlink_message_1;
 		static mavlink_message_t* p_rxmsg_1 = &m_mavlink_message_1;
 		mavlink_status_t* p_status_1 = mavlink_get_channel_status(MAVLINK_COMM_1);	
+		
 		if(mavlink_parse_char(MAVLINK_COMM_1, c, p_rxmsg_1, p_status_1))
 		{	
+			usart4RspStop();
+			usart3BthStop();				 
 			g_eeGeneral.comlinkState = COMLINK_USB;
             handleMessage(p_rxmsg_1);	
 		}				
@@ -519,9 +522,12 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 	{
 		static mavlink_message_t  m_mavlink_message_2;
 		static mavlink_message_t* p_rxmsg_2 = &m_mavlink_message_2;
-		mavlink_status_t* p_status_2 = mavlink_get_channel_status(MAVLINK_COMM_2);	
+		mavlink_status_t* p_status_2 = mavlink_get_channel_status(MAVLINK_COMM_2);
+		
 		if(mavlink_parse_char(MAVLINK_COMM_2, c, p_rxmsg_2, p_status_2)) 
 		{
+		    usart1UsbStop();
+			usart3BthStop();
 			g_eeGeneral.comlinkState = COMLINK_RSP;
 			handleMessage(p_rxmsg_2);	
 		}
@@ -532,13 +538,16 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		static mavlink_message_t  m_mavlink_message_3;
 		static mavlink_message_t* p_rxmsg_3 = &m_mavlink_message_3;
 		mavlink_status_t* p_status_3 = mavlink_get_channel_status(MAVLINK_COMM_3);	
+		
 		if(mavlink_parse_char(MAVLINK_COMM_3, c, p_rxmsg_3, p_status_3)) 
 		{
+			usart1UsbStop();
+			usart4RspStop();
 			g_eeGeneral.comlinkState = COMLINK_BTH;
-			handleMessage(p_rxmsg_3);	//! mavData.mavStatus.dataReadyBth = 1;		
+			handleMessage(p_rxmsg_3);		
 		}		
 	}
-	else
+	else 
 	{
 		//! nothing to do 
 	}
