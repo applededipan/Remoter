@@ -51,6 +51,8 @@
 
 #include "opentx.h"
 
+#define MAVLINK_1
+
 #if defined MAVLINK_1
 	#include "GCS_MAVLink/v1.0/mavlink_types.h"
 	mavlink_system_t mavlink_system = {OPENTX_SYSTEM_ID, OPENTX_COMPON_ID};
