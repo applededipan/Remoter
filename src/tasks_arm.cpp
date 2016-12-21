@@ -197,7 +197,7 @@ void commnTask(void *pdata)
 		 {
 		    while(telemetryrxFifo.pop(tempdata))
 		    {  
-		       if(mavData.mavStatus.health == 30)                                       //! uav unconnection: for usb config the p900 
+		       if(mavData.mavStatus.health%30 == 0)                                     //! uav unconnection: for usb config the p900 
 			   {
 				  usart1UsbSendChar(tempdata);                                          
 			   }

@@ -51,7 +51,7 @@
 
 #include "opentx.h"
 
-#define MAVLINK_1
+//#define MAVLINK_1
 
 #if defined MAVLINK_1
 	#include "GCS_MAVLink/v1.0/mavlink_types.h"
