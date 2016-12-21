@@ -83,11 +83,11 @@ static inline void handle_message_heartbeat(const mavlink_message_t *msg)
 	//! get the armed or disarmed state from mavData.heartBeat.baseMode
 	if(mavData.heartBeat.baseMode & MAV_MODE_FLAG_SAFETY_ARMED) 
     {
-	  mavData.mavStatus.armState = 1; //! armed	  
+	  mavData.mavStatus.armState = ARMSTATE_ARMED; 	  
     }  	
     else 
     {
-	  mavData.mavStatus.armState = 0; //! disarmed
+	  mavData.mavStatus.armState = ARMSTATE_DISARMED; 
     } 
 }
 
@@ -794,7 +794,7 @@ void px4_set_mode_manual(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_acro(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_ACRO);	   
    }
@@ -809,7 +809,7 @@ void px4_set_mode_acro(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_stabilized(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_STABILIZED);	   
    }
@@ -824,7 +824,7 @@ void px4_set_mode_stabilized(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_altitude(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_ALTITUDE);	   
    }
@@ -839,7 +839,7 @@ void px4_set_mode_altitude(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_position(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_POSITION);	   
    }
@@ -854,7 +854,7 @@ void px4_set_mode_position(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_offboard(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_OFFBOARD);	   
    }
@@ -869,7 +869,7 @@ void px4_set_mode_offboard(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_readyflight(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_READYFLIGHT);	   
    }
@@ -884,7 +884,7 @@ void px4_set_mode_readyflight(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_takeoff(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_TAKEOFF);	   
    }
@@ -899,7 +899,7 @@ void px4_set_mode_takeoff(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_pauseflight(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_PAUSEFLIGHT);	   
    }
@@ -914,7 +914,7 @@ void px4_set_mode_pauseflight(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_mission(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_MISSION);	   
    }
@@ -929,7 +929,7 @@ void px4_set_mode_mission(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_rtl(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_RTL);	   
    }
@@ -944,7 +944,7 @@ void px4_set_mode_rtl(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_landing(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState)
+   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
    {
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_LANDING);	   
    }

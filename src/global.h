@@ -57,6 +57,13 @@ enum DATASTREAMACK
 	ACK_OK,
 };
 
+enum ARMSTATE
+{
+    ARMSTATE_DISARMED,
+	ARMSTATE_ARMED,
+};
+
+
 #define SUB_STATE_INIT  0     //! 第一次切换到该菜单，执行初始化的操作
 #define SUB_STATE_START 1     //! 表示进入了该菜单
 #define SUB_STATE_NONE  255   //! 菜单执行完初始化操作后跳转到该状态等待进一步操作（若菜单的作用是实时显示变化的数据则不需跳转到该状态）
