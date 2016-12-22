@@ -91,35 +91,6 @@ extern "C" void TELEMETRY_USART_IRQHandler()
 }
 
 
- 
- 
- 
-/* 
-void usart2UavSendBuffer(uint8_t *buffer, uint16_t count)
-{
-  for(uint16_t i=0; i<count; i++) 
-  {
-     telemetrytxFifo.push(*(buffer+i));
-  }
-}
-
-
-extern "C" void TELEMETRY_USART_IRQHandler()
-{ 
-  if(USART_GetITStatus(TELEMETRY_USART, USART_IT_TXE) != RESET) 
-  {
-    uint8_t txdata;
-    if(telemetrytxFifo.pop(txdata)) USART_SendData(TELEMETRY_USART, txdata);
-  } 
-
-  if(USART_GetITStatus(TELEMETRY_USART, USART_IT_RXNE) != RESET)
-  {  
-    uint8_t rxdata;
-	rxdata = USART_ReceiveData(TELEMETRY_USART);	  
-    telemetryrxFifo.push(rxdata);	
-    mavlinkReceiver(MAVLINK_COMM_0, rxdata);		  
-  }
-} */
 
 
 

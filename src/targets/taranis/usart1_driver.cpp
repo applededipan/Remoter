@@ -102,61 +102,6 @@ extern "C" void USART1_USART_IRQHandler()
 }
 
 
-/* 
-void usart1UsbSendBuffer(uint8_t *buffer, uint16_t count)
-{
-  usart1UsbTxBuffer.ptr = buffer;
-  usart1UsbTxBuffer.count = count;
-  USART1_USART->CR1 |= USART_CR1_TXEIE ;
-}
-
-
-extern "C" void USART1_USART_IRQHandler()
-{
-  uint32_t status;
-  uint8_t data;
-
-  status = USART1_USART->SR;
-
-  if(status & USART_SR_TXE) 
-  {
-    if(usart1UsbTxBuffer.count) 
-    {
-      USART1_USART->DR = *usart1UsbTxBuffer.ptr++;
-      if(--usart1UsbTxBuffer.count == 0) 
-      {
-        USART1_USART->CR1 &= ~USART_CR1_TXEIE;   //! stop Tx interrupt
-        USART1_USART->CR1 |= USART_CR1_TCIE;     //! enable complete interrupt
-      }
-    }
-  }
-	
-  if((status & USART_SR_TC) && (USART1_USART->CR1 & USART_CR1_TCIE)) 
-  {
-    USART1_USART->CR1 &= ~USART_CR1_TCIE ;	     //! stop Complete interrupt
-    USART1_USART->CR1 |= USART_CR1_RE ;
-    while(status & (USART_FLAG_RXNE)) 
-    {
-      status = USART1_USART->DR;
-      status = USART1_USART->SR ;
-    }
-  }
-	
-  while(status & (USART_FLAG_RXNE | USART_FLAG_ERRORS)) 
-  {
-    data = USART1_USART->DR;
-    if(!(status & USART_FLAG_ERRORS)) 
-    {
-	  usart1rxFifo.push(data);
-	  mavlinkReceiver(MAVLINK_COMM_1, data);   
-	  if((data == 0XFE)&&(comData.comStep>-COMMAX)) comData.comStep--;
-    }
-    status = USART1_USART->SR;
-  }
-}
-
- */
-
 
 
 

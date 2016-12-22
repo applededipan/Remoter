@@ -264,17 +264,6 @@ void usart3BthSendBuffer(uint8_t *buffer, uint16_t count)
 }
 
 
-/* 
-void usart3BthSendBuffer(uint8_t *buffer, uint16_t count)
-{
-     while (count--)    
-    {    
-        usart3BthSendChar(*buffer);    
-        buffer++;    
-    }
-} */
-
-
 
 extern "C" void USART3_USART_IRQHandler()
 {
@@ -287,65 +276,6 @@ extern "C" void USART3_USART_IRQHandler()
 	  mavlinkReceiver(MAVLINK_COMM_3, data); 
   }
 }
-
-
-#if !defined(SIMU)
-#define USART_FLAG_ERRORS (USART_FLAG_ORE | USART_FLAG_NE | USART_FLAG_FE | USART_FLAG_PE)
-#endif
-
-/* extern "C" void USART3_USART_IRQHandler()
-{
-  uint8_t data;
-  if(USART_GetITStatus(USART3_USART, USART_IT_RXNE) != RESET)
-  {
-	  data = USART_ReceiveData(USART3_USART);
-      usart3rxFifo.push(data);	 	  
-  }
-} */
-
-/* extern "C" void USART3_USART_IRQHandler()
-{
-  uint32_t status;
-  uint8_t data;
-
-  status = USART3_USART->SR;
-
-  if(status & USART_SR_TXE) 
-  {
-    if(btTxBuffer.count) 
-    {
-      USART3_USART->DR = *btTxBuffer.ptr++;
-      if(--btTxBuffer.count == 0) 
-      {
-        USART3_USART->CR1 &= ~USART_CR1_TXEIE;   // stop Tx interrupt
-        USART3_USART->CR1 |= USART_CR1_TCIE;     // enable complete interrupt
-      }
-    }
-  }
-	
-  if((status & USART_SR_TC) && (USART3_USART->CR1 & USART_CR1_TCIE)) 
-  {
-    USART3_USART->CR1 &= ~USART_CR1_TCIE ;	// stop Complete interrupt
-    USART3_USART->CR1 |= USART_CR1_RE ;
-    while(status & (USART_FLAG_RXNE)) 
-    {
-      status = USART3_USART->DR;
-      status = USART3_USART->SR;
-    }
-  }
-	
-  while(status & (USART_FLAG_RXNE | USART_FLAG_ERRORS)) 
-  {
-    data = USART3_USART->DR;
-    if(!(status & USART_FLAG_ERRORS)) 
-    {
-      usart3rxFifo.push(data);	
-    }
-    status = USART3_USART->SR;
-  }
-}
- */
-
 
 
 
