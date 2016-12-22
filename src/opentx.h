@@ -78,7 +78,7 @@
 //#define BRAINYBEE_GIMBAL_CONTROL
 
 //! define whether control digicam zone in/out
-//#define DIGICAM_ZONE_IN_OUT
+#define DIGICAM_ZONE_IN_OUT
 
 //! define vtol mode control
 #define VTOL_MODE_CONTROL

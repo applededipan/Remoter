@@ -91,59 +91,7 @@ extern "C" void UART4_USART_IRQHandler()
 
 
 
-/* 
-void usart4RspSendBuffer(uint8_t *buffer, uint16_t count)
-{
-  usart4RspTxBuffer.ptr = buffer;
-  usart4RspTxBuffer.count = count;
-  UART4_USART->CR1 |= USART_CR1_TXEIE ;
-}
 
-
-extern "C" void UART4_USART_IRQHandler()
-{
-  uint32_t status;
-  uint8_t data;
-
-  status = UART4_USART->SR;
-
-  if(status & USART_SR_TXE) 
-  {
-    if(usart4RspTxBuffer.count) 
-    {
-      UART4_USART->DR = *usart4RspTxBuffer.ptr++;
-      if(--usart4RspTxBuffer.count == 0) 
-      {
-        UART4_USART->CR1 &= ~USART_CR1_TXEIE;   // stop Tx interrupt
-        UART4_USART->CR1 |= USART_CR1_TCIE;     // enable complete interrupt
-      }
-    }
-  }
-	
-  if((status & USART_SR_TC) && (UART4_USART->CR1 & USART_CR1_TCIE)) 
-  {
-    UART4_USART->CR1 &= ~USART_CR1_TCIE ;	// stop Complete interrupt
-    UART4_USART->CR1 |= USART_CR1_RE ;
-    while(status & (USART_FLAG_RXNE)) 
-    {
-      status = UART4_USART->DR;
-      status = UART4_USART->SR;
-    }
-  }
-	
-  while(status & (USART_FLAG_RXNE | USART_FLAG_ERRORS)) 
-  {
-    data = UART4_USART->DR;
-    if(!(status & USART_FLAG_ERRORS)) 
-    {
-      usart4rxFifo.push(data);
-      mavlinkReceiver(MAVLINK_COMM_2, data);  
-	  if((data == 0XFE)&&(comData.comStep<COMMAX)) comData.comStep++;
-    }
-    status = UART4_USART->SR;
-  }
-}
- */
 
 
 
