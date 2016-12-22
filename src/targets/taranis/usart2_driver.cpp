@@ -85,8 +85,7 @@ extern "C" void TELEMETRY_USART_IRQHandler()
   if(USART_GetITStatus(TELEMETRY_USART, USART_IT_RXNE) != RESET)
   {
 	  data = USART_ReceiveData(TELEMETRY_USART);	  
-      telemetryrxFifo.push(data);	
-      mavlinkReceiver(MAVLINK_COMM_0, data);		  
+      telemetryrxFifo.push(data);			  
   }
 }
 

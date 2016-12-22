@@ -178,30 +178,62 @@ void commnTask(void *pdata)
       
 	  if(!g_eeGeneral.firmwareUpdate) //! normal operate
 	  {
-		 if(g_eeGeneral.comlinkState == COMLINK_USB)                                    //! usb plugged in to transfer mavlink message
+		 if(g_eeGeneral.comlinkState == COMLINK_USB)                       
 		 {
-		    while(telemetryrxFifo.pop(tempdata)) usart1UsbSendChar(tempdata); 
-            while(usart1rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);             			
+		    while(telemetryrxFifo.pop(tempdata))
+			{
+				usart1UsbSendChar(tempdata);
+                mavlinkReceiver(MAVLINK_COMM_0, tempdata); 				
+			}
+			
+            while(usart1rxFifo.pop(tempdata))
+			{
+				usart2UavSendChar(tempdata); 
+				mavlinkReceiver(MAVLINK_COMM_1, tempdata);				
+			}
+            			
 		 }
-		 else if(g_eeGeneral.comlinkState == COMLINK_RSP)                               //! rsp plugged in to transfer mavlink message
+		 else if(g_eeGeneral.comlinkState == COMLINK_RSP)   
 		 {
-		    while(telemetryrxFifo.pop(tempdata)) usart4RspSendChar(tempdata); 
-            while(usart4rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              			
+		    while(telemetryrxFifo.pop(tempdata))
+			{
+				usart4RspSendChar(tempdata); 
+                mavlinkReceiver(MAVLINK_COMM_0, tempdata); 				
+			}
+
+            while(usart4rxFifo.pop(tempdata))
+			{
+				usart2UavSendChar(tempdata); 
+                mavlinkReceiver(MAVLINK_COMM_2, tempdata);				
+			}
+             			
 		 }
-		 else if(g_eeGeneral.comlinkState == COMLINK_BTH)                               //! bth plugged in to transfer mavlink message
+		 else if(g_eeGeneral.comlinkState == COMLINK_BTH)   
 		 {
-		    while(telemetryrxFifo.pop(tempdata)) usart3BthSendChar(tempdata);
-			while(usart3rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              
+		    while(telemetryrxFifo.pop(tempdata)) 
+			{
+				usart3BthSendChar(tempdata);
+                mavlinkReceiver(MAVLINK_COMM_0, tempdata); 				
+			}
+
+			while(usart3rxFifo.pop(tempdata)) 
+			{
+				usart2UavSendChar(tempdata);
+	            mavlinkReceiver(MAVLINK_COMM_3, tempdata); 				
+			}
+              
 		 }
-		 else                                                                           //! no one plugged in: uav connection or unconnection
+		 else   //! no one plugged in: uav connection or unconnection
 		 {
 		    while(telemetryrxFifo.pop(tempdata))
 		    {  
-		       if(mavData.mavStatus.health == 30)                                       //! uav unconnection: for usb config the p900 
+		       mavlinkReceiver(MAVLINK_COMM_0, tempdata);
+			   
+		       if(mavData.mavStatus.health == 30)   //! uav unconnection: for usb config the p900 
 			   {
 				  usart1UsbSendChar(tempdata);                                          
 			   }
-			   else                                                                     //! uav connection: try to connect to QGC
+			   else                                 //! uav connection: try to connect to QGC
 			   {
 				   switch(g_rtcTime%3)
 				   {
@@ -213,9 +245,24 @@ void commnTask(void *pdata)
 
 		    } 
 			
-            while(usart1rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              //! data form usb to uav	
-            while(usart4rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              //! data form rsp to uav
-            while(usart3rxFifo.pop(tempdata)) usart2UavSendChar(tempdata);              //! data form bth to uav 			
+            while(usart1rxFifo.pop(tempdata)) //! data form usb to uav	
+			{
+				usart2UavSendChar(tempdata);    
+				mavlinkReceiver(MAVLINK_COMM_1, tempdata);
+			}          
+			
+            while(usart4rxFifo.pop(tempdata)) //! data form rsp to uav
+			{
+				usart2UavSendChar(tempdata);    
+				mavlinkReceiver(MAVLINK_COMM_2, tempdata);
+			}          
+			
+            while(usart3rxFifo.pop(tempdata)) //! data form bth to uav 
+			{
+				usart2UavSendChar(tempdata);    
+				mavlinkReceiver(MAVLINK_COMM_3, tempdata);
+			}          
+			
 		 }	 
 	  }	
 	  	  

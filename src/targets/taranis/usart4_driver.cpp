@@ -82,7 +82,6 @@ extern "C" void UART4_USART_IRQHandler()
   {	  
 	  data = USART_ReceiveData(UART4_USART);
       usart4rxFifo.push(data); 	 
-	  mavlinkReceiver(MAVLINK_COMM_2, data);
   }
 }
 
