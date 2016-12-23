@@ -53,29 +53,7 @@ void displayStartmenu(void)
 		  f_close(&fsrc);
 		  f_mount(NULL, "0:", 0);			   
 	   }            
-	}
-	
-	
-	// FATFS fs;         
-    // FIL fsrc;   
-    // BYTE buffer[256]; 
-    // UINT br;        
-    // FRESULT fr;
-	
-    // f_mount(&fs, "0:", 0);		
-    // f_open(&fsrc, "0:SmartConsole/fonts/startup.bin", FA_READ); //! if open file failed then get info from extra flash
-	 // for(uint8_t i=0; i<5; i++)
-	 // {
-		// spiFlashEraseBlock64(i); 		 
-	 // }
-	// for(uint i=0; i<1200; i++)                           
-	// {
-		// fr = f_read(&fsrc, buffer, sizeof(buffer), &br);  
-		// if(fr || br == 0) break; 
-	    // spiFlashWritePage((uint8_t *)buffer, F_ADDR_PICSTARTMENU+i*256, 256);
-	// }
-	// f_close(&fsrc);
-	// f_mount(NULL, "0:", 0);			   
+	}		   
 
 }
 
