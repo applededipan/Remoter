@@ -1,4 +1,4 @@
- /*
+  /*
  * Authors (alphabetical order)
  * - Andre Bernet <bernet.andre@gmail.com>
  * - Andreas Weitl
@@ -117,6 +117,27 @@ uint16_t stackAvailable()
 }
 #endif
 
+
+
+
+
+
+
+
+
+
+
+/****************************************************************************** 
+ * @brief  get system time 
+ *
+ * @param  none
+ 
+ * @return double millisecond 
+*******************************************************************************/
+uint32_t hrtAbsoluteTime(void)
+{
+	return CoGetOSTime(); 
+}
 
 
 
@@ -284,7 +305,6 @@ void commnTask(void *pdata)
 	  //! CoTickDelay(2);//! 4ms for now 
   } 
 }
-
 
 
 void tasksStart()

@@ -93,7 +93,7 @@
 
 
 
-
+extern uint32_t hrtAbsoluteTime(void);
 
 void globalDatelInit(void);
 void ftpProcess(void); 
