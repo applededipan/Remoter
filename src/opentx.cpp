@@ -1248,7 +1248,7 @@ void doMixerCalculations()
   channelUpdate();               //! 
   powerShutdown();               //! 
   setFlightMode(OPENTX_MANUAL, OPENTX_AUTO, OPENTX_HOME); //! 
-  setGimbalMode(OPENTX_TR1);     //!  
+  //setGimbalMode(OPENTX_TR1);     //!  
 
   s_mixer_first_run_done = true;
 }
