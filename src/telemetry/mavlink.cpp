@@ -1115,6 +1115,7 @@ void autopilot_gimbal_control_send(uint16_t pitch, uint16_t roll, uint16_t yaw, 
  * @ autopilot set digicam zoom in or out, each cmd sent two times 
  * @ 0X80 zoom in
  * @ 0XA0 zoom out
+ * @ 0X10 zoom stop
 *******************************************************/
 void autopilot_set_digicam_zoom(uint32_t keyZoomIn, uint32_t keyZoomOut)
 {
@@ -1122,19 +1123,28 @@ void autopilot_set_digicam_zoom(uint32_t keyZoomIn, uint32_t keyZoomOut)
 	
 	if(g_eeGeneral.key == keyZoomIn)        //! keyZoomIn pressed down and set digicam zoom in
 	{
-	  if(state++ < 2)  g_mavlink_msg_camera_trigger_send(0X80);  //g_mavlink_msg_digicam_control_send(UAV_SYSTEM_ID, UAV_COMPON_ID, 0, 0X80, 0, 0, 0, 0, 0, 0);    
-	  else state = 2;
+	  if(!state) 
+	  {
+		g_mavlink_msg_camera_trigger_send(0X80); 
+		state = 1;
+	  }	  
 	}
 	else if(g_eeGeneral.key == keyZoomOut)  //! keyZoomOut pressed down and set digicam zoom out
 	{
-	  if(state++ < 2)  g_mavlink_msg_camera_trigger_send(0XA0);  //g_mavlink_msg_digicam_control_send(UAV_SYSTEM_ID, UAV_COMPON_ID, 0, 0XA0, 0, 0, 0, 0, 0, 0);   
-	  else state = 2;
+	  if(!state) 
+	  {
+		g_mavlink_msg_camera_trigger_send(0XA0);	
+	    state = 1;		
+	  }
 	} 
-	else if(state != 0)                     //! keyZoomIn/Out has been pressed down and set digicam zoom stop
+	else                                    //! keyZoomIn/Out has been pressed down and set digicam zoom stop
 	{
-	  if(state++ < 4)  g_mavlink_msg_camera_trigger_send(0X00);  //g_mavlink_msg_digicam_control_send(UAV_SYSTEM_ID, UAV_COMPON_ID, 0, 0X00, 0, 0, 0, 0, 0, 0);    
-      else state = 0;		  		  
-	}	
+	  if(state) 
+	  {
+	    g_mavlink_msg_camera_trigger_send(0X10); 
+        state = 0;		  
+	  }	  		  
+	}
 }
 
 
@@ -1280,7 +1290,6 @@ void mavlinkSendMessage(void)
 	if(streamId++ > 4) streamId = 0; //! 4
 	//! all datastreams are sent based on that the smart console has connected to uav
 	if((mavData.heartBeat.autopilot != MAV_AUTOPILOT_ARDUPILOTMEGA)&&(mavData.heartBeat.autopilot != MAV_AUTOPILOT_PX4)) return;
-
 	switch(streamId)
 	{   
 	    

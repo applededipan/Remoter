@@ -149,7 +149,7 @@ OS_TCID systemTimer_10ms;
 void systemTimer_10msCallBack(void)
 {
 #if defined (VTOL_MODE_CONTROL)
-  setVtolMode(OPENTX_TR2);    //! vtol mode control  use channel 8
+  setVtolMode(OPENTX_TR1);    //! vtol mode control  use channel 8
 #elif defined (THROW_CONTROL)	
   setThrowMode(OPENTX_TR2);   //! throw mode control  use channel 8
 #endif	
