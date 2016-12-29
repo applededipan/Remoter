@@ -258,7 +258,8 @@ void g_mavlink_msg_heartbeat_send(mavlink_channel_t chan, uint8_t type, uint8_t 
 void g_mavlink_msg_request_data_stream_send(uint8_t req_stream_id, uint16_t req_message_rate, uint8_t start_stop);											   													 
 void g_mavlink_msg_set_local_position_setpoint_send(uint8_t target_system, uint8_t target_component, uint8_t coordinate_frame, float x, float y, float z, float yaw);		
 void g_mavlink_msg_rc_channels_scaled_send(uint32_t time_boot_ms, uint8_t port, int16_t chan1, int16_t chan2, int16_t chan3, int16_t chan4, int16_t chan5, int16_t chan6, int16_t chan7, int16_t chan8, uint8_t rssi);										   										   																		  
-void g_mavlink_msg_rc_channels_override_send(uint16_t chan1, uint16_t chan2, uint16_t chan3, uint16_t chan4, uint16_t chan5, uint16_t chan6, uint16_t chan7, uint16_t chan8);										 							 
+void g_mavlink_msg_rc_channels_override_send(uint16_t chan1, uint16_t chan2, uint16_t chan3, uint16_t chan4, uint16_t chan5, uint16_t chan6, uint16_t chan7, uint16_t chan8);	
+void g_mavlink_msg_rc_channels_send(uint16_t chan1, uint16_t chan2, uint16_t chan3, uint16_t chan4, uint16_t chan5, uint16_t chan6, uint16_t chan7, uint16_t chan8, uint16_t chan9, uint16_t chan10, uint16_t chan11, uint16_t chan12, uint16_t chan13, uint16_t chan14, uint16_t chan15,uint16_t chan16, uint16_t chan17, uint16_t chan18);									 							 
 void g_mavlink_msg_command_long_send(uint8_t target_system, uint8_t target_component, uint16_t command, uint8_t confirmation, float param1, float param2, float param3, float param4, float param5, float param6, float param7);														   
 void g_mavlink_msg_file_transfer_protocol_send(mavlink_channel_t chan, uint8_t target_network, uint8_t target_system, uint8_t target_component, uint8_t *payload);
 void g_mavlink_msg_camera_trigger_send(uint32_t seq);

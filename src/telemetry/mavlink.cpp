@@ -631,6 +631,55 @@ void g_mavlink_msg_rc_channels_scaled_send(uint32_t time_boot_ms, uint8_t port, 
 
 
 /*******************************************************
+ * @messageID #65
+ * @brief Send a rc_channels message
+ * 
+ * uint32_t time_boot_ms Timestamp (milliseconds since system boot apple: used as target ID)
+ * uint16_t chan1_raw    RC channel 1 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan2_raw    RC channel 2 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan3_raw    RC channel 3 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan4_raw    RC channel 4 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan5_raw    RC channel 5 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan6_raw    RC channel 6 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan7_raw    RC channel 7 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan8_raw    RC channel 8 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan9_raw    RC channel 9 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan10_raw   RC channel 10 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan11_raw   RC channel 11 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan12_raw   RC channel 12 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan13_raw   RC channel 13 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan14_raw   RC channel 14 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan15_raw   RC channel 15 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan16_raw   RC channel 16 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan17_raw   RC channel 17 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint16_t chan18_raw   RC channel 18 value, in microseconds. A value of UINT16_MAX implies the channel is unused
+ * uint8_t chancount     Total number of RC channels being received. This can be larger than 18, indicating that more channels are available but not given in this message. This value should be 0 when no RC channels are available
+*******************************************************/
+void g_mavlink_msg_rc_channels_send(uint16_t chan1, 
+                                    uint16_t chan2, 
+									uint16_t chan3, 
+									uint16_t chan4, 
+									uint16_t chan5, 
+									uint16_t chan6, 
+									uint16_t chan7, 
+									uint16_t chan8,
+                                    uint16_t chan9, 
+									uint16_t chan10, 
+									uint16_t chan11, 
+									uint16_t chan12, 
+									uint16_t chan13, 
+									uint16_t chan14, 
+									uint16_t chan15,
+									uint16_t chan16, 
+									uint16_t chan17, 
+									uint16_t chan18)
+{
+    mavlink_channel_t chan = MAVLINK_COMM_0;
+    mavlink_msg_rc_channels_send(chan, UAV_SYSTEM_ID, 18, chan1, chan2, chan3, chan4, chan5, chan6, chan7, chan8, chan9, chan10,  chan11,  chan12,  chan13,  chan14,  chan15,  chan16,  chan17,  chan18, 100);	
+}
+
+
+/*******************************************************
  * @messageID #66
  * @brief Send a request_data_stream message
  *
@@ -1202,21 +1251,28 @@ void autopilot_set_armed_disarmed(RC_CHANNEL channels)
 /*******************************************************
  * @brief send autopilot joystick command 
  * @brief only when has received the autopilot's message the smartconsole will send this control message
- * @ 鍓嶅洓涓?氶亾鐨勯『搴忎负锛氬崌闄嶏紝鏂瑰悜锛屾补闂紝鍓考锛汸X4鍜孉PM鐨勯『搴忔湁鍖哄埆锛屼絾鍦ㄥ嚱鏁板唴閮ㄨ繘琛屼簡淇敼锛侊紒锛?
  
- * @ ch1    (1000 -- 2000) : ele  鍗囬檷
- * @ ch2    (1000 -- 2000) : rud  鏂瑰悜
- * @ ch3    (1000 -- 2000) : thr  娌归棬
- * @ ch4    (1000 -- 2000) : ail  鍓考
+ * @ ch1    (1000 -- 2000) : ele 
+ * @ ch2    (1000 -- 2000) : rud  
+ * @ ch3    (1000 -- 2000) : thr 
+ * @ ch4    (1000 -- 2000) : ail 
  * @ ch5    (1000 -- 2000)
  * @ ch6    (1000 -- 2000)
  * @ ch7    (1000 -- 2000)
- * @ ch8    (1000 -- 2000) 
+ * @ ch8    (1000 -- 2000)
+ * @ ch9    (1000 -- 2000)
+ * @ ch10   (1000 -- 2000)
+ * @ ch11   (1000 -- 2000)
+ * @ ch12   (1000 -- 2000)
+ * @ ch13   (1000 -- 2000)
+ * @ ch14   (1000 -- 2000)
 *******************************************************/
+#define CHANNEL_EXTENED
+
 void autopilot_joystick_command_send(RC_CHANNEL channels)
 {
 	const  uint8_t MIN = 5;   //! 闃堝??
-	static uint8_t count = 0; //! 2鍒嗛
+	static uint8_t count = 0; //! 2鍒嗛	
 	
 	static int16_t ch1Last = 0;
 	static int16_t ch2Last = 0;
@@ -1225,22 +1281,34 @@ void autopilot_joystick_command_send(RC_CHANNEL channels)
 	static int16_t ch5Last = 0;
 	static int16_t ch6Last = 0;
 	static int16_t ch7Last = 0;
-	static int16_t ch8Last = 0;
+	static int16_t ch8Last = 0;	
+	static int16_t ch9Last = 0;
+	static int16_t ch10Last = 0;
+	static int16_t ch11Last = 0;
+	static int16_t ch12Last = 0;
+	static int16_t ch13Last = 0;
+	static int16_t ch14Last = 0;	
 	
 	if(count++ > 1) count = 0;
 	//! 20Hz	
-	if(abs(channels.chan1-ch1Last)>MIN || abs(channels.chan2-ch2Last)>MIN || abs(channels.chan3-ch3Last)>MIN || abs(channels.chan4-ch4Last)>MIN || abs(channels.chan5-ch5Last)>MIN || abs(channels.chan6-ch6Last)>MIN || abs(channels.chan7-ch7Last)>MIN || abs(channels.chan8-ch8Last)>MIN)
-	{
-		//! PX4
+	if(abs(channels.chan1-ch1Last)>MIN || abs(channels.chan2-ch2Last)>MIN || abs(channels.chan3-ch3Last)>MIN   || abs(channels.chan4-ch4Last)>MIN   || abs(channels.chan5-ch5Last)>MIN   || abs(channels.chan6-ch6Last)>MIN   || abs(channels.chan7-ch7Last)>MIN || 
+	   abs(channels.chan8-ch8Last)>MIN || abs(channels.chan9-ch9Last)>MIN || abs(channels.chan10-ch10Last)>MIN || abs(channels.chan11-ch11Last)>MIN || abs(channels.chan12-ch12Last)>MIN || abs(channels.chan13-ch13Last)>MIN || abs(channels.chan14-ch14Last)>MIN)
+	{		
 	   if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_PX4)                //! PX4 inputs order: ele rud thr ail
 	   {
-		  //! +1000 -- +2000	
-		  g_mavlink_msg_rc_channels_override_send(channels.chan1, channels.chan2, channels.chan3, channels.chan4, channels.chan5, channels.chan6, channels.chan7, channels.chan8);
+		  #if defined(CHANNEL_EXTENED)
+		  g_mavlink_msg_rc_channels_send(channels.chan1, channels.chan2, channels.chan3, channels.chan4, channels.chan5, channels.chan6, channels.chan7, channels.chan8, channels.chan9, channels.chan10, channels.chan11, channels.chan12, channels.chan13, channels.chan14, 65535, 65535, 65535, 65535);
+          #else
+		  g_mavlink_msg_rc_channels_override_send(ch1Last, ch2Last, ch3Last, ch4Last, ch5Last, ch6Last, ch7Last, ch8Last);
+          #endif	  
 	   }
 	   else if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_ARDUPILOTMEGA) //! APM inputs order: ail ele thr rud
-	   {
-		  //! +1000 -- +2000		
-		  g_mavlink_msg_rc_channels_override_send(channels.chan4, channels.chan1, channels.chan3, channels.chan2, channels.chan5, channels.chan6, channels.chan7, channels.chan8);  
+	   {	
+		  #if defined(CHANNEL_EXTENED)	   
+		  g_mavlink_msg_rc_channels_send(channels.chan4, channels.chan1, channels.chan3, channels.chan2, channels.chan5, channels.chan6, channels.chan7, channels.chan8, channels.chan9, channels.chan10, channels.chan11, channels.chan12, channels.chan13, channels.chan14, 65535, 65535, 65535, 65535);  
+          #else
+		  g_mavlink_msg_rc_channels_override_send(channels.chan4, channels.chan1, channels.chan3, channels.chan2, channels.chan5, channels.chan6, channels.chan7, channels.chan8);
+          #endif
 	   }
 	   else
 	   {
@@ -1255,18 +1323,32 @@ void autopilot_joystick_command_send(RC_CHANNEL channels)
 	   ch6Last = channels.chan6;
        ch7Last = channels.chan7;
        ch8Last = channels.chan8;
+	   ch9Last = channels.chan9;
+	   ch10Last = channels.chan10;
+	   ch11Last = channels.chan11;
+	   ch12Last = channels.chan12; 
+	   ch13Last = channels.chan13;
+	   ch14Last = channels.chan14;	   
+	   
 	}
 	//! 10Hz
-	else if(count) //! 瀹氭椂鍙戦?侀槻姝onnect lost
+	else if(count)
 	{
-	   //! PX4鎴朠XHAWK
 	   if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_PX4)
 	   {
+		  #if defined(CHANNEL_EXTENED)
+		  g_mavlink_msg_rc_channels_send(ch1Last, ch2Last, ch3Last, ch4Last, ch5Last, ch6Last, ch7Last, ch8Last, ch9Last, ch10Last, ch11Last, ch12Last, ch13Last, ch14Last, 65535, 65535, 65535, 65535);
+		  #else
 		  g_mavlink_msg_rc_channels_override_send(ch1Last, ch2Last, ch3Last, ch4Last, ch5Last, ch6Last, ch7Last, ch8Last);
+          #endif	  
 	   }
-	   else if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_ARDUPILOTMEGA)//! APM
+	   else if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_ARDUPILOTMEGA)
 	   {
-		  g_mavlink_msg_rc_channels_override_send(ch4Last, ch1Last, ch3Last, ch2Last, ch5Last, ch6Last, ch7Last, ch8Last);	   
+		  #if defined(CHANNEL_EXTENED)		   
+		  g_mavlink_msg_rc_channels_send(ch4Last, ch1Last, ch3Last, ch2Last, ch5Last, ch6Last, ch7Last, ch8Last, ch9Last, ch10Last, ch11Last, ch12Last, ch13Last, ch14Last, 65535, 65535, 65535, 65535);
+          #else
+		  g_mavlink_msg_rc_channels_override_send(ch4Last, ch1Last, ch3Last, ch2Last, ch5Last, ch6Last, ch7Last, ch8Last);	
+          #endif	  
 	   }
 	   else
 	   {
@@ -1276,7 +1358,7 @@ void autopilot_joystick_command_send(RC_CHANNEL channels)
 	else
 	{
 		//! nothing to do
-	}
+	}	
 }
 
 
