@@ -103,6 +103,11 @@ void setGimbalMode(uint32_t key);
 void setVtolMode(uint32_t keyVtol);
 void setThrowMode(uint32_t keyThrow);
 void setFlightMode(uint32_t keyManual, uint32_t keyAuto, uint32_t keyRtl);
+void setChannel10Value(uint32_t key);
+void setChannel11Value(uint32_t key);
+void setChannel12Value(uint32_t key);
+void setChannel13Value(uint32_t key);
+void setChannel14Value(uint32_t key);
 
 //! added by apple
 #if defined(PCBTARANIS)

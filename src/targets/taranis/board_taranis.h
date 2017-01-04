@@ -433,6 +433,10 @@ void displayTime(uint16_t x, uint16_t y, uint8_t size);
 void displayRssi(uint16_t x, uint16_t y, uint8_t wifiRssi, uint8_t dataRssi);
 void displayJoystick(RC_CHANNEL channels);
 void displayAttitude(int16_t pitch, int16_t roll, int16_t heading, int32_t alt, int8_t batRemain);
+void displayAirSpeed(uint16_t x, uint16_t y, float airSpeed);
+void displayGroundSpeed(uint16_t x, uint16_t y, float groundSpeed);
+void displayClimb(uint16_t x, uint16_t y, float climb);
+void displayThrottle(uint16_t x, uint16_t y, float throttle);
 
 
 void displayUavType(uint16_t x, uint16_t y);

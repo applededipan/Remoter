@@ -494,7 +494,7 @@ void menu_calibJoystick(uint8_t state)
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_THRESHOLD;      
           break;          
      case CALIB_STATE_THRESHOLD:
-          g_eeGeneral.joyscale.threshold = 25;
+          g_eeGeneral.joyscale.threshold = 50;
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_STICK_LEFT_UP;           
           break;        
      case CALIB_STATE_STICK_LEFT_UP:

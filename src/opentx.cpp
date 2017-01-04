@@ -151,7 +151,7 @@ void systemTimer_10msCallBack(void)
 #if defined (VTOL_MODE_CONTROL)
   setVtolMode(OPENTX_TR1);    //! vtol mode control  use channel 8
 #elif defined (THROW_CONTROL)	
-  setThrowMode(OPENTX_TR2);   //! throw mode control  use channel 8
+  setThrowMode(OPENTX_TR1);   //! throw mode control  use channel 9
 #endif	
   
   mavlinkSendMessage();       //! send messages to uav
@@ -159,6 +159,11 @@ void systemTimer_10msCallBack(void)
   displayNavigation();
   
   displayAttitude(mavData.attitude.pitch, mavData.attitude.roll, mavData.attitude.yaw, mavData.hud.alt, mavData.sysStatus.volBat);
+  // displayAirSpeed(15, 30, mavData.hud.airspeed);
+  // displayGroundSpeed(15, 80, mavData.hud.groundspeed);
+  // displayClimb(15, 130, mavData.hud.climb);
+  // displayThrottle(3, 180, mavData.hud.throttle);
+  
   
   view_information(true);
   
@@ -1765,7 +1770,7 @@ void setVtolMode(uint32_t keyVtol)
 
 
 /*******************************************************
- * @ set the throw mode :the value is 1000 or 2000 use channel 8
+ * @ set the throw mode :the value is 1000 or 2000 use channel 9
  
  * @ param: keyThrow:  apply which key to set the throw mode
 *******************************************************/
@@ -1786,6 +1791,120 @@ void setThrowMode(uint32_t keyThrow)
   }  
 }
 
+
+/*******************************************************
+ * @ set the channel10 value :the value is 1000 or 2000 use channel 10
+ 
+ * @ param: key:  apply which key to set the channel10 value
+*******************************************************/
+void setChannel10Value(uint32_t key)
+{
+  if(g_eeGeneral.key == key)  
+  {
+	if(g_rcChannel.chan10 != 1000)
+	{
+	  g_rcChannel.chan10 = 1000;
+	}
+	else
+	{
+	  g_rcChannel.chan10 = 2000;
+	}
+	
+    g_eeGeneral.key = 0;	
+  }  
+}
+
+
+/*******************************************************
+ * @ set the channel11 value :the value is 1000 or 2000 use channel 11
+ 
+ * @ param: key:  apply which key to set the channel11 value
+*******************************************************/
+void setChannel11Value(uint32_t key)
+{
+  if(g_eeGeneral.key == key)  
+  {
+	if(g_rcChannel.chan11 != 1000)
+	{
+	  g_rcChannel.chan11 = 1000;
+	}
+	else
+	{
+	  g_rcChannel.chan11 = 2000;
+	}
+	
+    g_eeGeneral.key = 0;	
+  }  
+}
+
+
+/*******************************************************
+ * @ set the channel12 value :the value is 1000 or 2000 use channel 12
+ 
+ * @ param: key:  apply which key to set the channel12 value
+*******************************************************/
+void setChannel12Value(uint32_t key)
+{
+  if(g_eeGeneral.key == key)  
+  {
+	if(g_rcChannel.chan12 != 1000)
+	{
+	  g_rcChannel.chan12 = 1000;
+	}
+	else
+	{
+	  g_rcChannel.chan12 = 2000;
+	}
+	
+    g_eeGeneral.key = 0;	
+  }  
+}
+
+
+/*******************************************************
+ * @ set the channel13 value :the value is 1000 or 2000 use channel 13
+ 
+ * @ param: key:  apply which key to set the channel13 value
+*******************************************************/
+void setChannel13Value(uint32_t key)
+{
+  if(g_eeGeneral.key == key)  
+  {
+	if(g_rcChannel.chan13 != 1000)
+	{
+	  g_rcChannel.chan13 = 1000;
+	}
+	else
+	{
+	  g_rcChannel.chan13 = 2000;
+	}
+	
+    g_eeGeneral.key = 0;	
+  }  
+}
+
+
+/*******************************************************
+ * @ set the channel14 value :the value is 1000 or 2000 use channel 14
+ 
+ * @ param: key:  apply which key to set the channel14 value
+*******************************************************/
+void setChannel14Value(uint32_t key)
+{
+  if(g_eeGeneral.key == key)  
+  {
+	if(g_rcChannel.chan14 != 1000)
+	{
+	  g_rcChannel.chan14 = 1000;
+	}
+	else
+	{
+	  g_rcChannel.chan14 = 2000;
+	}
+	
+    g_eeGeneral.key = 0;	
+  }  
+}
 
 
 /*******************************************************
@@ -1830,28 +1949,29 @@ void setGimbalMode(uint32_t key)
 *******************************************************/
 void joystickConvert(void)
 {  
-   int16_t temp;
+   g_eeGeneral.joyscale.threshold = 75; 
    
+   int16_t temp;
    //! ELE
    temp = anaIn(1);
    if(temp>g_eeGeneral.joyscale.ele_max)      temp = g_eeGeneral.joyscale.ele_max;
    else if(temp<g_eeGeneral.joyscale.ele_min) temp = g_eeGeneral.joyscale.ele_min; 
    
-   if(temp<(g_eeGeneral.joyscale.ele_min+g_eeGeneral.joyscale.threshold))
+   if(temp<g_eeGeneral.joyscale.ele_min)
    {
 	 g_eeGeneral.joystick.ele = 2000;
    }
    else if(temp<(g_eeGeneral.joyscale.ele_cen-g_eeGeneral.joyscale.threshold))
    {
-	 g_eeGeneral.joystick.ele = temp*500/(g_eeGeneral.joyscale.ele_min-g_eeGeneral.joyscale.ele_cen) - 500*g_eeGeneral.joyscale.ele_min/(g_eeGeneral.joyscale.ele_min-g_eeGeneral.joyscale.ele_cen) + 2000;	   
+	 g_eeGeneral.joystick.ele = 500*(temp-g_eeGeneral.joyscale.ele_min)/(g_eeGeneral.joyscale.ele_min-g_eeGeneral.joyscale.ele_cen+g_eeGeneral.joyscale.threshold) + 2000;	   
    }
    else if(temp<(g_eeGeneral.joyscale.ele_cen+g_eeGeneral.joyscale.threshold))
    {
 	 g_eeGeneral.joystick.ele = 1500;  
    }
-   else if(temp<(g_eeGeneral.joyscale.ele_max-g_eeGeneral.joyscale.threshold))
+   else if(temp<g_eeGeneral.joyscale.ele_max)
    {
-	 g_eeGeneral.joystick.ele = temp*500/(g_eeGeneral.joyscale.ele_cen-g_eeGeneral.joyscale.ele_max) + 500*g_eeGeneral.joyscale.ele_max/(g_eeGeneral.joyscale.ele_max-g_eeGeneral.joyscale.ele_cen) + 1000;
+	 g_eeGeneral.joystick.ele = 500*(temp-g_eeGeneral.joyscale.ele_max)/(g_eeGeneral.joyscale.ele_cen-g_eeGeneral.joyscale.ele_max+g_eeGeneral.joyscale.threshold) + 1000;
    }	
    else
    {
@@ -1863,21 +1983,21 @@ void joystickConvert(void)
    if(temp>g_eeGeneral.joyscale.rud_max)      temp = g_eeGeneral.joyscale.rud_max;
    else if(temp<g_eeGeneral.joyscale.rud_min) temp = g_eeGeneral.joyscale.rud_min; 
    
-   if(temp<(g_eeGeneral.joyscale.rud_min+g_eeGeneral.joyscale.threshold))
+   if(temp<g_eeGeneral.joyscale.rud_min)
    {
 	 g_eeGeneral.joystick.rud = 2000;
    }
    else if(temp<(g_eeGeneral.joyscale.rud_cen-g_eeGeneral.joyscale.threshold))
    {
-	 g_eeGeneral.joystick.rud = temp*500/(g_eeGeneral.joyscale.rud_min-g_eeGeneral.joyscale.rud_cen) - 500*g_eeGeneral.joyscale.rud_min/(g_eeGeneral.joyscale.rud_min-g_eeGeneral.joyscale.rud_cen) + 2000;	   
+	 g_eeGeneral.joystick.rud = 500*(temp-g_eeGeneral.joyscale.rud_min)/(g_eeGeneral.joyscale.rud_min-g_eeGeneral.joyscale.rud_cen+g_eeGeneral.joyscale.threshold) + 2000;	   
    }
    else if(temp<(g_eeGeneral.joyscale.rud_cen+g_eeGeneral.joyscale.threshold))
    {
 	 g_eeGeneral.joystick.rud = 1500;  
    }
-   else if(temp<(g_eeGeneral.joyscale.rud_max-g_eeGeneral.joyscale.threshold))
+   else if(temp<g_eeGeneral.joyscale.rud_max)
    {
-	 g_eeGeneral.joystick.rud = temp*500/(g_eeGeneral.joyscale.rud_cen-g_eeGeneral.joyscale.rud_max) + 500*g_eeGeneral.joyscale.rud_max/(g_eeGeneral.joyscale.rud_max-g_eeGeneral.joyscale.rud_cen) + 1000;
+	 g_eeGeneral.joystick.rud = 500*(temp-g_eeGeneral.joyscale.rud_max)/(g_eeGeneral.joyscale.rud_cen-g_eeGeneral.joyscale.rud_max+g_eeGeneral.joyscale.threshold) + 1000;
    }	
    else
    {
@@ -1889,21 +2009,21 @@ void joystickConvert(void)
    if(temp>g_eeGeneral.joyscale.thr_max)      temp = g_eeGeneral.joyscale.thr_max;
    else if(temp<g_eeGeneral.joyscale.thr_min) temp = g_eeGeneral.joyscale.thr_min; 
    
-   if(temp>(g_eeGeneral.joyscale.thr_max-g_eeGeneral.joyscale.threshold))
+   if(temp>g_eeGeneral.joyscale.thr_max)
    {
 	 g_eeGeneral.joystick.thr = 2000;
    }
    else if(temp>(g_eeGeneral.joyscale.thr_cen+g_eeGeneral.joyscale.threshold))
    {
-	 g_eeGeneral.joystick.thr = temp*500/(g_eeGeneral.joyscale.thr_cen-g_eeGeneral.joyscale.thr_min) + 500*g_eeGeneral.joyscale.thr_cen/(g_eeGeneral.joyscale.thr_min-g_eeGeneral.joyscale.thr_cen) + 1500;	   
+	 g_eeGeneral.joystick.thr = 500*(temp-g_eeGeneral.joyscale.thr_max)/(g_eeGeneral.joyscale.thr_max-g_eeGeneral.joyscale.thr_cen-g_eeGeneral.joyscale.threshold) + 2000;	   
    }
    else if(temp>(g_eeGeneral.joyscale.thr_cen-g_eeGeneral.joyscale.threshold))
    {
 	 g_eeGeneral.joystick.thr = 1500;
    }
-   else if(temp>(g_eeGeneral.joyscale.thr_min+g_eeGeneral.joyscale.threshold))
+   else if(temp>g_eeGeneral.joyscale.thr_min)
    {
-	 g_eeGeneral.joystick.thr = temp*500/(g_eeGeneral.joyscale.thr_max-g_eeGeneral.joyscale.thr_cen) + 500*g_eeGeneral.joyscale.thr_cen/(g_eeGeneral.joyscale.thr_cen-g_eeGeneral.joyscale.thr_max) + 1500;
+	 g_eeGeneral.joystick.thr = 500*(temp-g_eeGeneral.joyscale.thr_min)/(g_eeGeneral.joyscale.thr_cen-g_eeGeneral.joyscale.thr_min-g_eeGeneral.joyscale.threshold) + 1000;
    }	
    else
    {
@@ -1915,47 +2035,47 @@ void joystickConvert(void)
    if(temp>g_eeGeneral.joyscale.ail_max)      temp = g_eeGeneral.joyscale.ail_max;
    else if(temp<g_eeGeneral.joyscale.ail_min) temp = g_eeGeneral.joyscale.ail_min; 
    
-   if(temp>(g_eeGeneral.joyscale.ail_max-g_eeGeneral.joyscale.threshold))
+   if(temp>g_eeGeneral.joyscale.ail_max)
    {
 	 g_eeGeneral.joystick.ail = 2000;
    }
    else if(temp>(g_eeGeneral.joyscale.ail_cen+g_eeGeneral.joyscale.threshold))
    {
-	 g_eeGeneral.joystick.ail = temp*500/(g_eeGeneral.joyscale.ail_cen-g_eeGeneral.joyscale.ail_min) + 500*g_eeGeneral.joyscale.ail_cen/(g_eeGeneral.joyscale.ail_min-g_eeGeneral.joyscale.ail_cen) + 1500;	   
+	 g_eeGeneral.joystick.ail = 500*(temp-g_eeGeneral.joyscale.ail_max)/(g_eeGeneral.joyscale.ail_max-g_eeGeneral.joyscale.ail_cen-g_eeGeneral.joyscale.threshold) + 2000;	   
    }
    else if(temp>(g_eeGeneral.joyscale.ail_cen-g_eeGeneral.joyscale.threshold))
    {
 	 g_eeGeneral.joystick.ail = 1500;
    }
-   else if(temp>(g_eeGeneral.joyscale.ail_min+g_eeGeneral.joyscale.threshold))
+   else if(temp>g_eeGeneral.joyscale.ail_min)
    {
-	 g_eeGeneral.joystick.ail = temp*500/(g_eeGeneral.joyscale.ail_max-g_eeGeneral.joyscale.ail_cen) + 500*g_eeGeneral.joyscale.ail_cen/(g_eeGeneral.joyscale.ail_cen-g_eeGeneral.joyscale.ail_max) + 1500;
+	 g_eeGeneral.joystick.ail = 500*(temp-g_eeGeneral.joyscale.ail_min)/(g_eeGeneral.joyscale.ail_cen-g_eeGeneral.joyscale.ail_min-g_eeGeneral.joyscale.threshold) + 1000;
    }	
    else
    {
 	 g_eeGeneral.joystick.ail = 1000;   
    }	
- 
+   
    //! LTRM
    temp = anaIn(4);
    if(temp>g_eeGeneral.joyscale.ltrm_max)      temp = g_eeGeneral.joyscale.ltrm_max;
    else if(temp<g_eeGeneral.joyscale.ltrm_min) temp = g_eeGeneral.joyscale.ltrm_min; 
    
-   if(temp>(g_eeGeneral.joyscale.ltrm_max-g_eeGeneral.joyscale.threshold))
+   if(temp>g_eeGeneral.joyscale.ltrm_max)
    {
 	 g_eeGeneral.joystick.ltrm = 2000;
    }
    else if(temp>(g_eeGeneral.joyscale.ltrm_cen+g_eeGeneral.joyscale.threshold))
    {
-	 g_eeGeneral.joystick.ltrm = temp*500/(g_eeGeneral.joyscale.ltrm_cen-g_eeGeneral.joyscale.ltrm_min) + 500*g_eeGeneral.joyscale.ltrm_cen/(g_eeGeneral.joyscale.ltrm_min-g_eeGeneral.joyscale.ltrm_cen) + 1500;	   
+	 g_eeGeneral.joystick.ltrm = 500*(temp-g_eeGeneral.joyscale.ltrm_max)/(g_eeGeneral.joyscale.ltrm_max-g_eeGeneral.joyscale.ltrm_cen-g_eeGeneral.joyscale.threshold) + 2000;	   
    }
    else if(temp>(g_eeGeneral.joyscale.ltrm_cen-g_eeGeneral.joyscale.threshold))
    {
 	 g_eeGeneral.joystick.ltrm = 1500;
    }
-   else if(temp>(g_eeGeneral.joyscale.ltrm_min+g_eeGeneral.joyscale.threshold))
+   else if(temp>g_eeGeneral.joyscale.ltrm_min)
    {
-	 g_eeGeneral.joystick.ltrm = temp*500/(g_eeGeneral.joyscale.ltrm_max-g_eeGeneral.joyscale.ltrm_cen) + 500*g_eeGeneral.joyscale.ltrm_cen/(g_eeGeneral.joyscale.ltrm_cen-g_eeGeneral.joyscale.ltrm_max) + 1500;
+	 g_eeGeneral.joystick.ltrm = 500*(temp-g_eeGeneral.joyscale.ltrm_min)/(g_eeGeneral.joyscale.ltrm_cen-g_eeGeneral.joyscale.ltrm_min-g_eeGeneral.joyscale.threshold) + 1000;
    }	
    else
    {
@@ -1967,21 +2087,21 @@ void joystickConvert(void)
    if(temp>g_eeGeneral.joyscale.rtrm_max)      temp = g_eeGeneral.joyscale.rtrm_max;
    else if(temp<g_eeGeneral.joyscale.rtrm_min) temp = g_eeGeneral.joyscale.rtrm_min; 
    
-   if(temp>(g_eeGeneral.joyscale.rtrm_max-g_eeGeneral.joyscale.threshold))
+   if(temp>g_eeGeneral.joyscale.rtrm_max)
    {
 	 g_eeGeneral.joystick.rtrm = 2000;
    }
    else if(temp>(g_eeGeneral.joyscale.rtrm_cen+g_eeGeneral.joyscale.threshold))
    {
-	 g_eeGeneral.joystick.rtrm = temp*500/(g_eeGeneral.joyscale.rtrm_cen-g_eeGeneral.joyscale.rtrm_min) + 500*g_eeGeneral.joyscale.rtrm_cen/(g_eeGeneral.joyscale.rtrm_min-g_eeGeneral.joyscale.rtrm_cen) + 1500;	   
+	 g_eeGeneral.joystick.rtrm = 500*(temp-g_eeGeneral.joyscale.rtrm_max)/(g_eeGeneral.joyscale.rtrm_max-g_eeGeneral.joyscale.rtrm_cen-g_eeGeneral.joyscale.threshold) + 2000;	   
    }
    else if(temp>(g_eeGeneral.joyscale.rtrm_cen-g_eeGeneral.joyscale.threshold))
    {
 	 g_eeGeneral.joystick.rtrm = 1500;
    }
-   else if(temp>(g_eeGeneral.joyscale.rtrm_min+g_eeGeneral.joyscale.threshold))
+   else if(temp>g_eeGeneral.joyscale.rtrm_min)
    {
-	 g_eeGeneral.joystick.rtrm = temp*500/(g_eeGeneral.joyscale.rtrm_max-g_eeGeneral.joyscale.rtrm_cen) + 500*g_eeGeneral.joyscale.rtrm_cen/(g_eeGeneral.joyscale.rtrm_cen-g_eeGeneral.joyscale.rtrm_max) + 1500;
+	 g_eeGeneral.joystick.rtrm = 500*(temp-g_eeGeneral.joyscale.rtrm_min)/(g_eeGeneral.joyscale.rtrm_cen-g_eeGeneral.joyscale.rtrm_min-g_eeGeneral.joyscale.threshold) + 1000;
    }	
    else
    {
@@ -2001,7 +2121,7 @@ void joystickConvert(void)
    if(g_eeGeneral.joystick.ltrm<1000) g_eeGeneral.joystick.ltrm = 1000;
    if(g_eeGeneral.joystick.rtrm>2000) g_eeGeneral.joystick.rtrm = 2000;
    if(g_eeGeneral.joystick.rtrm<1000) g_eeGeneral.joystick.rtrm = 1000;	 
-
+ 
 }
 
 
@@ -2035,6 +2155,7 @@ void channelUpdate(void)
    g_rcChannel.chan7 = g_eeGeneral.joystick.rtrm;
 #if defined (VTOL_MODE_CONTROL)
    g_rcChannel.chan8 = g_eeGeneral.vtolMode;     //! vtol mode control  use channel 8
+
 #elif defined (THROW_CONTROL)	
    g_rcChannel.chan8 = g_eeGeneral.throwMode;    //! throw mode control  use channel 8
 #endif	

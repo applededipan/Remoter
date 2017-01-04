@@ -259,7 +259,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
             {
 		      uint8_t MANUAL[] = "   MANUAL   ";			  
 		      if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, MANUAL);				  
-			  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, MANUAL);                              
+			  else                                lcd_ShowString(x-72, y, WHITE, 24, MANUAL);                              
 			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);			  
@@ -268,7 +268,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 	        {
               uint8_t ACRO[] =   "    ACRO    ";	
               if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, ACRO);				  
-              else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, ACRO);				  			  
+              else                                lcd_ShowString(x-72, y, WHITE, 24, ACRO);				  			  
 			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
@@ -277,7 +277,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 	        {
 	    	  uint8_t STABILIZED[] = " STABILIZED ";
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, STABILIZED);
-			  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, STABILIZED);
+			  else                                lcd_ShowString(x-72, y, WHITE, 24, STABILIZED);
 			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);			  
@@ -286,7 +286,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 			{
 			  uint8_t RATTITUDE[] =  " RATTITUDE  ";		  
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-66, y, GREEN, 24, RATTITUDE);
-			  else                                lcd_ShowString(x-66, y, LIGHTWHITE, 24, RATTITUDE);
+			  else                                lcd_ShowString(x-66, y, WHITE, 24, RATTITUDE);
 			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);			  
@@ -297,7 +297,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 		      uint8_t NONE[]=        "            ";
 		      lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);				  
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-66, y, GREEN, 24, PAUSEFLIGHT); 
-			  else                                lcd_ShowString(x-66, y, LIGHTWHITE, 24, PAUSEFLIGHT);
+			  else                                lcd_ShowString(x-66, y, WHITE, 24, PAUSEFLIGHT);
 			  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);			  
@@ -308,7 +308,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 		      uint8_t NONE[]="            ";
 		      lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);				  
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-42, y, GREEN, 24, MISSION);
-			  else                                lcd_ShowString(x-42, y, LIGHTWHITE, 24, MISSION);
+			  else                                lcd_ShowString(x-42, y, WHITE, 24, MISSION);
 			  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
@@ -317,7 +317,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 			{
 	    	  uint8_t RTL[] = "   RETURN   ";				  
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, RTL);
-			  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, RTL);
+			  else                                lcd_ShowString(x-72, y, WHITE, 24, RTL);
 			  GPIO_SetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
 			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);				
@@ -326,7 +326,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 			{
 	    	  uint8_t ALT[] = "  ALTITUDE  ";			  
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, ALT);
-			  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, ALT);
+			  else                                lcd_ShowString(x-72, y, WHITE, 24, ALT);
 			  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				
@@ -335,7 +335,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 			{
 	    	  uint8_t POS[] = "  POSITION  ";			  
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, POS);
-			  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, POS);
+			  else                                lcd_ShowString(x-72, y, WHITE, 24, POS);
 			  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				
@@ -346,7 +346,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 		      uint8_t NONE[]="            ";
 		      lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);				  
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-42, y, GREEN, 24, LANDING);
-			  else                                lcd_ShowString(x-42, y, LIGHTWHITE, 24, LANDING);
+			  else                                lcd_ShowString(x-42, y, WHITE, 24, LANDING);
 			  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				
@@ -355,7 +355,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 			{
 	    	  uint8_t RTGS[] = "    RTGS    ";				  
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, RTGS);
-			  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, RTGS);
+			  else                                lcd_ShowString(x-72, y, WHITE, 24, RTGS);
 			  GPIO_SetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
 			  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);			
@@ -374,7 +374,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 		      uint8_t NONE[]="            ";
 		      lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);	
 	    	  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-66, y, GREEN, 24, UNKNOWN);
-			  else                                lcd_ShowString(x-66, y, LIGHTWHITE, 24, UNKNOWN);			  
+			  else                                lcd_ShowString(x-66, y, WHITE, 24, UNKNOWN);			  
 		      GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
 		      GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 		      GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);			  
@@ -391,7 +391,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 		          uint8_t NONE[]="            ";
 		          lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);					  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-54, y, GREEN, 24, STABILIZE);
-				  else                                lcd_ShowString(x-54, y, LIGHTWHITE, 24, STABILIZE);
+				  else                                lcd_ShowString(x-54, y, WHITE, 24, STABILIZE);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -400,7 +400,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t ACRO[] = "    ACRO    ";						  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, ACRO);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, ACRO);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, ACRO);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
@@ -409,7 +409,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t AUTO[] = "    AUTO    ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, AUTO);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, AUTO);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, AUTO);
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
@@ -418,7 +418,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t LOITER[]= "   LOITER   ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, LOITER);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, LOITER);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, LOITER);
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -429,7 +429,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 		          uint8_t NONE[]="            ";
 		          lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);					  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-54, y, GREEN, 24, OF_LOITER); 
-				  else                                lcd_ShowString(x-54, y, LIGHTWHITE, 24, OF_LOITER); 
+				  else                                lcd_ShowString(x-54, y, WHITE, 24, OF_LOITER); 
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -438,7 +438,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t ALT_HOLD[]= "  ALT_HOLD  ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, ALT_HOLD); 
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, ALT_HOLD);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, ALT_HOLD);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -447,7 +447,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t RTL[]= "   RETURN   ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, RTL);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, RTL);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, RTL);
 				  GPIO_SetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);				  
@@ -456,7 +456,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t POSITION[]= "  POSITION  ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, POSITION);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, POSITION);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, POSITION);
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -465,7 +465,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t POS_HOLD[]= "  POS_HOLD  ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, POS_HOLD);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, POS_HOLD);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, POS_HOLD);
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -485,7 +485,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				   uint8_t NONE[]="            ";
 		           lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);
 				   if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-66, y, GREEN, 24, UNKNOWN);
-				   else                                lcd_ShowString(x-66, y, LIGHTWHITE, 24, UNKNOWN);				   
+				   else                                lcd_ShowString(x-66, y, WHITE, 24, UNKNOWN);				   
 				   GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
 				   GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				   GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);				   
@@ -498,7 +498,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t MANUAL[] = "   MANUAL   ";					  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, MANUAL);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, MANUAL);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, MANUAL);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
@@ -507,7 +507,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t CIRCLE[]= "   CIRCLE   ";					  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, CIRCLE); 
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, CIRCLE);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, CIRCLE);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -518,7 +518,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 		          uint8_t NONE[]="            ";
 		          lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);					  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-54, y, GREEN, 24, STABILIZE);
-				  else                                lcd_ShowString(x-54, y, LIGHTWHITE, 24, STABILIZE);
+				  else                                lcd_ShowString(x-54, y, WHITE, 24, STABILIZE);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -527,7 +527,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t TRAINING[]= "  TRAINING  ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, TRAINING); 
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, TRAINING);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, TRAINING);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -536,7 +536,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t ACRO[]= "    ACRO    ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, ACRO); 
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, ACRO);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, ACRO);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -545,7 +545,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t FBWA[]= "    FBWA    ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, FBWA);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, FBWA);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, FBWA);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -554,7 +554,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t FBWB[]= "    FBWB    ";					  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, FBWB);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, FBWB);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, FBWB);
 				  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -563,7 +563,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t CRUISE[]= "   CRUISE   ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, CRUISE); 
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, CRUISE);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, CRUISE);
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -572,7 +572,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t AUTOTUNE[]= "  AUTOTUNE  ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, AUTOTUNE); 
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, AUTOTUNE);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, AUTOTUNE);
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -581,7 +581,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t AUTO[] = "    AUTO    ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, AUTO);
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, AUTO);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, AUTO);
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
@@ -590,7 +590,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t RETURN[]= "   RETURN   ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, RETURN); 
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, RETURN);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, RETURN);
 				  GPIO_SetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
@@ -599,7 +599,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t LOITER[]= "   LOITER   ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, LOITER); 
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, LOITER);
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, LOITER);
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -608,7 +608,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				{
 				  uint8_t GUIDED[]= "   GUIDED   ";				  
 				  if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, GUIDED); 
-				  else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, GUIDED); 
+				  else                                lcd_ShowString(x-72, y, WHITE, 24, GUIDED); 
 				  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
 				  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				  GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);				  
@@ -628,7 +628,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 				   uint8_t NONE[]="            ";
 		           lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);
 				   if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-66, y, GREEN, 24, UNKNOWN); 
-				   else                                lcd_ShowString(x-66, y, LIGHTWHITE, 24, UNKNOWN); 				   
+				   else                                lcd_ShowString(x-66, y, WHITE, 24, UNKNOWN); 				   
 				   GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
 				   GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 				   GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);					
@@ -641,7 +641,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 			   // uint8_t NONE[]="            ";
 		       // lcd_ShowString(x-72, y, BACKCOLOR, 24, NONE);
 			   // if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-66, y, GREEN, 24, UNKNOWN); 
-			   // else                                lcd_ShowString(x-66, y, LIGHTWHITE, 24, UNKNOWN); 			   
+			   // else                                lcd_ShowString(x-66, y, WHITE, 24, UNKNOWN); 			   
 			   // GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
 			   // GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 			   // GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);				
@@ -651,7 +651,7 @@ void displayUavFlightMode(uint16_t x, uint16_t y)
 	   {
 		  // uint8_t UNKNOWN[] = " UNKNOWNUAV ";		   
 		  // if(mavData.mavStatus.armState == ARMSTATE_ARMED) lcd_ShowString(x-72, y, GREEN, 24, UNKNOWN); 
-		  // else                                lcd_ShowString(x-72, y, LIGHTWHITE, 24, UNKNOWN); 		  
+		  // else                                lcd_ShowString(x-72, y, WHITE, 24, UNKNOWN); 		  
 		  // GPIO_ResetBits(LED_GPIO_REG_H, LED_GPIO_PIN_H);
 		  // GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
 		  // GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);		   
@@ -1384,6 +1384,95 @@ void displayAttitude(int16_t pitch, int16_t roll, int16_t heading, int32_t alt, 
 }
 
 
+/************************************************
+gui   name: displayAirSpeed
+      func: 
+	 (x,y):  
+************************************************/
+void displayAirSpeed(uint16_t x, uint16_t y, float airSpeed)
+{
+   uint8_t logo[] = "AIRSPD";
+   const uint8_t charsize = 24;
+   const uint8_t valuelength = 5;
+   
+   lcd_ShowString(x, y, WHITE, charsize, logo);
+   
+   static float airSpeedLast = 50.0;
+   if(fabs(airSpeed-airSpeedLast) > 0.5f)
+   {
+	 lcd_ShowFloat(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, airSpeed);	
+     airSpeedLast = airSpeed;	  
+   }
+
+}
+
+
+/************************************************
+gui   name: displayGroundSpeed
+      func: 
+	 (x,y):  
+************************************************/
+void displayGroundSpeed(uint16_t x, uint16_t y, float groundSpeed)
+{
+   uint8_t logo[] = "GRDSPD";
+   const uint8_t charsize = 24;
+   const uint8_t valuelength = 5;
+   
+   lcd_ShowString(x, y, WHITE, charsize, logo);
+   
+   static float groundSpeedLast = 50.0;
+   if(fabs(groundSpeed-groundSpeedLast) > 0.5f)
+   {
+	 lcd_ShowFloat(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, groundSpeed);	
+     groundSpeedLast = groundSpeed;	  
+   }   
+}
+
+
+/************************************************
+gui   name: displayClimb
+      func: 
+	 (x,y):  
+************************************************/
+void displayClimb(uint16_t x, uint16_t y, float climb)
+{
+   uint8_t logo[] = "CLIMB";
+   const uint8_t charsize = 24;
+   const uint8_t valuelength = 5;
+   
+   lcd_ShowString(x, y, WHITE, charsize, logo);
+   
+   static float climbLast = 50.0;
+   if(fabs(climb-climbLast) > 0.1f)
+   {
+	 lcd_ShowFloat(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, climb);	
+     climbLast = climb;	  
+   }
+}
+
+
+/************************************************
+gui   name: displayThrottle
+      func: 
+	 (x,y):  
+************************************************/
+void displayThrottle(uint16_t x, uint16_t y, uint16_t throttle)
+{
+   uint8_t logo[] = "THROTTLE";
+   const uint8_t charsize = 24;
+   const uint8_t valuelength = 3;
+   
+   lcd_ShowString(x, y, WHITE, charsize, logo);
+   
+   static uint16_t throttleLast = 50.0;
+   if(throttle != throttleLast)
+   {
+	 lcd_ShowNum(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, throttle, 0);	
+     throttleLast = throttle;	  
+   }
+}
+
+
 
 /************************************************
 gui   name: displayUpdating
@@ -1541,9 +1630,7 @@ void view_information(uint16_t id)
 
  
 void displayTest(void)
-{  
-   // lcd_ShowNum(40, 120,  RED, 24, 3, g_eeGeneral.comlinkState, 0);
-   // lcd_ShowNum(40, 150,  RED, 24, 3, mavData.mavStatus.health, 0);
+{  	
    #if defined APPLE_DEBUG
 
    lcd_ShowNum(40, 150,  RED, 24, 3, mavData.mavStatus.health, 0);   	   
