@@ -51,6 +51,7 @@
 //! define smartconsole version 
 #define SMARTC_VERSION     "V1.0.0rc" 
 
+//#define CHANNEL_EXTENED
 
 
 //! define whether erase extra flash all

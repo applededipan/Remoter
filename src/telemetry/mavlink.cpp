@@ -1267,7 +1267,7 @@ void autopilot_set_armed_disarmed(RC_CHANNEL channels)
  * @ ch13   (1000 -- 2000)
  * @ ch14   (1000 -- 2000)
 *******************************************************/
-#define CHANNEL_EXTENED
+
 
 void autopilot_joystick_command_send(RC_CHANNEL channels)
 {
