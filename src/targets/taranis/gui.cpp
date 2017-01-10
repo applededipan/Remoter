@@ -860,9 +860,9 @@ gui   name: displayRssi
      (x,y): 起始坐标
 	  size: 字体大小
   wifiRssi: 0 -- 255： 128： 树莓派启动成功
-                       144： 遥控器端图传启动成功
-                       176： 图传连接成功
-                       240： 摄像头连接成功
+                       144： 遥控器端图传(Master)启动成功
+                       176： 飞控端图传(Slave)连接成功
+                       240： 摄像头端(Target)连接成功
   dataRssi: 0 -- 100/255
 ************************************************/ 
 void displayRssi(uint16_t x, uint16_t y, uint8_t wifiRssi, uint8_t dataRssi)
