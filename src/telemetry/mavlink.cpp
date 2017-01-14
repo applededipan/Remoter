@@ -67,28 +67,28 @@ void mavlinkReset(void)
 *******************************************************************************/
 static inline void handle_message_heartbeat(const mavlink_message_t *msg) 
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
-    mavData.mavStatus.health = 0; //! UAVport receive a heartBeat message ok!
-	
+	if(msg->sysid != UAV_SYSTEM_ID) return;
+	mavData.mavStatus.health = 0; //! UAVport receive a heartBeat message ok!
+
 	mavData.heartBeat.type      = mavlink_msg_heartbeat_get_type(msg);
 	mavData.heartBeat.autopilot = mavlink_msg_heartbeat_get_autopilot(msg);
 	mavData.heartBeat.baseMode  = mavlink_msg_heartbeat_get_base_mode(msg);
 	mavData.heartBeat.custMode  = mavlink_msg_heartbeat_get_custom_mode(msg);
 	mavData.heartBeat.sysStatus = mavlink_msg_heartbeat_get_system_status(msg);
 	mavData.heartBeat.version   = mavlink_msg_heartbeat_get_mavlink_version(msg);
-	
+
 	mavData.heartBeat.sysid = msg->sysid;
 	mavData.heartBeat.cmpid = msg->compid;
-	
+
 	//! get the armed or disarmed state from mavData.heartBeat.baseMode
 	if(mavData.heartBeat.baseMode & MAV_MODE_FLAG_SAFETY_ARMED) 
-    {
+	{
 	  mavData.mavStatus.armState = ARMSTATE_ARMED; 	  
-    }  	
-    else 
-    {
+	}  	
+	else 
+	{
 	  mavData.mavStatus.armState = ARMSTATE_DISARMED; 
-    } 
+	} 
 }
 
 
@@ -103,9 +103,9 @@ static inline void handle_message_heartbeat(const mavlink_message_t *msg)
 *******************************************************************************/
 static inline void handle_message_sys_status(const mavlink_message_t *msg) 
 {   
-    if(msg->sysid != UAV_SYSTEM_ID) return;
+	if(msg->sysid != UAV_SYSTEM_ID) return;
 	mavData.mavStatus.health = 0; //! UAVport receive a heartBeat message ok!
-	
+
 	mavData.sysStatus.volBat    = mavlink_msg_sys_status_get_voltage_battery(msg); 
 	mavData.sysStatus.curBat    = mavlink_msg_sys_status_get_current_battery(msg);
 	mavData.sysStatus.batRemain = mavlink_msg_sys_status_get_battery_remaining(msg);
@@ -143,8 +143,8 @@ static inline void handle_message_ping(const mavlink_message_t *msg)
 *******************************************************************************/
 static inline void handle_message_gps_raw_int(const mavlink_message_t *msg)
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
-	
+	if(msg->sysid != UAV_SYSTEM_ID) return;
+
 	mavData.gpsRaw.satellites = mavlink_msg_gps_raw_int_get_satellites_visible(msg);
 	mavData.gpsRaw.fixType    = mavlink_msg_gps_raw_int_get_fix_type(msg);
 }
@@ -160,7 +160,7 @@ static inline void handle_message_gps_raw_int(const mavlink_message_t *msg)
 *******************************************************************************/
 static inline void handle_message_scaled_pressure(const mavlink_message_t *msg)
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
+	if(msg->sysid != UAV_SYSTEM_ID) return;
 }
 
 
@@ -178,9 +178,9 @@ static inline void handle_message_scaled_pressure(const mavlink_message_t *msg)
 *******************************************************************************/
 static inline void handle_message_attitude(const mavlink_message_t *msg)
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
-    if(mavData.mavStatus.health>10) mavData.mavStatus.health--; //! 璇ユ秷鎭鐜囧お楂橈紝鏀跺埌璇ユ秷鎭笉鑳戒唬琛ㄤ俊鍙峰緢濂斤紝閫氳繃health鑷噺鐨勬柟寮忚〃绀鸿娑堟伅瀵逛簬淇″彿妫?娴嬬殑鏉冮噸
-	
+	if(msg->sysid != UAV_SYSTEM_ID) return;
+	if(mavData.mavStatus.health>10) mavData.mavStatus.health--; //! 璇ユ秷鎭鐜囧お楂橈紝鏀跺埌璇ユ秷鎭笉鑳戒唬琛ㄤ俊鍙峰緢濂斤紝閫氳繃health鑷噺鐨勬柟寮忚〃绀鸿娑堟伅瀵逛簬淇″彿妫?娴嬬殑鏉冮噸
+
 	mavData.attitude.pitch_rad = mavlink_msg_attitude_get_pitch(msg);
 	mavData.attitude.roll_rad  = mavlink_msg_attitude_get_roll(msg);
 	mavData.attitude.yaw_rad   = mavlink_msg_attitude_get_yaw(msg);
@@ -198,8 +198,8 @@ static inline void handle_message_attitude(const mavlink_message_t *msg)
 *******************************************************************************/
 static inline void handle_message_global_position_int(const mavlink_message_t *msg)
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
-	
+	if(msg->sysid != UAV_SYSTEM_ID) return;
+
 	mavData.globalPos.lat = mavlink_msg_global_position_int_get_lat(msg) / 1E7;
 	mavData.globalPos.lon = mavlink_msg_global_position_int_get_lon(msg) / 1E7;
 	mavData.globalPos.alt = mavlink_msg_global_position_int_get_alt(msg);
@@ -222,9 +222,9 @@ static inline void handle_message_global_position_int(const mavlink_message_t *m
 *******************************************************************************/
 static inline void handle_message_servo_output_raw(const mavlink_message_t *msg) 
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
-	
-    mavData.servoOutput.chan1 = mavlink_msg_servo_output_raw_get_servo1_raw(msg);
+	if(msg->sysid != UAV_SYSTEM_ID) return;
+
+	mavData.servoOutput.chan1 = mavlink_msg_servo_output_raw_get_servo1_raw(msg);
 	mavData.servoOutput.chan2 = mavlink_msg_servo_output_raw_get_servo2_raw(msg);
 	mavData.servoOutput.chan3 = mavlink_msg_servo_output_raw_get_servo3_raw(msg);
 	mavData.servoOutput.chan4 = mavlink_msg_servo_output_raw_get_servo4_raw(msg);
@@ -243,9 +243,9 @@ static inline void handle_message_servo_output_raw(const mavlink_message_t *msg)
 *******************************************************************************/
 static inline void handle_message_rc_channels(const mavlink_message_t *msg) 
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;	
-	
-    //mavData.radioStatus.rssi = mavlink_msg_rc_channels_get_rssi(msg);
+	if(msg->sysid != UAV_SYSTEM_ID) return;	
+
+	//mavData.radioStatus.rssi = mavlink_msg_rc_channels_get_rssi(msg);
 }
 
 
@@ -262,8 +262,8 @@ static inline void handle_message_rc_channels(const mavlink_message_t *msg)
 *******************************************************************************/
 static inline void handle_message_vfr_hud(const mavlink_message_t *msg) 
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
-	
+	if(msg->sysid != UAV_SYSTEM_ID) return;
+
 	mavData.hud.alt	        = mavlink_msg_vfr_hud_get_alt(msg);
 	mavData.hud.climb	    = mavlink_msg_vfr_hud_get_climb(msg);
 	mavData.hud.heading     = mavlink_msg_vfr_hud_get_heading(msg);
@@ -291,7 +291,7 @@ static inline void handle_message_vfr_hud(const mavlink_message_t *msg)
 *******************************************************************************/
 static inline void handle_message_hil_controls(const mavlink_message_t *msg) 
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
+	if(msg->sysid != UAV_SYSTEM_ID) return;
 }
 
 
@@ -308,8 +308,8 @@ static inline void handle_message_hil_controls(const mavlink_message_t *msg)
 *******************************************************************************/
 static inline void handle_message_radio_status(const mavlink_message_t *msg) 
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
-	
+	if(msg->sysid != UAV_SYSTEM_ID) return;
+
 	//mavData.radioStatus.rssi    = mavlink_msg_radio_status_get_rssi(msg);
 	//mavData.radioStatus.remrssi = mavlink_msg_radio_status_get_remrssi(msg);
 }
@@ -326,16 +326,16 @@ static inline void handle_message_file_transfer_protocol(const mavlink_message_t
 	mavlink_file_transfer_protocol_t data;
 	mavlink_msg_file_transfer_protocol_decode(msg, &data);	
 	Payload* payload = (Payload*)&data.payload[0];	
-	
+
 	mavData.ftp.sysid = mavlink_msg_file_transfer_protocol_get_target_system(msg);
 	if(mavData.ftp.sysid != OPENTX_SYSTEM_ID) return; //! see if this message is for smartconsole			
-	
-    mavData.ftp.payload.hdr.seqNumber = payload->hdr.seqNumber;
+
+	mavData.ftp.payload.hdr.seqNumber = payload->hdr.seqNumber;
 	mavData.ftp.payload.hdr.opcode    = payload->hdr.opcode;
 	mavData.ftp.payload.hdr.offset    = payload->hdr.offset; 
-    mavData.ftp.payload.hdr.size	  = payload->hdr.size;
+	mavData.ftp.payload.hdr.size	  = payload->hdr.size;
 	memcpy(&mavData.ftp.payload.data, &payload->data, sizeof(mavData.ftp.payload.data));
-	
+
 	g_eeGeneral.ftpReady = 1;	
 }
 
@@ -356,7 +356,7 @@ static inline void handle_message_file_transfer_protocol(const mavlink_message_t
 static inline void handle_message_battery_status(const mavlink_message_t* msg)
 {
 	if(msg->sysid != UAV_SYSTEM_ID) return;
-	
+
 	mavData.batStatus.current_consumed  = mavlink_msg_battery_status_get_current_consumed(msg);
 	mavData.batStatus.energy_consumed   = mavlink_msg_battery_status_get_energy_consumed(msg);
 	mavData.batStatus.battery_remaining = mavlink_msg_battery_status_get_battery_remaining(msg);     
@@ -365,7 +365,7 @@ static inline void handle_message_battery_status(const mavlink_message_t* msg)
 	mavData.batStatus.temperature       = mavlink_msg_battery_status_get_temperature(msg);
 	mavData.batStatus.type	            = mavlink_msg_battery_status_get_type(msg);
 	mavData.batStatus.id                = mavlink_msg_battery_status_get_id(msg);	
-    mavlink_msg_battery_status_get_voltages(msg, (uint16_t *)&mavData.batStatus.voltages);	
+	mavlink_msg_battery_status_get_voltages(msg, (uint16_t *)&mavData.batStatus.voltages);	
 }
 
 
@@ -381,10 +381,10 @@ static inline void handle_message_battery_status(const mavlink_message_t* msg)
 *******************************************************************************/
 static inline void handle_message_extended_sys_state(const mavlink_message_t* msg)
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
-    
-    mavData.sysStatus.vtolState = mavlink_msg_extended_sys_state_get_vtol_state(msg);
-    mavData.sysStatus.landState = mavlink_msg_extended_sys_state_get_landed_state(msg);
+	if(msg->sysid != UAV_SYSTEM_ID) return;
+
+	mavData.sysStatus.vtolState = mavlink_msg_extended_sys_state_get_vtol_state(msg);
+	mavData.sysStatus.landState = mavlink_msg_extended_sys_state_get_landed_state(msg);
 }
 
 
@@ -402,7 +402,7 @@ static inline void handle_message_extended_sys_state(const mavlink_message_t* ms
 *******************************************************************************/
 static inline void handle_message_statustext(const mavlink_message_t* msg) 
 {
-    if(msg->sysid != UAV_SYSTEM_ID) return;
+	if(msg->sysid != UAV_SYSTEM_ID) return;
 }
 
 
@@ -418,8 +418,8 @@ static inline void handle_message_debug(const mavlink_message_t* msg)
 {
 	if(msg->sysid != RASPI_SYSTEM_ID) return; //! message must from RASPI_SYSTEM_ID
 	mavData.mavStatus.pdlState = mavlink_msg_debug_get_ind(msg);
-    mavData.mavStatus.raspiHealth = 0;
-    
+	mavData.mavStatus.raspiHealth = 0;
+
 }
 
 
@@ -435,23 +435,23 @@ static inline void handleMessage(mavlink_message_t *msg)
 	case MAVLINK_MSG_ID_HEARTBEAT:                        
 		 handle_message_heartbeat(msg);
 		 break;
-    case MAVLINK_MSG_ID_FILE_TRANSFER_PROTOCOL:
-	     handle_message_file_transfer_protocol(msg);
-         break;			 
+	case MAVLINK_MSG_ID_FILE_TRANSFER_PROTOCOL:
+		 handle_message_file_transfer_protocol(msg);
+		 break;			 
 	case MAVLINK_MSG_ID_SYS_STATUS:                       
 		 handle_message_sys_status(msg);
 		 break;
 	case MAVLINK_MSG_ID_BATTERY_STATUS:
-	     handle_message_battery_status(msg);
+		 handle_message_battery_status(msg);
 		 break;
 	case MAVLINK_MSG_ID_RC_CHANNELS:
-	     handle_message_rc_channels(msg);
+		 handle_message_rc_channels(msg);
 		 break;		 
 	case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:                  
 		 handle_message_servo_output_raw(msg);  
 		 break;
-    case MAVLINK_MSG_ID_GPS_RAW_INT:
-	     handle_message_gps_raw_int(msg);
+	case MAVLINK_MSG_ID_GPS_RAW_INT:
+		 handle_message_gps_raw_int(msg);
 		 break;
 	case MAVLINK_MSG_ID_RADIO_STATUS:
 		 handle_message_radio_status(msg);
@@ -460,23 +460,23 @@ static inline void handleMessage(mavlink_message_t *msg)
 		 handle_message_vfr_hud(msg);
 		 break;
 	case MAVLINK_MSG_ID_ATTITUDE:                     
-	     handle_message_attitude(msg);
-	     break;
-	case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:          
-	     handle_message_global_position_int(msg);
-	     break;
-	case MAVLINK_MSG_ID_SCALED_PRESSURE:                  
-	     handle_message_scaled_pressure(msg); 
-         break;	        
-    case MAVLINK_MSG_ID_DEBUG:
-         handle_message_debug(msg);	
+		 handle_message_attitude(msg);
 		 break;
-    case MAVLINK_MSG_ID_EXTENDED_SYS_STATE:           //! for vtol state
-         handle_message_extended_sys_state(msg);
-         break;         
+	case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:          
+		 handle_message_global_position_int(msg);
+		 break;
+	case MAVLINK_MSG_ID_SCALED_PRESSURE:                  
+		 handle_message_scaled_pressure(msg); 
+		 break;	        
+	case MAVLINK_MSG_ID_DEBUG:
+		 handle_message_debug(msg);	
+		 break;
+	case MAVLINK_MSG_ID_EXTENDED_SYS_STATE:           //! for vtol state
+		 handle_message_extended_sys_state(msg);
+		 break;         
 	case MAVLINK_MSG_ID_PING:
-	     handle_message_ping(msg);
-         break;		 
+		 handle_message_ping(msg);
+		 break;		 
 	}
 
 }
@@ -512,14 +512,14 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		
 		if(mavlink_parse_char(MAVLINK_COMM_1, c, p_rxmsg_1, p_status_1))
 		{	
-	        if(g_eeGeneral.comlinkState != COMLINK_USB)
+			if(g_eeGeneral.comlinkState != COMLINK_USB)
 			{
 			   usart4RspStop();
 			   usart3BthStop();	
 			   g_eeGeneral.comlinkState = COMLINK_USB;			   
 			}
 		
-            handleMessage(p_rxmsg_1);	
+			handleMessage(p_rxmsg_1);	
 		}				
 	}
 	else if(chan == MAVLINK_COMM_2) //! date from usart4RspPort only parse debug message
@@ -532,7 +532,7 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		{
 			if(g_eeGeneral.comlinkState != COMLINK_RSP)
 			{
-		       usart1UsbStop();
+			   usart1UsbStop();
 			   usart3BthStop();
 			   g_eeGeneral.comlinkState = COMLINK_RSP;				
 			}
@@ -602,7 +602,7 @@ void g_mavlink_msg_heartbeat_send(mavlink_channel_t chan, uint8_t type, uint8_t 
 *******************************************************/
 void g_mavlink_msg_set_mode_send(uint8_t target_system, uint8_t baseMode, uint32_t custMode)
 {
-    mavlink_channel_t chan = MAVLINK_COMM_0;
+	mavlink_channel_t chan = MAVLINK_COMM_0;
 	mavlink_msg_set_mode_send(chan,  target_system,  baseMode,  custMode);
 }
 
@@ -625,8 +625,8 @@ void g_mavlink_msg_set_mode_send(uint8_t target_system, uint8_t baseMode, uint32
 *******************************************************/
 void g_mavlink_msg_rc_channels_scaled_send(uint32_t time_boot_ms, uint8_t port, int16_t chan1, int16_t chan2, int16_t chan3, int16_t chan4, int16_t chan5, int16_t chan6, int16_t chan7, int16_t chan8, uint8_t rssi)
 {
-    mavlink_channel_t chan = MAVLINK_COMM_0;
-    mavlink_msg_rc_channels_scaled_send(chan, time_boot_ms, port, chan1, chan2, chan3, chan4, chan5, chan6, chan7, chan8, rssi);	
+	mavlink_channel_t chan = MAVLINK_COMM_0;
+	mavlink_msg_rc_channels_scaled_send(chan, time_boot_ms, port, chan1, chan2, chan3, chan4, chan5, chan6, chan7, chan8, rssi);	
 }
 
 
@@ -674,8 +674,8 @@ void g_mavlink_msg_rc_channels_send(uint16_t chan1,
 									uint16_t chan17, 
 									uint16_t chan18)
 {
-    mavlink_channel_t chan = MAVLINK_COMM_0;
-    mavlink_msg_rc_channels_send(chan, UAV_SYSTEM_ID, 18, chan1, chan2, chan3, chan4, chan5, chan6, chan7, chan8, chan9, chan10,  chan11,  chan12,  chan13,  chan14,  chan15,  chan16,  chan17,  chan18, 100);	
+	mavlink_channel_t chan = MAVLINK_COMM_0;
+	mavlink_msg_rc_channels_send(chan, UAV_SYSTEM_ID, 18, chan1, chan2, chan3, chan4, chan5, chan6, chan7, chan8, chan9, chan10,  chan11,  chan12,  chan13,  chan14,  chan15,  chan16,  chan17,  chan18, 100);	
 }
 
 
@@ -689,10 +689,10 @@ void g_mavlink_msg_rc_channels_send(uint16_t chan1,
 *******************************************************/
 void g_mavlink_msg_request_data_stream_send(uint8_t req_stream_id, uint16_t req_message_rate, uint8_t start_stop)
 {
-    if(mavData.mavStatus.dataStreamAck == ACK_NO) 
+	if(mavData.mavStatus.dataStreamAck == ACK_NO) 
 	{
 	   mavlink_channel_t chan = MAVLINK_COMM_0;		
-       mavlink_msg_request_data_stream_send(chan, UAV_SYSTEM_ID, UAV_COMPON_ID, req_stream_id, req_message_rate, start_stop);		
+	   mavlink_msg_request_data_stream_send(chan, UAV_SYSTEM_ID, UAV_COMPON_ID, req_stream_id, req_message_rate, start_stop);		
 	}	
 }
 
@@ -828,14 +828,14 @@ void g_mavlink_msg_camera_trigger_send(uint32_t seq)
 *******************************************************/
 void px4_set_mode_manual(uint8_t target_system)
 {  
-   if(mavData.heartBeat.baseMode & MAV_MODE_FLAG_SAFETY_ARMED)
-   {
+	if(mavData.heartBeat.baseMode & MAV_MODE_FLAG_SAFETY_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_MANUAL);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_MANUAL);   
-   }
+	}
 }
 
 /*******************************************************
@@ -843,14 +843,14 @@ void px4_set_mode_manual(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_acro(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_ACRO);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_ACRO);	   
-   }
+	}
 }
 
 /*******************************************************
@@ -858,14 +858,14 @@ void px4_set_mode_acro(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_stabilized(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_STABILIZED);	   
-   }
-   else
-   {
-      g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_STABILIZED);	   
-   }
+	}
+	else
+	{
+	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_STABILIZED);	   
+	}
 }
 
 /*******************************************************
@@ -873,14 +873,14 @@ void px4_set_mode_stabilized(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_altitude(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_ALTITUDE);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_ALTITUDE);	   
-   }
+	}
 }
 
 /*******************************************************
@@ -888,14 +888,14 @@ void px4_set_mode_altitude(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_position(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_POSITION);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_POSITION);	   
-   }	
+	}	
 }
 
 /*******************************************************
@@ -903,14 +903,14 @@ void px4_set_mode_position(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_offboard(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_OFFBOARD);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_OFFBOARD);	   
-   }
+	}
 }
 
 /*******************************************************
@@ -918,14 +918,14 @@ void px4_set_mode_offboard(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_readyflight(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_READYFLIGHT);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_READYFLIGHT);	   
-   }
+	}
 }
 
 /*******************************************************
@@ -933,14 +933,14 @@ void px4_set_mode_readyflight(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_takeoff(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_TAKEOFF);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_TAKEOFF);	   
-   }	
+	}	
 }
 
 /*******************************************************
@@ -948,14 +948,14 @@ void px4_set_mode_takeoff(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_pauseflight(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_PAUSEFLIGHT);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_PAUSEFLIGHT);	   
-   }
+	}
 }
 
 /*******************************************************
@@ -963,14 +963,14 @@ void px4_set_mode_pauseflight(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_mission(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_MISSION);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_MISSION);	   
-   }	
+	}	
 }
 
 /*******************************************************
@@ -978,14 +978,14 @@ void px4_set_mode_mission(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_rtl(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_RTL);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_RTL);	   
-   }
+	}
 }
 
 /*******************************************************
@@ -993,14 +993,14 @@ void px4_set_mode_rtl(uint8_t target_system)
 *******************************************************/
 void px4_set_mode_landing(uint8_t target_system)
 {
-   if(mavData.mavStatus.armState == ARMSTATE_ARMED)
-   {
+	if(mavData.mavStatus.armState == ARMSTATE_ARMED)
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED|MAV_MODE_FLAG_SAFETY_ARMED, PX4_FLIGHT_MODE_LANDING);	   
-   }
-   else
-   {
+	}
+	else
+	{
 	  g_mavlink_msg_set_mode_send(target_system, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, PX4_FLIGHT_MODE_LANDING);	   
-   }
+	}
 }
 
 /*******************************************************
@@ -1130,12 +1130,12 @@ void apmplane_set_mode_guided(uint8_t target_system)
 *******************************************************/
 void autopilot_send_heartbeat(void)
 {
-  static gtime_t timeLast = 0;
-  if(timeLast != g_rtcTime) 
-  {
-	 timeLast = g_rtcTime;
-     g_mavlink_msg_heartbeat_send(MAVLINK_COMM_0, 0, 0, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, 0, 0); //! 蹇冭烦淇℃伅闄ysid澶栧椋炴帶鏉ヨ娌℃湁鎰忎箟
-  }	 
+	static gtime_t timeLast = 0;
+	if(timeLast != g_rtcTime) 
+	{
+		timeLast = g_rtcTime;
+		g_mavlink_msg_heartbeat_send(MAVLINK_COMM_0, 0, 0, MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, 0, 0); //! 蹇冭烦淇℃伅闄ysid澶栧椋炴帶鏉ヨ娌℃湁鎰忎箟
+	}	 
 }
 
 
@@ -1169,30 +1169,30 @@ void autopilot_gimbal_control_send(uint16_t pitch, uint16_t roll, uint16_t yaw, 
 void autopilot_set_digicam_zoom(uint32_t keyZoomIn, uint32_t keyZoomOut)
 {
 	static uint8_t state = 0;
-	
+
 	if(g_eeGeneral.key == keyZoomIn)        //! keyZoomIn pressed down and set digicam zoom in
 	{
-	  if(!state) 
-	  {
-		g_mavlink_msg_camera_trigger_send(0X80); 
-		state = 1;
-	  }	  
+		if(!state) 
+		{
+			g_mavlink_msg_camera_trigger_send(0X80); 
+			state = 1;
+		}	  
 	}
 	else if(g_eeGeneral.key == keyZoomOut)  //! keyZoomOut pressed down and set digicam zoom out
 	{
-	  if(!state) 
-	  {
-		g_mavlink_msg_camera_trigger_send(0XA0);	
-	    state = 1;		
-	  }
+		if(!state) 
+		{
+			g_mavlink_msg_camera_trigger_send(0XA0);	
+			state = 1;		
+		}
 	} 
 	else                                    //! keyZoomIn/Out has been pressed down and set digicam zoom stop
 	{
-	  if(state) 
-	  {
-	    g_mavlink_msg_camera_trigger_send(0X10); 
-        state = 0;		  
-	  }	  		  
+		if(state) 
+		{
+			g_mavlink_msg_camera_trigger_send(0X10); 
+			state = 0;		  
+		}	  		  
 	}
 }
 
@@ -1210,39 +1210,39 @@ void autopilot_set_digicam_zoom(uint32_t keyZoomIn, uint32_t keyZoomOut)
 *******************************************************/
 void autopilot_set_armed_disarmed(RC_CHANNEL channels)
 {	
-   static uint16_t flagarmcount = 0; 
-   static uint16_t flagdisarmcount = 0;
-   
-   const uint16_t chan1_min = 1100;
-   const uint16_t chan2_max = 1900;
-   const uint16_t chan2_min = 1100;
-   const uint16_t chan3_min = 1100;    
-   const uint16_t chan4_min = 1100;   
-   const uint16_t chan4_max = 1900;
+	static uint16_t flagarmcount = 0; 
+	static uint16_t flagdisarmcount = 0;
+
+	const uint16_t chan1_min = 1100;
+	const uint16_t chan2_max = 1900;
+	const uint16_t chan2_min = 1100;
+	const uint16_t chan3_min = 1100;    
+	const uint16_t chan4_min = 1100;   
+	const uint16_t chan4_max = 1900;
   
    
-   if((channels.chan2>chan2_max)&&(channels.chan1<chan1_min)&&(channels.chan3<chan3_min)&&(channels.chan4<chan4_min)) //! armed 
-   {
-	  flagdisarmcount = 0;
-	  if((flagarmcount++)==20) //! delay 2s
-	  {
-		 g_mavlink_msg_command_long_send(UAV_SYSTEM_ID, UAV_COMPON_ID, MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0); //! 瑙ｉ攣鍗虫瑁?
-		 //flagarmcount = 0;
-	  }		   
-   }
+	if((channels.chan2>chan2_max)&&(channels.chan1<chan1_min)&&(channels.chan3<chan3_min)&&(channels.chan4<chan4_min)) //! armed 
+	{
+		flagdisarmcount = 0;
+		if((flagarmcount++)==20) //! delay 2s
+		{
+			g_mavlink_msg_command_long_send(UAV_SYSTEM_ID, UAV_COMPON_ID, MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0); //! 瑙ｉ攣鍗虫瑁?
+			//flagarmcount = 0;
+		}		   
+	}
    else if((channels.chan2<chan2_min)&&(channels.chan1<chan1_min)&&(channels.chan3<chan3_min)&&(channels.chan4>chan4_max)) //! disarmed
    {
-	  flagarmcount = 0;	
-	  if((flagdisarmcount++)==20)
-	  { 	
-		 g_mavlink_msg_command_long_send(UAV_SYSTEM_ID, UAV_COMPON_ID, MAV_CMD_COMPONENT_ARM_DISARM, 0, 0, 0, 0, 0, 0, 0, 0); //!涓婇攣鍗宠В闄ゆ瑁?
-		 //flagdisarmcount = 0;
-	  }			   
+		flagarmcount = 0;	
+		if((flagdisarmcount++)==20)
+		{ 	
+			g_mavlink_msg_command_long_send(UAV_SYSTEM_ID, UAV_COMPON_ID, MAV_CMD_COMPONENT_ARM_DISARM, 0, 0, 0, 0, 0, 0, 0, 0); //!涓婇攣鍗宠В闄ゆ瑁?
+			//flagdisarmcount = 0;
+		}			   
    }	
    else
    {
-	  flagarmcount = 0;	
-	  flagdisarmcount = 0;		  
+		flagarmcount = 0;	
+		flagdisarmcount = 0;		  
    }	   
 }	
 
@@ -1294,66 +1294,66 @@ void autopilot_joystick_command_send(RC_CHANNEL channels)
 	if(abs(channels.chan1-ch1Last)>MIN || abs(channels.chan2-ch2Last)>MIN || abs(channels.chan3-ch3Last)>MIN   || abs(channels.chan4-ch4Last)>MIN   || abs(channels.chan5-ch5Last)>MIN   || abs(channels.chan6-ch6Last)>MIN   || abs(channels.chan7-ch7Last)>MIN || 
 	   abs(channels.chan8-ch8Last)>MIN || abs(channels.chan9-ch9Last)>MIN || abs(channels.chan10-ch10Last)>MIN || abs(channels.chan11-ch11Last)>MIN || abs(channels.chan12-ch12Last)>MIN || abs(channels.chan13-ch13Last)>MIN || abs(channels.chan14-ch14Last)>MIN)
 	{		
-	   if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_PX4)                //! PX4 inputs order: ele rud thr ail
-	   {
-		  #if defined(CHANNEL_EXTENED)
-		  g_mavlink_msg_rc_channels_send(channels.chan1, channels.chan2, channels.chan3, channels.chan4, channels.chan5, channels.chan6, channels.chan7, channels.chan8, channels.chan9, channels.chan10, channels.chan11, channels.chan12, channels.chan13, channels.chan14, 65535, 65535, 65535, 65535);
-          #else
-		  g_mavlink_msg_rc_channels_override_send(ch1Last, ch2Last, ch3Last, ch4Last, ch5Last, ch6Last, ch7Last, ch8Last);
-          #endif	  
-	   }
-	   else if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_ARDUPILOTMEGA) //! APM inputs order: ail ele thr rud
-	   {	
-		  #if defined(CHANNEL_EXTENED)	   
-		  g_mavlink_msg_rc_channels_send(channels.chan4, channels.chan1, channels.chan3, channels.chan2, channels.chan5, channels.chan6, channels.chan7, channels.chan8, channels.chan9, channels.chan10, channels.chan11, channels.chan12, channels.chan13, channels.chan14, 65535, 65535, 65535, 65535);  
-          #else
-		  g_mavlink_msg_rc_channels_override_send(channels.chan4, channels.chan1, channels.chan3, channels.chan2, channels.chan5, channels.chan6, channels.chan7, channels.chan8);
-          #endif
-	   }
-	   else
-	   {
+		if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_PX4)                //! PX4 inputs order: ele rud thr ail
+		{
+		#if defined(CHANNEL_EXTENED)
+			g_mavlink_msg_rc_channels_send(channels.chan1, channels.chan2, channels.chan3, channels.chan4, channels.chan5, channels.chan6, channels.chan7, channels.chan8, channels.chan9, channels.chan10, channels.chan11, channels.chan12, channels.chan13, channels.chan14, 65535, 65535, 65535, 65535);
+		#else
+			g_mavlink_msg_rc_channels_override_send(ch1Last, ch2Last, ch3Last, ch4Last, ch5Last, ch6Last, ch7Last, ch8Last);
+		#endif	  
+		}
+		else if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_ARDUPILOTMEGA) //! APM inputs order: ail ele thr rud
+		{	
+		#if defined(CHANNEL_EXTENED)	   
+			g_mavlink_msg_rc_channels_send(channels.chan4, channels.chan1, channels.chan3, channels.chan2, channels.chan5, channels.chan6, channels.chan7, channels.chan8, channels.chan9, channels.chan10, channels.chan11, channels.chan12, channels.chan13, channels.chan14, 65535, 65535, 65535, 65535);  
+		#else
+			g_mavlink_msg_rc_channels_override_send(channels.chan4, channels.chan1, channels.chan3, channels.chan2, channels.chan5, channels.chan6, channels.chan7, channels.chan8);
+		#endif
+		}
+		else
+		{
 		  //! other autopilot
-	   }
+		}
 	   
-	   ch1Last = channels.chan1;
-	   ch2Last = channels.chan2;
-	   ch3Last = channels.chan3;
-	   ch4Last = channels.chan4; 
-	   ch5Last = channels.chan5;
-	   ch6Last = channels.chan6;
-       ch7Last = channels.chan7;
-       ch8Last = channels.chan8;
-	   ch9Last = channels.chan9;
-	   ch10Last = channels.chan10;
-	   ch11Last = channels.chan11;
-	   ch12Last = channels.chan12; 
-	   ch13Last = channels.chan13;
-	   ch14Last = channels.chan14;	   
+		ch1Last = channels.chan1;
+		ch2Last = channels.chan2;
+		ch3Last = channels.chan3;
+		ch4Last = channels.chan4; 
+		ch5Last = channels.chan5;
+		ch6Last = channels.chan6;
+		ch7Last = channels.chan7;
+		ch8Last = channels.chan8;
+		ch9Last = channels.chan9;
+		ch10Last = channels.chan10;
+		ch11Last = channels.chan11;
+		ch12Last = channels.chan12; 
+		ch13Last = channels.chan13;
+		ch14Last = channels.chan14;	   
 	   
 	}
 	//! 10Hz
 	else if(count)
 	{
-	   if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_PX4)
-	   {
-		  #if defined(CHANNEL_EXTENED)
-		  g_mavlink_msg_rc_channels_send(ch1Last, ch2Last, ch3Last, ch4Last, ch5Last, ch6Last, ch7Last, ch8Last, ch9Last, ch10Last, ch11Last, ch12Last, ch13Last, ch14Last, 65535, 65535, 65535, 65535);
-		  #else
-		  g_mavlink_msg_rc_channels_override_send(ch1Last, ch2Last, ch3Last, ch4Last, ch5Last, ch6Last, ch7Last, ch8Last);
-          #endif	  
-	   }
-	   else if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_ARDUPILOTMEGA)
-	   {
-		  #if defined(CHANNEL_EXTENED)		   
-		  g_mavlink_msg_rc_channels_send(ch4Last, ch1Last, ch3Last, ch2Last, ch5Last, ch6Last, ch7Last, ch8Last, ch9Last, ch10Last, ch11Last, ch12Last, ch13Last, ch14Last, 65535, 65535, 65535, 65535);
-          #else
-		  g_mavlink_msg_rc_channels_override_send(ch4Last, ch1Last, ch3Last, ch2Last, ch5Last, ch6Last, ch7Last, ch8Last);	
-          #endif	  
-	   }
-	   else
-	   {
-		  //! other autopilot
-	   }		   
+		if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_PX4)
+		{
+		#if defined(CHANNEL_EXTENED)
+			g_mavlink_msg_rc_channels_send(ch1Last, ch2Last, ch3Last, ch4Last, ch5Last, ch6Last, ch7Last, ch8Last, ch9Last, ch10Last, ch11Last, ch12Last, ch13Last, ch14Last, 65535, 65535, 65535, 65535);
+		#else
+			g_mavlink_msg_rc_channels_override_send(ch1Last, ch2Last, ch3Last, ch4Last, ch5Last, ch6Last, ch7Last, ch8Last);
+		#endif	  
+		}
+		else if(mavData.heartBeat.autopilot == MAV_AUTOPILOT_ARDUPILOTMEGA)
+		{
+		#if defined(CHANNEL_EXTENED)		   
+			g_mavlink_msg_rc_channels_send(ch4Last, ch1Last, ch3Last, ch2Last, ch5Last, ch6Last, ch7Last, ch8Last, ch9Last, ch10Last, ch11Last, ch12Last, ch13Last, ch14Last, 65535, 65535, 65535, 65535);
+		#else
+			g_mavlink_msg_rc_channels_override_send(ch4Last, ch1Last, ch3Last, ch2Last, ch5Last, ch6Last, ch7Last, ch8Last);	
+		#endif	  
+		}
+		else
+		{
+			//! other autopilot
+		}		   
 	}
 	else
 	{
