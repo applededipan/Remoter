@@ -16,43 +16,45 @@ gui   name: displayStartmenu
 ************************************************/
 void displayStartmenu(void)
 {	
-    FATFS fs;         
-    FIL fsrc;   
-    BYTE buffer[61440];   
-    UINT br;        
-    FRESULT fr;
+	FATFS fs;         
+	FIL fsrc;   
+	BYTE buffer[61440];   
+	UINT br;        
+	FRESULT fr;
 	
 	if(g_eeGeneral.sdCardError) //! sdcard error
 	{
-	   for(uint8_t i=0; i<5; i++)
-	   {
-		  spiFlashRead(buffer, F_ADDR_PICSTARTMENU+i*61440, 61440);
-		  lcd_DrawBmp(0, 320-64*(i+1), 480, 64, buffer);
-	   }	
+		for(uint8_t i=0; i<5; i++)
+		{
+			spiFlashRead(buffer, F_ADDR_PICSTARTMENU+i*61440, 61440);
+			lcd_DrawBmp(0, 320-64*(i+1), 480, 64, buffer);
+		}	
 	}
 	else                             //! sdcard ok
 	{
-       f_mount(&fs, "0:", 0);		
-       if(fr=f_open(&fsrc, "0:SmartConsole/fonts/startup.bin", FA_READ)) //! open file failed then get info from extra flash
-	   {
-          f_mount(NULL, "0:", 0);
-	      for(uint8_t i=0; i<5; i++)
-	      {
-		     spiFlashRead(buffer, F_ADDR_PICSTARTMENU+i*61440, 61440);
-		     lcd_DrawBmp(0, 320-64*(i+1), 480, 64, buffer);
-	      }		   
-	   }
-	   else                                                              //! open file ok 
-	   {
-		  for(uint8_t i=0; i<5; i++)                           
-		  {
-			fr = f_read(&fsrc, buffer, sizeof(buffer), &br);  
-			if(fr || br == 0) break; 
-			lcd_DrawBmp(0, 320-64*(i+1), 480, 64, buffer);
-		  }
-		  f_close(&fsrc);
-		  f_mount(NULL, "0:", 0);			   
-	   }            
+		f_mount(&fs, "0:", 0);		
+		if(fr=f_open(&fsrc, "0:SmartConsole/fonts/startup.bin", FA_READ)) //! open file failed then get info from extra flash
+		{
+			f_mount(NULL, "0:", 0);
+			for(uint8_t i=0; i<5; i++)
+			{
+				spiFlashRead(buffer, F_ADDR_PICSTARTMENU+i*61440, 61440);
+				lcd_DrawBmp(0, 320-64*(i+1), 480, 64, buffer);
+			}		   
+		}
+		else                                                              //! open file ok 
+		{
+			for(uint8_t i=0; i<5; i++)                           
+			{
+				fr = f_read(&fsrc, buffer, sizeof(buffer), &br);  
+				
+				if(fr || br == 0) break; 
+				lcd_DrawBmp(0, 320-64*(i+1), 480, 64, buffer);
+			}
+			
+			f_close(&fsrc);
+			f_mount(NULL, "0:", 0);			   
+		}            
 	}		   
 
 }
@@ -88,7 +90,7 @@ gui   name: displayNavigation
 ************************************************/  
 void displayNavigation(void)
 {	
-    displayUavType(137, 3);	
+	displayUavType(137, 3);	
 	displayGps(320, 3, mavData.gpsRaw.satellites, mavData.gpsRaw.fixType);      //! GPS
 	displayRssi(365, 23, mavData.mavStatus.pdlState, mavData.radioStatus.rssi); //! 信号强度
 	displayMiniCell(410, 0);                                                    //! 电池电量		
@@ -103,38 +105,38 @@ gui   name: displayLogo
 ************************************************/
 void displayLogo(void)
 { 
-   lcd_DrawRectangle(1, 0, 479, 319, LINEBLACK);     //外围
-   lcd_DrawLine(0,   0, 480,  0, LINEBLACK);
-   lcd_DrawLine(0,  28, 480, 28, LINEBLACK);
-   lcd_DrawLine(134, 0, 134, 27, LINEBLACK); 
-   lcd_DrawLine(163, 0, 163, 27, LINEBLACK); 
-   lcd_DrawLine(316, 0, 316, 27, LINEBLACK); 
-   lcd_DrawLine(363, 0, 363, 27, LINEBLACK); 
-   lcd_DrawLine(405, 0, 405, 27, LINEBLACK); 	
-   lcd_DrawRectangle(100, 163, 380, 319, LINEBLACK); //区域方框
-   //! GPS logo
-   uint8_t gpsLogo[968] = {0};	
-   spiFlashRead(gpsLogo, F_ADDR_GPS, 968); 
-   lcd_DrawBmp(320, 3, 22, 22, gpsLogo);
-   
-   //! RSSI logo
-   uint8_t rssiLogo[968] = {0};	
-   spiFlashRead(rssiLogo, F_ADDR_RSSI, 968); 
-   lcd_DrawBmp(365, 3, 22, 22, rssiLogo);
+	lcd_DrawRectangle(1, 0, 479, 319, LINEBLACK);     //外围
+	lcd_DrawLine(0,   0, 480,  0, LINEBLACK);
+	lcd_DrawLine(0,  28, 480, 28, LINEBLACK);
+	lcd_DrawLine(134, 0, 134, 27, LINEBLACK); 
+	lcd_DrawLine(163, 0, 163, 27, LINEBLACK); 
+	lcd_DrawLine(316, 0, 316, 27, LINEBLACK); 
+	lcd_DrawLine(363, 0, 363, 27, LINEBLACK); 
+	lcd_DrawLine(405, 0, 405, 27, LINEBLACK); 	
+	lcd_DrawRectangle(100, 163, 380, 319, LINEBLACK); //区域方框
+	//! GPS logo
+	uint8_t gpsLogo[968] = {0};	
+	spiFlashRead(gpsLogo, F_ADDR_GPS, 968); 
+	lcd_DrawBmp(320, 3, 22, 22, gpsLogo);
+
+	//! RSSI logo
+	uint8_t rssiLogo[968] = {0};	
+	spiFlashRead(rssiLogo, F_ADDR_RSSI, 968); 
+	lcd_DrawBmp(365, 3, 22, 22, rssiLogo);
 
    
-    FATFS fs;         
-    FIL fsrc;   
-    BYTE logoBuffer[1392];          
-    UINT br;
-    f_mount(&fs, "0:", 0);		
-    f_open(&fsrc, "0:SmartConsole/fonts/logo.bin", FA_READ); 
+	FATFS fs;         
+	FIL fsrc;   
+	BYTE logoBuffer[1392];          
+	UINT br;
+	f_mount(&fs, "0:", 0);		
+	f_open(&fsrc, "0:SmartConsole/fonts/logo.bin", FA_READ); 
 	f_read(&fsrc, logoBuffer, sizeof(logoBuffer), &br);  
-    lcd_DrawBmp(5, 2, 29, 24, logoBuffer);
+	lcd_DrawBmp(5, 2, 29, 24, logoBuffer);
 	f_close(&fsrc);
-    f_mount(NULL, "0:", 0);			         
-    uint8_t BrainyBEE[] = "BrainyBEE";
-    lcd_ShowString(38, 7, WHITE, 18, BrainyBEE);	
+	f_mount(NULL, "0:", 0);			         
+	uint8_t BrainyBEE[] = "BrainyBEE";
+	lcd_ShowString(38, 7, WHITE, 18, BrainyBEE);	
 }
 
 
@@ -144,17 +146,21 @@ gui   name: displayRunState
 ************************************************/
 void displayRunState(uint16_t x, uint16_t y, uint8_t value)
 {
-    uint8_t valueLast = 20;
-    if(value>20) value = 20;
-    if(value != valueLast)
-    {
-      lcd_DrawFillRectangleDiff(x, y, 2, -21, BACKCOLOR);
-      if(value == 0)      lcd_DrawFillRectangleDiff(x, y, 2, -8, GREEN);
-      else if(value <= 2) lcd_DrawFillRectangleDiff(x, y, 2, -8-(value*2), GREEN);
-      else if(value <= 5) lcd_DrawFillRectangleDiff(x, y, 2, -12-(value), YELLOW);
-      else                lcd_DrawFillRectangleDiff(x, y, 2, -17-(value-5)/5, RED);  
-      valueLast = value;      
-    }
+	uint8_t valueLast = 20;
+	
+	if(value>20) value = 20;
+	
+	if(value != valueLast)
+	{
+		lcd_DrawFillRectangleDiff(x, y, 2, -21, BACKCOLOR);
+		
+		if(value == 0)      lcd_DrawFillRectangleDiff(x, y, 2, -8, GREEN);
+		else if(value <= 2) lcd_DrawFillRectangleDiff(x, y, 2, -8-(value*2), GREEN);
+		else if(value <= 5) lcd_DrawFillRectangleDiff(x, y, 2, -12-(value), YELLOW);
+		else                lcd_DrawFillRectangleDiff(x, y, 2, -17-(value-5)/5, RED);  
+		
+		valueLast = value;      
+	}
 
 }
 
@@ -174,65 +180,66 @@ void displayUavType(uint16_t x, uint16_t y)
 	
 	if(mavData.heartBeat.type != typeLast)
 	{
-        if(mavData.heartBeat.type == MAV_TYPE_FIXED_WING)     //! 固定翼
+		if(mavData.heartBeat.type == MAV_TYPE_FIXED_WING)     //! 固定翼
 		{
-	       spiFlashRead(temp, F_ADDR_FIXED, 576);
-	       lcd_DrawBmp_256(x, y, 24, 24, temp);		
+			spiFlashRead(temp, F_ADDR_FIXED, 576);
+			lcd_DrawBmp_256(x, y, 24, 24, temp);		
 		}
-        else if(mavData.heartBeat.type == MAV_TYPE_QUADROTOR) //! 四旋翼
+		else if(mavData.heartBeat.type == MAV_TYPE_QUADROTOR) //! 四旋翼
 		{
-	       spiFlashRead(temp, F_ADDR_QUADROTOR, 576);
-	       lcd_DrawBmp_256(x, y, 24, 24, temp);				
+			spiFlashRead(temp, F_ADDR_QUADROTOR, 576);
+			lcd_DrawBmp_256(x, y, 24, 24, temp);				
 		}		
-        else if(mavData.heartBeat.type == MAV_TYPE_HEXAROTOR) //! 六旋翼
+		else if(mavData.heartBeat.type == MAV_TYPE_HEXAROTOR) //! 六旋翼
 		{
-	       spiFlashRead(temp, F_ADDR_HEXAROTOR, 576);
-	       lcd_DrawBmp_256(x, y, 24, 24, temp);				
+			spiFlashRead(temp, F_ADDR_HEXAROTOR, 576);
+			lcd_DrawBmp_256(x, y, 24, 24, temp);				
 		}		
-        else if(mavData.heartBeat.type == MAV_TYPE_OCTOROTOR) //! 八旋翼
+		else if(mavData.heartBeat.type == MAV_TYPE_OCTOROTOR) //! 八旋翼
 		{
-	       spiFlashRead(temp, F_ADDR_OCTOROTOR, 576);
-	       lcd_DrawBmp_256(x, y, 24, 24, temp);				
+			spiFlashRead(temp, F_ADDR_OCTOROTOR, 576);
+			lcd_DrawBmp_256(x, y, 24, 24, temp);				
 		}		
-        else if(mavData.heartBeat.type == MAV_TYPE_HELICOPTER)//! 直升机
+		else if(mavData.heartBeat.type == MAV_TYPE_HELICOPTER)//! 直升机
 		{
-	       spiFlashRead(temp, F_ADDR_HELI, 576);
-	       lcd_DrawBmp_256(x, y, 24, 24, temp);				
+			spiFlashRead(temp, F_ADDR_HELI, 576);
+			lcd_DrawBmp_256(x, y, 24, 24, temp);				
 		}
-        else if(mavData.heartBeat.type == MAV_TYPE_GCS)       //! 地面站
+		else if(mavData.heartBeat.type == MAV_TYPE_GCS)       //! 地面站
 		{
-	       spiFlashRead(temp, F_ADDR_QGC, 576);
-	       lcd_DrawBmp_256(x, y, 24, 24, temp);				
+			spiFlashRead(temp, F_ADDR_QGC, 576);
+			lcd_DrawBmp_256(x, y, 24, 24, temp);				
 		}			
-        else //! 未知机型
+		else //! 未知机型
 		{
-		   uint8_t logo_none[]="NA";
-		   lcd_ShowString(x, y, BACKCOLOR, 24, logo_none);
+			uint8_t logo_none[]="NA";
+			lcd_ShowString(x, y, BACKCOLOR, 24, logo_none);
 		}
-        typeLast = mavData.heartBeat.type;		
+
+		typeLast = mavData.heartBeat.type;		
 	}
 
 	static uint8_t  vtolLast = MAV_VTOL_STATE_UNDEFINED;
-	
-    if(mavData.heartBeat.type == MAV_TYPE_VTOL_DUOROTOR)     //! VTOL
+
+	if(mavData.heartBeat.type == MAV_TYPE_VTOL_DUOROTOR)     //! VTOL
 	{
 		if(mavData.sysStatus.vtolState != vtolLast)
 		{
 			if(mavData.sysStatus.vtolState == MAV_VTOL_STATE_FW)      //! fw
 			{
-			   spiFlashRead(temp, F_ADDR_FIXED, 576);
-			   lcd_DrawBmp_256(x, y, 24, 24, temp);					
+				spiFlashRead(temp, F_ADDR_FIXED, 576);
+				lcd_DrawBmp_256(x, y, 24, 24, temp);					
 			}
 			else if(mavData.sysStatus.vtolState == MAV_VTOL_STATE_MC) //! mc
 			{
-			   spiFlashRead(temp, F_ADDR_QUADROTOR, 576);
-			   lcd_DrawBmp_256(x, y, 24, 24, temp);					
+				spiFlashRead(temp, F_ADDR_QUADROTOR, 576);
+				lcd_DrawBmp_256(x, y, 24, 24, temp);					
 			}
-			
-            vtolLast = mavData.sysStatus.vtolState;			
+
+			vtolLast = mavData.sysStatus.vtolState;			
 		}
-		
-        typeLast = mavData.heartBeat.type;
+
+		typeLast = mavData.heartBeat.type;
 	}
 	
 }
@@ -672,20 +679,23 @@ armState: : armed  disarmed
 ************************************************/
 void displayArmed(uint16_t x, uint16_t y)
 {
-   static uint8_t armStateLast = 255;
-   if(mavData.mavStatus.armState != armStateLast)
-   {
-	  uint8_t temp[800] = {0};
-      if(mavData.mavStatus.armState == ARMSTATE_ARMED) 
-	  {
-	     spiFlashRead(temp, F_ADDR_ARMED, 800); lcd_DrawBmp(x, y, 20, 20, temp);		
-	  }	
-      else //! disarmed
-	  {
-	     spiFlashRead(temp, F_ADDR_DISARMED, 800); lcd_DrawBmp(x, y, 20, 20, temp);		  
-	  }		  
-      armStateLast = mavData.mavStatus.armState;	  
-   }
+	static uint8_t armStateLast = 255;
+	
+	if(mavData.mavStatus.armState != armStateLast)
+	{
+		uint8_t temp[800] = {0};
+		
+		if(mavData.mavStatus.armState == ARMSTATE_ARMED) 
+		{
+			spiFlashRead(temp, F_ADDR_ARMED, 800); lcd_DrawBmp(x, y, 20, 20, temp);		
+		}	
+		else //! disarmed
+		{
+			spiFlashRead(temp, F_ADDR_DISARMED, 800); lcd_DrawBmp(x, y, 20, 20, temp);		  
+		}	
+		
+		armStateLast = mavData.mavStatus.armState;	  
+	}
 }
 
 
@@ -701,16 +711,17 @@ void displayCell(void)
 {
 	delayms(500);
 
-	uint32_t sum=0;	
-	int32_t temp=0;
-	for(uint8_t i=0; i<100; i++)
+	uint32_t sum = 0;	
+	int32_t temp = 0;
+	
+	for(uint8_t i = 0; i < 100; i++)
 	{
 		delayms(2); //! delay for 2ms
 		getADC();
 #if defined(BAT18650)
-        temp = anaIn(6)*0.67 - 567;
+		temp = anaIn(6)*0.67 - 567;
 #else	
-        temp = anaIn(6)-900;
+		temp = anaIn(6)-900;
 #endif		
 		if(temp > 100)     temp = 100;
 		else if(temp <= 0)temp = 0;
@@ -718,10 +729,10 @@ void displayCell(void)
 	}	
 	uint8_t bat = sum/100;
 	if(bat > 100) bat = 100;	
-	
-    g_eeGeneral.vBattery = bat;
-	
-	if(bat>batError)
+
+	g_eeGeneral.vBattery = bat;
+
+	if(bat > batError)
 	{
 		lcd_DrawRectangle(120, 105, 360, 195, WHITE); //! 框
 		lcd_DrawFillRectangle(360, 130, 380, 170, WHITE); //! 正极
@@ -732,7 +743,7 @@ void displayCell(void)
 		lcd_DrawRectangle(120, 105, 360, 195, RED);
 		lcd_DrawFillRectangle(360, 130, 380, 170, RED); //! 正极
 		lcd_DrawFillRectangle(124, 110, 126+bat*2.3, 190, RED);			
-    }  
+	}  
 }
  
  
@@ -745,7 +756,7 @@ gui   name: displayMiniCell
 void displayMiniCell(uint16_t x, uint16_t y)
 {
 	static gtime_t timeLast = 255;
-    static uint8_t  count = 0;
+	static uint8_t  count = 0;
 	static uint8_t batLast = 255; //! 初始值非0解决充电时上电伊始不显示电池轮廓的问题	
 
 	if(anaIn(7) > 1100) //! charging
@@ -753,27 +764,30 @@ void displayMiniCell(uint16_t x, uint16_t y)
 		if(g_rtcTime != timeLast) //! 一秒更新一次
 		{ 
 		
-		   if(batLast != 0) //! 充电过程只执行了一次
-		   {
-		      batLast = 0; //! 解决由充电切换到未充电时是否显示当前电量格数的问题			   
-			  lcd_DrawFillRectangleDiff(x+2, y+8, 29, 12, BACKCOLOR); //! 清除掉之前电池电量的格数	
-		      lcd_DrawRectangleDiff(x, y+6, 32, 15, RED); //! 电池轮廓
-		      lcd_DrawFillRectangleDiff(x+32, y+9, 4, 9, RED); //! 正极图标				  
-		   }	   
-		   switch(count)
-		   {
-			 case 0: lcd_DrawFillRectangleDiff(x+2,  y+8, 3, 11, WHITE); count++; break;
-			 case 1: lcd_DrawFillRectangleDiff(x+7,  y+8, 3, 11, WHITE); count++; break;
-             case 2: lcd_DrawFillRectangleDiff(x+12, y+8, 3, 11, WHITE); count++; break;
-			 case 3: lcd_DrawFillRectangleDiff(x+17, y+8, 3, 11, WHITE); count++; break;
-			 case 4: lcd_DrawFillRectangleDiff(x+22, y+8, 3, 11, WHITE); count++; break;
-			 case 5: lcd_DrawFillRectangleDiff(x+27, y+8, 3, 11, WHITE); count++; break;
-		   default : lcd_DrawFillRectangleDiff(x+2,  y+8,29, 11, BACKCOLOR); count = 0;
-		   }
-		   lcd_ShowNumBackColor(x+39, y+7, WHITE, 18, 2, g_eeGeneral.vBattery, 0, BACKCOLOR);
-		   lcd_ShowChar(x+39+19, y+4, WHITE, 24, '%');		   
-	       timeLast = g_rtcTime;			
+			if(batLast != 0) //! 充电过程只执行了一次
+			{
+				batLast = 0; //! 解决由充电切换到未充电时是否显示当前电量格数的问题			   
+				lcd_DrawFillRectangleDiff(x+2, y+8, 29, 12, BACKCOLOR); //! 清除掉之前电池电量的格数	
+				lcd_DrawRectangleDiff(x, y+6, 32, 15, RED); //! 电池轮廓
+				lcd_DrawFillRectangleDiff(x+32, y+9, 4, 9, RED); //! 正极图标				  
+			}
+			
+			switch(count)
+			{
+				case 0: lcd_DrawFillRectangleDiff(x+2,  y+8, 3, 11, WHITE); count++; break;
+				case 1: lcd_DrawFillRectangleDiff(x+7,  y+8, 3, 11, WHITE); count++; break;
+				case 2: lcd_DrawFillRectangleDiff(x+12, y+8, 3, 11, WHITE); count++; break;
+				case 3: lcd_DrawFillRectangleDiff(x+17, y+8, 3, 11, WHITE); count++; break;
+				case 4: lcd_DrawFillRectangleDiff(x+22, y+8, 3, 11, WHITE); count++; break;
+				case 5: lcd_DrawFillRectangleDiff(x+27, y+8, 3, 11, WHITE); count++; break;
+				default : lcd_DrawFillRectangleDiff(x+2,  y+8,29, 11, BACKCOLOR); count = 0;
+			}
+			
+			lcd_ShowNumBackColor(x+39, y+7, WHITE, 18, 2, g_eeGeneral.vBattery, 0, BACKCOLOR);
+			lcd_ShowChar(x+39+19, y+4, WHITE, 24, '%');		   
+			timeLast = g_rtcTime;			
 		}
+		
 	    //! 显示充电logo
 	    lcd_DrawCharge(x+22, y+8, anaIn(7));		
 	}	
@@ -788,23 +802,24 @@ void displayMiniCell(uint16_t x, uint16_t y)
         		
 	    if(g_eeGeneral.vBattery != batLast) 
 	    {  		
-		   if(g_eeGeneral.vBattery > batError)
-		   {
-			   lcd_DrawFillRectangleDiff(x+2, y+8, 29, 12, BACKCOLOR);
-			   lcd_DrawRectangleDiff(x, y+6, 32, 15, WHITE); //! 轮廓
-			   lcd_DrawFillRectangleDiff(x+32, y+9, 4, 9, WHITE); //! 正极
-			   lcd_DrawFillRectangleDiff(x+2,  y+8, g_eeGeneral.vBattery/3.6, 11, WHITE); //! 格数
-		   }
-		   else
-		   {
-			   lcd_DrawFillRectangleDiff(x+2, y+8, 29, 12, BACKCOLOR);
-			   lcd_DrawRectangleDiff(x, y+6, 32, 15, RED); //! 轮廓
-			   lcd_DrawFillRectangleDiff(x+32, y+9, 4, 9, RED); //! 正极
-			   lcd_DrawFillRectangleDiff(x+2,  y+8, g_eeGeneral.vBattery/3.6, 11, RED); //! 格数
-		   }
-		   lcd_ShowNumBackColor(x+39, y+7, WHITE, 18, 2, g_eeGeneral.vBattery, 0, BACKCOLOR);
-		   lcd_ShowChar(x+39+18, y+4, WHITE, 24, '%');
-           batLast = g_eeGeneral.vBattery;				
+			if(g_eeGeneral.vBattery > batError)
+			{
+				lcd_DrawFillRectangleDiff(x+2, y+8, 29, 12, BACKCOLOR);
+				lcd_DrawRectangleDiff(x, y+6, 32, 15, WHITE); //! 轮廓
+				lcd_DrawFillRectangleDiff(x+32, y+9, 4, 9, WHITE); //! 正极
+				lcd_DrawFillRectangleDiff(x+2,  y+8, g_eeGeneral.vBattery/3.6, 11, WHITE); //! 格数
+			}
+			else
+			{
+				lcd_DrawFillRectangleDiff(x+2, y+8, 29, 12, BACKCOLOR);
+				lcd_DrawRectangleDiff(x, y+6, 32, 15, RED); //! 轮廓
+				lcd_DrawFillRectangleDiff(x+32, y+9, 4, 9, RED); //! 正极
+				lcd_DrawFillRectangleDiff(x+2,  y+8, g_eeGeneral.vBattery/3.6, 11, RED); //! 格数
+			}
+			
+			lcd_ShowNumBackColor(x+39, y+7, WHITE, 18, 2, g_eeGeneral.vBattery, 0, BACKCOLOR);
+			lcd_ShowChar(x+39+18, y+4, WHITE, 24, '%');
+			batLast = g_eeGeneral.vBattery;				
 	    }			
 	}
 }
@@ -825,29 +840,30 @@ void displayGps(uint16_t x, uint16_t y, uint8_t gps, uint8_t fixType)
 	{
 		if(gps < 10) 
 		{	
-	       if(fixType == 3) //! 3D fix
-		   {
-	          lcd_ShowChar(x+33, y+5, BACKCOLOR, 18, ' '); //! clear the second number
-              lcd_ShowNumBackColor(x+23, y+5, GREEN, 18, 1, gps, 0, BACKCOLOR);			   
-		   }
-		   else
-		   {
-	          lcd_ShowChar(x+33, y+5, WHITE, 18, ' '); //! clear the second number
-              lcd_ShowNumBackColor(x+23, y+5, WHITE, 18, 1, gps, 0, BACKCOLOR);			   
-		   }			
+			if(fixType == 3) //! 3D fix
+			{
+				lcd_ShowChar(x+33, y+5, BACKCOLOR, 18, ' '); //! clear the second number
+				lcd_ShowNumBackColor(x+23, y+5, GREEN, 18, 1, gps, 0, BACKCOLOR);			   
+			}
+			else
+			{
+				lcd_ShowChar(x+33, y+5, WHITE, 18, ' '); //! clear the second number
+				lcd_ShowNumBackColor(x+23, y+5, WHITE, 18, 1, gps, 0, BACKCOLOR);			   
+			}			
 		}
 		else
 		{
-		   if(fixType == 3)
-		   {
-		      lcd_ShowNumBackColor(x+23, y+5, GREEN, 18, 2, gps, 0, BACKCOLOR);				   
-		   }
-		   else
-		   {
-		      lcd_ShowNumBackColor(x+23, y+5, WHITE, 18, 2, gps, 0, BACKCOLOR);			   
-		   }
+			if(fixType == 3)
+			{
+				lcd_ShowNumBackColor(x+23, y+5, GREEN, 18, 2, gps, 0, BACKCOLOR);				   
+			}
+			else
+			{
+				lcd_ShowNumBackColor(x+23, y+5, WHITE, 18, 2, gps, 0, BACKCOLOR);			   
+			}
 
-		}       
+		} 
+		
 		gpsLast = gps;
 	}			
 }
@@ -911,61 +927,11 @@ void displayRssi(uint16_t x, uint16_t y, uint8_t wifiRssi, uint8_t dataRssi)
         {
             
         } 
+		
         wifiRssiLast = wifiRssi;       
 	}
 
-	// if(wifiRssi != wifiRssiLast)
-	// {
-		// if(wifiRssi == 192) //! PDDL startup failed
-		// {
-			// lcd_DrawFillRectangleDiff(x+22,   y-11, 1, -1, RED);
-			// lcd_DrawFillRectangleDiff(x+22+4, y-11, 1, -3, RED);
-			// lcd_DrawFillRectangleDiff(x+22+8, y-11, 1, -5, RED);
-			// lcd_DrawFillRectangleDiff(x+22+12,y-11, 1, -7, RED);		
-		// }	
-		// else
-		// {  
-		    // wifiRssiLast = wifiRssi;	
-	        // wifiRssi = wifiRssi-192;
-			// if(wifiRssi == 0)
-			// {
-				// lcd_DrawFillRectangleDiff(x+22,   y-11, 1, -1, LIGHTBLACK);
-				// lcd_DrawFillRectangleDiff(x+22+4, y-11, 1, -3, LIGHTBLACK);
-				// lcd_DrawFillRectangleDiff(x+22+8, y-11, 1, -5, LIGHTBLACK);
-				// lcd_DrawFillRectangleDiff(x+22+12,y-11, 1, -7, LIGHTBLACK);		
-			// }
-			// else if((wifiRssi>0)&&(wifiRssi<=2))     
-			// {
-				// lcd_DrawFillRectangleDiff(x+22,   y-11, 1, -1, WHITE);
-				// lcd_DrawFillRectangleDiff(x+22+4, y-11, 1, -3, LIGHTBLACK);
-				// lcd_DrawFillRectangleDiff(x+22+8, y-11, 1, -5, LIGHTBLACK);
-				// lcd_DrawFillRectangleDiff(x+22+12,y-11, 1, -7, LIGHTBLACK);			
-			// }
-			// else if((wifiRssi>2)&&(wifiRssi<=5))	
-			// {
-				// lcd_DrawFillRectangleDiff(x+22,   y-11, 1, -1, WHITE);
-				// lcd_DrawFillRectangleDiff(x+22+4, y-11, 1, -3, WHITE);
-				// lcd_DrawFillRectangleDiff(x+22+8, y-11, 1, -5, LIGHTBLACK);
-				// lcd_DrawFillRectangleDiff(x+22+12,y-11, 1, -7, LIGHTBLACK);			
-			// }
-			// else if((wifiRssi>5)&&(wifiRssi<=7))
-			// {
-				// lcd_DrawFillRectangleDiff(x+22,   y-11, 1, -1, WHITE);
-				// lcd_DrawFillRectangleDiff(x+22+4, y-11, 1, -3, WHITE);
-				// lcd_DrawFillRectangleDiff(x+22+8, y-11, 1, -5, WHITE);
-				// lcd_DrawFillRectangleDiff(x+22+12,y-11, 1, -7, LIGHTBLACK);			
-			// }
-			// else 
-			// {
-				// lcd_DrawFillRectangleDiff(x+22,   y-11, 1, -1, WHITE);
-				// lcd_DrawFillRectangleDiff(x+22+4, y-11, 1, -3, WHITE);
-				// lcd_DrawFillRectangleDiff(x+22+8, y-11, 1, -5, WHITE);
-				// lcd_DrawFillRectangleDiff(x+22+12,y-11, 1, -7, WHITE);	
-			// }	
-		// }
-	// }
-
-	if(abs(dataRssi-dataRssiLast)>10) //! datarssi
+	if(abs(dataRssi-dataRssiLast) > 10) //! datarssi
 	{
 		if(dataRssi <= 5)
 		{
@@ -1002,6 +968,7 @@ void displayRssi(uint16_t x, uint16_t y, uint8_t wifiRssi, uint8_t dataRssi)
 			lcd_DrawFillRectangleDiff(x+22+8, y, 1, -5, WHITE);
 			lcd_DrawFillRectangleDiff(x+22+12,y, 1, -7, WHITE);	
 		}
+		
 		dataRssiLast = dataRssi;
 	}	
 }
@@ -1020,20 +987,20 @@ void displayTime(uint16_t x, uint16_t y, uint8_t size)
 	static struct gtm tlast;		
 	rtcGetTime(&t);
 		
-	if (t.tm_sec != tlast.tm_sec)    //! 时间更新时更新显示   只显示时间
+	if(t.tm_sec != tlast.tm_sec)    //! 时间更新时更新显示   只显示时间
     {      
-	   tlast.tm_sec = t.tm_sec;
-	   uint16_t x1 = x;
-	   uint16_t x2 = x+size;
-	   uint16_t x3 = x2+size/2;
-	   uint16_t x4 = x3+size;
-	   uint16_t x5 = x4+size/2;
-	   	   
-	   if(t.tm_hour != tlast.tm_hour) lcd_ShowNum (x1,  y, WHITE, size, 2, t.tm_hour, 1);//	
-	   lcd_ShowChar(x2,  y, WHITE, size, ':');
-	   if(t.tm_min != tlast.tm_min)   lcd_ShowNum (x3,  y, WHITE, size, 2, t.tm_min, 1);
-	   lcd_ShowChar(x4,  y, WHITE, size, ':');
-	   lcd_ShowNum (x5,  y, WHITE, size, 2, t.tm_sec, 1);		   
+		tlast.tm_sec = t.tm_sec;
+		uint16_t x1 = x;
+		uint16_t x2 = x+size;
+		uint16_t x3 = x2+size/2;
+		uint16_t x4 = x3+size;
+		uint16_t x5 = x4+size/2;
+
+		if(t.tm_hour != tlast.tm_hour) lcd_ShowNum (x1,  y, WHITE, size, 2, t.tm_hour, 1);//	
+		lcd_ShowChar(x2,  y, WHITE, size, ':');
+		if(t.tm_min != tlast.tm_min)   lcd_ShowNum (x3,  y, WHITE, size, 2, t.tm_min, 1);
+		lcd_ShowChar(x4,  y, WHITE, size, ':');
+		lcd_ShowNum (x5,  y, WHITE, size, 2, t.tm_sec, 1);		   
     }	
 }
 
@@ -1070,54 +1037,53 @@ void displayJoystick(RC_CHANNEL channels) //!RC_CHANNEL channels
 	static int8_t chan3Last = 10;
 	static int8_t chan4Last = 10;
 	
-	static uint8_t excuted = 0;
+	static bool excuted = false;
 	
-	if(excuted == 0)
+	if(!excuted)
 	{
-	   excuted = 1;
-	   lcd_DrawRectangleDiff(102, 154, width, longth, LIGHTWHITE);//左侧边小矩形框
-	   lcd_DrawRectangleDiff(363, 154, width, longth, LIGHTWHITE);//右侧边小矩形框
-	   lcd_DrawFillRectangleDiff(103, 155, width-2, longth-2, BACKCOLOR);
-	   lcd_DrawFillRectangleDiff(364, 155, width-2, longth-2, BACKCOLOR);
+		excuted = true;
+		lcd_DrawRectangleDiff(102, 154, width, longth, LIGHTWHITE);//左侧边小矩形框
+		lcd_DrawRectangleDiff(363, 154, width, longth, LIGHTWHITE);//右侧边小矩形框
+		lcd_DrawFillRectangleDiff(103, 155, width-2, longth-2, BACKCOLOR);
+		lcd_DrawFillRectangleDiff(364, 155, width-2, longth-2, BACKCOLOR);
 
-	   lcd_DrawRectangleDiff(119, 203, longth, width, LIGHTWHITE);//左侧下小矩形框
-	   lcd_DrawRectangleDiff(298, 203, longth, width, LIGHTWHITE);//右侧下小矩形框
-	   lcd_DrawFillRectangleDiff(120, 204, longth-2, width-2, BACKCOLOR);
-	   lcd_DrawFillRectangleDiff(299, 204, longth-2, width-2, BACKCOLOR);	   
+		lcd_DrawRectangleDiff(119, 203, longth, width, LIGHTWHITE);//左侧下小矩形框
+		lcd_DrawRectangleDiff(298, 203, longth, width, LIGHTWHITE);//右侧下小矩形框
+		lcd_DrawFillRectangleDiff(120, 204, longth-2, width-2, BACKCOLOR);
+		lcd_DrawFillRectangleDiff(299, 204, longth-2, width-2, BACKCOLOR);	   
 	}
 
-	 int8_t chan1 = (channels.chan1-1500)*3/50;
-	 int8_t chan2 = (channels.chan2-1500)*3/50;
-	 int8_t chan3 = (channels.chan3-1500)*3/50;
-	 int8_t chan4 = (channels.chan4-1500)*3/50;	   
+	int8_t chan1 = (channels.chan1-1500)*3/50;
+	int8_t chan2 = (channels.chan2-1500)*3/50;
+	int8_t chan3 = (channels.chan3-1500)*3/50;
+	int8_t chan4 = (channels.chan4-1500)*3/50;	   
    
-	if(chan1!=chan1Last)
+	if(chan1 != chan1Last)
 	{
-	   lcd_DrawFillRectangleDiff(104, 186, width-4, -chan1Last, BACKCOLOR);
-	   lcd_DrawFillRectangleDiff(104, 186, width-4, -chan1, GREEN);
-	   chan1Last = chan1;	   
+		lcd_DrawFillRectangleDiff(104, 186, width-4, -chan1Last, BACKCOLOR);
+		lcd_DrawFillRectangleDiff(104, 186, width-4, -chan1, GREEN);
+		chan1Last = chan1;	   
 	}
 	
-	if(chan2!=chan2Last)
+	if(chan2 != chan2Last)
 	{
-		
-	   lcd_DrawFillRectangleDiff(151, 205, chan2Last, width-4, BACKCOLOR);	
-       lcd_DrawFillRectangleDiff(151, 205, chan2, width-4, GREEN);
-	   chan2Last = chan2;
+		lcd_DrawFillRectangleDiff(151, 205, chan2Last, width-4, BACKCOLOR);	
+		lcd_DrawFillRectangleDiff(151, 205, chan2, width-4, GREEN);
+		chan2Last = chan2;
 	}
 	
-    if(chan3!=chan3Last)
+    if(chan3 != chan3Last)
 	{
-	   lcd_DrawFillRectangleDiff(365, 186, width-4, -chan3Last, BACKCOLOR);
-	   lcd_DrawFillRectangleDiff(365, 186, width-4, -chan3, GREEN);	   
-	   chan3Last = chan3;	   
+		lcd_DrawFillRectangleDiff(365, 186, width-4, -chan3Last, BACKCOLOR);
+		lcd_DrawFillRectangleDiff(365, 186, width-4, -chan3, GREEN);	   
+		chan3Last = chan3;	   
 	}
 	
-	if(chan4!=chan4Last)
+	if(chan4 != chan4Last)
 	{
-	   lcd_DrawFillRectangleDiff(330, 205, chan4Last, width-4, BACKCOLOR);		
-	   lcd_DrawFillRectangleDiff(330, 205, chan4, width-4, GREEN);
-	   chan4Last = chan4;
+		lcd_DrawFillRectangleDiff(330, 205, chan4Last, width-4, BACKCOLOR);		
+		lcd_DrawFillRectangleDiff(330, 205, chan4, width-4, GREEN);
+		chan4Last = chan4;
 	}
 }
  
@@ -1138,13 +1104,13 @@ void displayAttitude(int16_t pitch, int16_t roll, int16_t heading, int32_t alt, 
 	const uint16_t upBackColor = BLUE;
 	const uint16_t downBackColor = BROWN;
 	
-	static uint8_t attitude_painted = 0;	
+	static bool attitude_painted = false;	
 	//矩形框中心点坐标                       //矩形坐标：(100, 28)   (380, 28)
 	const uint16_t xpoint = 240;             //矩形坐标：(100,160)   (380,160)
 	const uint16_t ypoint = 115;		
-	if(attitude_painted == 0)
+	if(!attitude_painted)
 	{
-		attitude_painted = 1;
+		attitude_painted = true;
 		//背景色
 		lcd_DrawFillRectangle(xpoint-140, ypoint-85, xpoint+140,  ypoint-15, upBackColor);
 		lcd_DrawFillRectangle(xpoint-140, ypoint-15, xpoint+140,  ypoint+46, downBackColor); //! 
@@ -1227,40 +1193,40 @@ void displayAttitude(int16_t pitch, int16_t roll, int16_t heading, int32_t alt, 
     
     if(roll != rollLast)
     {  //中心点坐标(240, 100)	  
-	  if((100-sin(rollLast/57.3)*30)>100) 
-	  {
-		  lcd_DrawLine(240-cos(rollLast/57.3)*30, 100-sin(rollLast/57.3)*30, 240-cos(rollLast/57.3)*15, 100-sin(rollLast/57.3)*15, downBackColor);   
-	  }
-      else 
-	  {
-		  lcd_DrawLine(240-cos(rollLast/57.3)*30, 100-sin(rollLast/57.3)*30, 240-cos(rollLast/57.3)*15, 100-sin(rollLast/57.3)*15, upBackColor); 
-	  }  	  
+		if((100-sin(rollLast/57.3)*30)>100) 
+		{
+			lcd_DrawLine(240-cos(rollLast/57.3)*30, 100-sin(rollLast/57.3)*30, 240-cos(rollLast/57.3)*15, 100-sin(rollLast/57.3)*15, downBackColor);   
+		}
+		else 
+		{
+			lcd_DrawLine(240-cos(rollLast/57.3)*30, 100-sin(rollLast/57.3)*30, 240-cos(rollLast/57.3)*15, 100-sin(rollLast/57.3)*15, upBackColor); 
+		}  	  
 
-	  if((100-cos(rollLast/57.3)*15)>100) 
-	  {
-		  lcd_DrawLine(240+sin(rollLast/57.3)*15, 100-cos(rollLast/57.3)*15, 240+sin(rollLast/57.3)*30, 100-cos(rollLast/57.3)*30, downBackColor);      
-	  }
-      else 
-	  {
-          lcd_DrawLine(240+sin(rollLast/57.3)*15, 100-cos(rollLast/57.3)*15, 240+sin(rollLast/57.3)*30, 100-cos(rollLast/57.3)*30, upBackColor);   
-	  } 
+		if((100-cos(rollLast/57.3)*15)>100) 
+		{
+			lcd_DrawLine(240+sin(rollLast/57.3)*15, 100-cos(rollLast/57.3)*15, 240+sin(rollLast/57.3)*30, 100-cos(rollLast/57.3)*30, downBackColor);      
+		}
+		else 
+		{
+			lcd_DrawLine(240+sin(rollLast/57.3)*15, 100-cos(rollLast/57.3)*15, 240+sin(rollLast/57.3)*30, 100-cos(rollLast/57.3)*30, upBackColor);   
+		} 
 
-	  if((100+sin(rollLast/57.3)*15)>100) 
-	  {
-          lcd_DrawLine(240+cos(rollLast/57.3)*15, 100+sin(rollLast/57.3)*15, 240+cos(rollLast/57.3)*30, 100+sin(rollLast/57.3)*30, downBackColor); 
-	  }
-      else 
-	  {
-          lcd_DrawLine(240+cos(rollLast/57.3)*15, 100+sin(rollLast/57.3)*15, 240+cos(rollLast/57.3)*30, 100+sin(rollLast/57.3)*30, upBackColor);	  
-      }
-	  
-	  lcd_DrawCicle(240, 100, 15, WHITE);
-	  lcd_DrawLineDiff(240-30,100,60,  0, LIGHTWHITE);
-      lcd_DrawLine(240-cos(roll/57.3)*30, 100-sin(roll/57.3)*30, 240-cos(roll/57.3)*15, 100-sin(roll/57.3)*15, WHITE);   
-      lcd_DrawLine(240+sin(roll/57.3)*15, 100-cos(roll/57.3)*15, 240+sin(roll/57.3)*30, 100-cos(roll/57.3)*30, WHITE);   
-      lcd_DrawLine(240+cos(roll/57.3)*15, 100+sin(roll/57.3)*15, 240+cos(roll/57.3)*30, 100+sin(roll/57.3)*30, WHITE); 		  
+		if((100+sin(rollLast/57.3)*15)>100) 
+		{
+			lcd_DrawLine(240+cos(rollLast/57.3)*15, 100+sin(rollLast/57.3)*15, 240+cos(rollLast/57.3)*30, 100+sin(rollLast/57.3)*30, downBackColor); 
+		}
+		else 
+		{
+			lcd_DrawLine(240+cos(rollLast/57.3)*15, 100+sin(rollLast/57.3)*15, 240+cos(rollLast/57.3)*30, 100+sin(rollLast/57.3)*30, upBackColor);	  
+		}
 
-	  rollLast = roll;	  
+		lcd_DrawCicle(240, 100, 15, WHITE);
+		lcd_DrawLineDiff(240-30,100,60,  0, LIGHTWHITE);
+		lcd_DrawLine(240-cos(roll/57.3)*30, 100-sin(roll/57.3)*30, 240-cos(roll/57.3)*15, 100-sin(roll/57.3)*15, WHITE);   
+		lcd_DrawLine(240+sin(roll/57.3)*15, 100-cos(roll/57.3)*15, 240+sin(roll/57.3)*30, 100-cos(roll/57.3)*30, WHITE);   
+		lcd_DrawLine(240+cos(roll/57.3)*15, 100+sin(roll/57.3)*15, 240+cos(roll/57.3)*30, 100+sin(roll/57.3)*30, WHITE); 		  
+
+		rollLast = roll;	  
      }
 		
 	/********heading***********************************************************/
@@ -1268,35 +1234,35 @@ void displayAttitude(int16_t pitch, int16_t roll, int16_t heading, int32_t alt, 
 	static uint8_t headingStep = 0; //! for delay about 1s
 	if(heading != headingLast)
 	{
-       headingStep = 0;       	
-	   if((heading-headingLast)<0)
-	   {	
-		  lcd_ShowTriCursor(240-54, 37, 0, RED);
-		  lcd_ShowTriCursor(240+55, 37, 1, LIGHTBLUE);
-	   }
-	   else 
-	   {
-		  lcd_ShowTriCursor(240-54, 37, 0, LIGHTBLUE);
-		  lcd_ShowTriCursor(240+55, 37, 1, RED);		   
-	   }
+		headingStep = 0;       	
+		if((heading-headingLast)<0)
+		{	
+			lcd_ShowTriCursor(240-54, 37, 0, RED);
+			lcd_ShowTriCursor(240+55, 37, 1, LIGHTBLUE);
+		}
+		else 
+		{
+			lcd_ShowTriCursor(240-54, 37, 0, LIGHTBLUE);
+			lcd_ShowTriCursor(240+55, 37, 1, RED);		   
+		}
 	   
-	   lcd_DrawFillRectangleDiff(240-15, 30, 32, 15, upBackColor);//清除上次的痕迹   
-	   if(heading == 0)        lcd_ShowCharBackColor(240-5, 30, WHITE, 18, 'N', upBackColor); 
-	   else if(heading == 90)  lcd_ShowCharBackColor(240-5, 30, WHITE, 18, 'E', upBackColor);		   
-	   else if(heading == 180) lcd_ShowCharBackColor(240-5, 30, WHITE, 18, 'S', upBackColor);		      
-	   else if(heading == 270) lcd_ShowCharBackColor(240-5, 30, WHITE, 18, 'W', upBackColor);		   	   
-	   else if(heading<10)     lcd_ShowNumBackColor(240-5,  30, WHITE, 18, 1, heading, 0, upBackColor);		   
-	   else if(heading<99)     lcd_ShowNumBackColor(240-9,  30, WHITE, 18, 2, heading, 0, upBackColor);		   
-	   else                    lcd_ShowNumBackColor(240-13, 30, WHITE, 18, 3, heading, 0, upBackColor);	
-		
-	   headingLast = heading;
+		lcd_DrawFillRectangleDiff(240-15, 30, 32, 15, upBackColor);//清除上次的痕迹   
+		if(heading == 0)        lcd_ShowCharBackColor(240-5, 30, WHITE, 18, 'N', upBackColor); 
+		else if(heading == 90)  lcd_ShowCharBackColor(240-5, 30, WHITE, 18, 'E', upBackColor);		   
+		else if(heading == 180) lcd_ShowCharBackColor(240-5, 30, WHITE, 18, 'S', upBackColor);		      
+		else if(heading == 270) lcd_ShowCharBackColor(240-5, 30, WHITE, 18, 'W', upBackColor);		   	   
+		else if(heading<10)     lcd_ShowNumBackColor(240-5,  30, WHITE, 18, 1, heading, 0, upBackColor);		   
+		else if(heading<99)     lcd_ShowNumBackColor(240-9,  30, WHITE, 18, 2, heading, 0, upBackColor);		   
+		else                    lcd_ShowNumBackColor(240-13, 30, WHITE, 18, 3, heading, 0, upBackColor);	
+
+		headingLast = heading;
 	}
 	else
 	{
 		if(headingStep++ == 100)
 		{
-		   lcd_ShowTriCursor(240-54, 37, 0, LIGHTBLUE);
-		   lcd_ShowTriCursor(240+55, 37, 1, LIGHTBLUE);			
+			lcd_ShowTriCursor(240-54, 37, 0, LIGHTBLUE);
+			lcd_ShowTriCursor(240+55, 37, 1, LIGHTBLUE);			
 		}
 		
 	}
@@ -1308,25 +1274,25 @@ void displayAttitude(int16_t pitch, int16_t roll, int16_t heading, int32_t alt, 
 	else if(alt < -100) alt = -100;
 	if(abs(alt-altLast) > 5)
 	{
-	   //基本范围为-100 -- 0 -- +1000  刻度范围为100: -40--+40  系数: *0.04 或 0.4
-	   //右侧方框内显示高度的值
-	   lcd_ShowNumBackColor(321,  100-7, LIGHTWHITE, 18, 4, alt, 0, BACKCOLOR);
-	   lcd_DrawRectangleDiff(321, 100-8 ,37, 15, LIGHTWHITE);
-	   //清除上次痕迹
-	   if(altLast >= 0)  lcd_ShowTriCursor(310, 100-altLast*0.04, 0, upBackColor); //right
-	   else		         lcd_ShowTriCursor(310, 100-altLast*0.4, 0, downBackColor); //right
-	   
-	   if(altLast*0.04<=6 && altLast*0.4>=-6)
-	   {	
-		lcd_DrawFillRectangleDiff(310, 100-6, 9, 5, upBackColor);
-		lcd_DrawFillRectangleDiff(310, 100+1 ,9, 5, downBackColor);
-		lcd_DrawLineDiff(310, 100, 9, 0, LIGHTWHITE);            			
-	   }
-	   
-	   if(alt >= 0) lcd_ShowTriCursor(310, 100-alt*0.04, 0, RED); //right	
-       else        	lcd_ShowTriCursor(310, 100-alt*0.4,  0, RED); //right   
+		//基本范围为-100 -- 0 -- +1000  刻度范围为100: -40--+40  系数: *0.04 或 0.4
+		//右侧方框内显示高度的值
+		lcd_ShowNumBackColor(321,  100-7, LIGHTWHITE, 18, 4, alt, 0, BACKCOLOR);
+		lcd_DrawRectangleDiff(321, 100-8 ,37, 15, LIGHTWHITE);
+		//清除上次痕迹
+		if(altLast >= 0)  lcd_ShowTriCursor(310, 100-altLast*0.04, 0, upBackColor); //right
+		else		      lcd_ShowTriCursor(310, 100-altLast*0.4, 0, downBackColor); //right
 
-       altLast = alt;	   	
+		if(altLast*0.04<=6 && altLast*0.4>=-6)
+		{	
+			lcd_DrawFillRectangleDiff(310, 100-6, 9, 5, upBackColor);
+			lcd_DrawFillRectangleDiff(310, 100+1 ,9, 5, downBackColor);
+			lcd_DrawLineDiff(310, 100, 9, 0, LIGHTWHITE);            			
+		}
+
+		if(alt >= 0) lcd_ShowTriCursor(310, 100-alt*0.04, 0, RED); //right	
+		else         lcd_ShowTriCursor(310, 100-alt*0.4,  0, RED); //right   
+
+		altLast = alt;	   	
 	}
 
 	
@@ -1334,52 +1300,64 @@ void displayAttitude(int16_t pitch, int16_t roll, int16_t heading, int32_t alt, 
 	static uint8_t battery_remainingLast = 200;	
     if(abs(batRemain-battery_remainingLast) >= 3) //去除干扰
 	{  
-	   switch(batRemain/9)
-	   {
-		   case  0: for(uint8_t i=0; i<1; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED); 
-		            for(uint8_t i=1; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-		   
-		   case  1: for(uint8_t i=0; i<2; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
-				    for(uint8_t i=2; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-		   
-		   case  2: for(uint8_t i=0; i<3; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
-				    for(uint8_t i=3; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-		   
-		   case  3: for(uint8_t i=0; i<4; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
-				    for(uint8_t i=4; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-					
-		   case  4: for(uint8_t i=0; i<5; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
-				    for(uint8_t i=5; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-					
-		   case  5: for(uint8_t i=0; i<6; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
-				    for(uint8_t i=6; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-					
-		   case  6: for(uint8_t i=0; i<7; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
-				    for(uint8_t i=7; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-					
-		   case  7: for(uint8_t i=0; i<8; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
-				    for(uint8_t i=8; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-					
-		   case  8: for(uint8_t i=0; i<9; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
-				    for(uint8_t i=9; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-					
-		   case  9: for(uint8_t i=0; i<10; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
-				    for(uint8_t i=10; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
-		            break;
-					
-		   case 10: for(uint8_t i=0; i<11; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
-		            break;				
-	   }
-	   battery_remainingLast = batRemain;
+		switch(batRemain/9)
+		{
+			case 0: 
+				for(uint8_t i=0; i<1; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED); 
+				for(uint8_t i=1; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 1: 
+				for(uint8_t i=0; i<2; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
+				for(uint8_t i=2; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 2: 
+				for(uint8_t i=0; i<3; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
+				for(uint8_t i=3; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 3: 
+				for(uint8_t i=0; i<4; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
+				for(uint8_t i=4; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 4: 
+				for(uint8_t i=0; i<5; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
+				for(uint8_t i=5; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 5: 
+				for(uint8_t i=0; i<6; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, RED);			        
+				for(uint8_t i=6; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 6: 
+				for(uint8_t i=0; i<7; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
+				for(uint8_t i=7; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 7: 
+				for(uint8_t i=0; i<8; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
+				for(uint8_t i=8; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 8: 
+				for(uint8_t i=0; i<9; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
+				for(uint8_t i=9; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 9: 
+				for(uint8_t i=0; i<10; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
+				for(uint8_t i=10; i<11;i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, BACKCOLOR);
+				break;
+
+			case 10: 
+				for(uint8_t i=0; i<11; i++) lcd_DrawFillRectangleDiff(363, 133-7*i, 12, 4, GREEN);			        
+				break;				
+		}
+		
+		battery_remainingLast = batRemain;
 	}
 }
 
@@ -1391,18 +1369,18 @@ gui   name: displayAirSpeed
 ************************************************/
 void displayAirSpeed(uint16_t x, uint16_t y, float airSpeed)
 {
-   uint8_t logo[] = "AIRSPD";
-   const uint8_t charsize = 24;
-   const uint8_t valuelength = 5;
-   
-   lcd_ShowString(x, y, WHITE, charsize, logo);
-   
-   static float airSpeedLast = 50.0;
-   if(fabs(airSpeed-airSpeedLast) > 0.5f)
-   {
-	 lcd_ShowFloat(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, airSpeed);	
-     airSpeedLast = airSpeed;	  
-   }
+	uint8_t logo[] = "AIRSPD";
+	const uint8_t charsize = 24;
+	const uint8_t valuelength = 5;
+
+	lcd_ShowString(x, y, WHITE, charsize, logo);
+
+	static float airSpeedLast = 50.0;
+	if(fabs(airSpeed-airSpeedLast) > 0.5f)
+	{
+		lcd_ShowFloat(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, airSpeed);	
+		airSpeedLast = airSpeed;	  
+	}
 
 }
 
@@ -1414,18 +1392,18 @@ gui   name: displayGroundSpeed
 ************************************************/
 void displayGroundSpeed(uint16_t x, uint16_t y, float groundSpeed)
 {
-   uint8_t logo[] = "GRDSPD";
-   const uint8_t charsize = 24;
-   const uint8_t valuelength = 5;
-   
-   lcd_ShowString(x, y, WHITE, charsize, logo);
-   
-   static float groundSpeedLast = 50.0;
-   if(fabs(groundSpeed-groundSpeedLast) > 0.5f)
-   {
-	 lcd_ShowFloat(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, groundSpeed);	
-     groundSpeedLast = groundSpeed;	  
-   }   
+	uint8_t logo[] = "GRDSPD";
+	const uint8_t charsize = 24;
+	const uint8_t valuelength = 5;
+
+	lcd_ShowString(x, y, WHITE, charsize, logo);
+
+	static float groundSpeedLast = 50.0;
+	if(fabs(groundSpeed-groundSpeedLast) > 0.5f)
+	{
+		lcd_ShowFloat(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, groundSpeed);	
+		groundSpeedLast = groundSpeed;	  
+	}   
 }
 
 
@@ -1436,18 +1414,18 @@ gui   name: displayClimb
 ************************************************/
 void displayClimb(uint16_t x, uint16_t y, float climb)
 {
-   uint8_t logo[] = "CLIMB";
-   const uint8_t charsize = 24;
-   const uint8_t valuelength = 5;
-   
-   lcd_ShowString(x, y, WHITE, charsize, logo);
-   
-   static float climbLast = 50.0;
-   if(fabs(climb-climbLast) > 0.1f)
-   {
-	 lcd_ShowFloat(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, climb);	
-     climbLast = climb;	  
-   }
+	uint8_t logo[] = "CLIMB";
+	const uint8_t charsize = 24;
+	const uint8_t valuelength = 5;
+
+	lcd_ShowString(x, y, WHITE, charsize, logo);
+
+	static float climbLast = 50.0;
+	if(fabs(climb-climbLast) > 0.1f)
+	{
+		lcd_ShowFloat(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, climb);	
+		climbLast = climb;	  
+	}
 }
 
 
@@ -1458,18 +1436,18 @@ gui   name: displayThrottle
 ************************************************/
 void displayThrottle(uint16_t x, uint16_t y, uint16_t throttle)
 {
-   uint8_t logo[] = "THROTTLE";
-   const uint8_t charsize = 24;
-   const uint8_t valuelength = 3;
-   
-   lcd_ShowString(x, y, WHITE, charsize, logo);
-   
-   static uint16_t throttleLast = 50.0;
-   if(throttle != throttleLast)
-   {
-	 lcd_ShowNum(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, throttle, 0);	
-     throttleLast = throttle;	  
-   }
+	uint8_t logo[] = "THROTTLE";
+	const uint8_t charsize = 24;
+	const uint8_t valuelength = 3;
+
+	lcd_ShowString(x, y, WHITE, charsize, logo);
+
+	static uint16_t throttleLast = 50.0;
+	if(throttle != throttleLast)
+	{
+		lcd_ShowNum(x+(sizeof(logo)-1-valuelength)*charsize/4, y+25, WHITE, charsize, valuelength, throttle, 0);	
+		throttleLast = throttle;	  
+	}
 }
 
 
@@ -1484,17 +1462,18 @@ void displayUpdating(uint16_t x, uint16_t y)
 	static uint8_t updateLast = 255;
 	if(g_eeGeneral.firmwareUpdate != updateLast)
 	{
-	  if(g_eeGeneral.firmwareUpdate == FIRMWARE_UPDATE) //! updating!!!
-	  {
-	    uint8_t UPDATING[]= "  UPDATING  ";					  
-	    lcd_ShowString(x-72, y, RED, 24, UPDATING); 		
-	  }	
-	  else if(g_eeGeneral.firmwareUpdate == FIRMWARE_REJECT) //! update rejected!!!
-	  {
-	    uint8_t REJECTED[]= "  REJECTED  ";					  
-	    lcd_ShowString(x-72, y, RED, 24, REJECTED);		  
-	  }
-      updateLast = g_eeGeneral.firmwareUpdate;	  
+		if(g_eeGeneral.firmwareUpdate == FIRMWARE_UPDATE) //! updating!!!
+		{
+			uint8_t UPDATING[]= "  UPDATING  ";					  
+			lcd_ShowString(x-72, y, RED, 24, UPDATING); 		
+		}	
+		else if(g_eeGeneral.firmwareUpdate == FIRMWARE_REJECT) //! update rejected!!!
+		{
+			uint8_t REJECTED[]= "  REJECTED  ";					  
+			lcd_ShowString(x-72, y, RED, 24, REJECTED);		  
+		}
+		
+		updateLast = g_eeGeneral.firmwareUpdate;	  
 	}
 
 }
@@ -1510,8 +1489,8 @@ void displayContectState(uint16_t x, uint16_t y)
 {
 	if(mavData.mavStatus.health == 30)     //! uncontected!
 	{
-	    uint8_t UNCONNTECTED[]= "UNCONNTECTED";		
-	    lcd_ShowString(x-72, y, RED, 24, UNCONNTECTED);			
+		uint8_t UNCONNTECTED[]= "UNCONNTECTED";		
+		lcd_ShowString(x-72, y, RED, 24, UNCONNTECTED);			
 	}
 }
 
@@ -1580,39 +1559,39 @@ gui   name: view_information
 ************************************************/
 void view_information(uint16_t id)
 {
-  const uint16_t x = 240;
-  const uint16_t y = 3;
+	const uint16_t x = 240;
+	const uint16_t y = 3;
+
+	static uint8_t count = 0;
+
+	if((count++ >= 10)||(g_eeGeneral.firmwareUpdate == 1)) count = 0; //! 10Hz and if do update then view_information 
   
-  static uint8_t count = 0;
-  
-  if((count++ >= 10)||(g_eeGeneral.firmwareUpdate == 1)) count = 0; //! 10Hz and if do update then view_information 
-  
-  switch(count)
-  {
-	case 0:
-	      displayUpdating(x, y);
-          break;		  	
-	case 1:
-	      displayUavFlightMode(x, y);
-          break;	
-	case 2:
-	      displayContectState(x, y);
-          break;	
-	case 3:
-          break;	
-	case 4:
-          break;	
-	case 5:
-          break;	
-	case 6:
-          break;	
-	case 7:
-          break;	
-	case 8:
-          break;	
-	case 9:
-          break;	
-  }
+	switch(count)
+	{
+		case 0:
+			displayUpdating(x, y);
+			break;		  	
+		case 1:
+			displayUavFlightMode(x, y);
+			break;	
+		case 2:
+			displayContectState(x, y);
+			break;	
+		case 3:
+			break;	
+		case 4:
+			break;	
+		case 5:
+			break;	
+		case 6:
+			break;	
+		case 7:
+			break;	
+		case 8:
+			break;	
+		case 9:
+			break;	
+	}
 
 }
 

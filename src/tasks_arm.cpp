@@ -64,56 +64,56 @@ OS_MutexID mixerMutex;
 template<int SIZE>
 void TaskStack<SIZE>::paint()
 {
-   for(uint32_t i=0; i<SIZE; i++) 
-   {
-       stack[i] = 0x55555555;
-   }
+	for(uint32_t i=0; i<SIZE; i++) 
+	{
+		stack[i] = 0x55555555;
+	}
 }
 
 
 template<int SIZE>
 uint16_t TaskStack<SIZE>::size()
 {
-   return SIZE*4;
+	return SIZE*4;
 }
 
 
 uint16_t getStackAvailable(void * address, uint16_t size)
 {
-   uint32_t * array = (uint32_t *)address;
-   uint16_t i = 0;
-   while (i < size && array[i] == 0x55555555) 
-   {
-      i++;
-   }
-   return i*4;
+	uint32_t * array = (uint32_t *)address;
+	uint16_t i = 0;
+	while (i < size && array[i] == 0x55555555) 
+	{
+		i++;
+	}
+	return i*4;
 }
 
 
 template<int SIZE>
 uint16_t TaskStack<SIZE>::available()
 {
-    return getStackAvailable(stack, SIZE);
+	return getStackAvailable(stack, SIZE);
 }
 
 
 void stackPaint()
 {  
-   menusStack.paint();
-   mixerStack.paint();
-   commnStack.paint();
+	menusStack.paint();
+	mixerStack.paint();
+	commnStack.paint();
 }
 
 
 #if defined(CPUSTM32) && !defined(SIMU)
 uint16_t stackSize()
 {
-  return ((unsigned char *)&_estack - (unsigned char *)&_main_stack_start) / 4;
+	return ((unsigned char *)&_estack - (unsigned char *)&_main_stack_start) / 4;
 }
 
 uint16_t stackAvailable()
 {
-  return getStackAvailable(&_main_stack_start, stackSize());
+	return getStackAvailable(&_main_stack_start, stackSize());
 }
 #endif
 
@@ -144,14 +144,14 @@ uint32_t hrtAbsoluteTime(void)
 /********************* mixerTask ********************************************/ 
 void mixerTask(void *pdata)
 {
-  while(1) 
-  { 
-     CoEnterMutexSection(mixerMutex);
-     doMixerCalculations();
-     CoLeaveMutexSection(mixerMutex); 		
- 
-     CoTickDelay(3);  //! 6ms for now
-  } 
+	while(1) 
+	{ 
+		CoEnterMutexSection(mixerMutex);
+		doMixerCalculations();
+		CoLeaveMutexSection(mixerMutex); 		
+
+		CoTickDelay(3);  //! 6ms for now
+	} 
 }
 
  
@@ -161,28 +161,28 @@ void mixerTask(void *pdata)
 
 void menusTask(void *pdata)
 {  
-   opentxInit(); 
-   
-   while(1)
-   {			
-	  U64 start = CoGetOSTime();
-	  perMain();		  
-       
-      displayTest();
-	  uint8_t runtime = CoGetOSTime() - start;
+	opentxInit(); 
+
+	while(1)
+	{			
+		U64 start = CoGetOSTime();
+		perMain();		  
+
+		displayTest();
+		uint8_t runtime = CoGetOSTime() - start;
 #if defined APPLE_DEBUG
-	  lcd_ShowNum(35, 30, WHITE, 18, 2, runtime, 0); 	
+		lcd_ShowNum(35, 30, WHITE, 18, 2, runtime, 0); 	
 #endif
-	  
-	  if(runtime < MENU_TASK_PERIOD_TICKS) 
-	  {
-	     CoTickDelay(MENU_TASK_PERIOD_TICKS - runtime);
-	  }
-   }
-   
-   backLightEnable(0, 100); //! backlight disable
-   opentxClose();
-   boardOff(); //! Only turn power off if necessary 
+
+		if(runtime < MENU_TASK_PERIOD_TICKS) 
+		{
+			CoTickDelay(MENU_TASK_PERIOD_TICKS - runtime);
+		}
+	}
+
+	backLightEnable(0, 100); //! backlight disable
+	opentxClose();
+	boardOff(); //! Only turn power off if necessary 
 } 
 
 
@@ -196,7 +196,6 @@ void commnTask(void *pdata)
 	{ 
 		U64 start = CoGetOSTime(); 
 		uint8_t tempdata;	
-		// g_eeGeneral.firmwareUpdate
 
 		if(g_eeGeneral.comlinkState == COMLINK_USB)                       
 		{
@@ -294,36 +293,36 @@ void commnTask(void *pdata)
 
 		}	 	
 
-	if(g_eeGeneral.ftpReady) //! firmware update
-	{
-		ftpProcess();
-		g_eeGeneral.ftpReady = 0;
-	}	
+		if(g_eeGeneral.ftpReady) //! firmware update
+		{
+			ftpProcess();
+			g_eeGeneral.ftpReady = false;
+		}	
 
-	uint8_t runtime = CoGetOSTime() - start; 
+		uint8_t runtime = CoGetOSTime() - start; 
 #if defined APPLE_DEBUG
-	lcd_ShowNum(35, 60, WHITE, 18, 2, runtime, 0);    
+		lcd_ShowNum(35, 60, WHITE, 18, 2, runtime, 0);    
 #endif
-	if(runtime < COMN_TASK_PERIOD_TICKS) 
-	{
-		CoTickDelay(COMN_TASK_PERIOD_TICKS - runtime);
-	}		  
+		if(runtime < COMN_TASK_PERIOD_TICKS) 
+		{
+			CoTickDelay(COMN_TASK_PERIOD_TICKS - runtime);
+		}		  
 
-	//! CoTickDelay(2);//! 4ms for now 
+		//! CoTickDelay(2);//! 4ms for now 
 	} 
 }
 
 
 void tasksStart()
 {
-  CoInitOS();
-   
-  mixerTaskId = CoCreateTask(mixerTask, NULL, 1, &mixerStack.stack[MIXER_STACK_SIZE-1], MIXER_STACK_SIZE);  //! default priority 5
-  menusTaskId = CoCreateTask(menusTask, NULL, 2, &menusStack.stack[MENUS_STACK_SIZE-1], MENUS_STACK_SIZE);  //! default priority 10  
-  commnTaskId = CoCreateTask(commnTask, NULL, 3, &commnStack.stack[COMMN_STACK_SIZE-1], COMMN_STACK_SIZE);  //! default priority 11  
+	CoInitOS();
 
-  mixerMutex = CoCreateMutex();
-  CoStartOS();
+	mixerTaskId = CoCreateTask(mixerTask, NULL, 1, &mixerStack.stack[MIXER_STACK_SIZE-1], MIXER_STACK_SIZE);  //! default priority 5
+	menusTaskId = CoCreateTask(menusTask, NULL, 2, &menusStack.stack[MENUS_STACK_SIZE-1], MENUS_STACK_SIZE);  //! default priority 10  
+	commnTaskId = CoCreateTask(commnTask, NULL, 3, &commnStack.stack[COMMN_STACK_SIZE-1], COMMN_STACK_SIZE);  //! default priority 11  
+
+	mixerMutex = CoCreateMutex();
+	CoStartOS();
 }
 
 

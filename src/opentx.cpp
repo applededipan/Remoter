@@ -129,15 +129,17 @@ void watchdogSetTimeout(uint32_t timeout)
 //! execute this function per 10ms
 void per10ms()
 {  
-  g_tmr10ms++;
-  if(++g_ms100 == 100)           //! Update global Date/Time every 100 per10ms cycles 
-  {
-    g_rtcTime++;
-    g_ms100 = 0;
-	wdt_feed();                  //! feed watchdog per 1000ms added by apple 26/07	
-  }
-  sdPoll10ms();                         //! must be called per 10ms for sd card    
-  getBatVoltage(&g_eeGeneral.vBattery); //! get the voltage of RC battery just put it here to make sure run per 10ms
+	g_tmr10ms++;
+	
+	if(++g_ms100 == 100)           //! Update global Date/Time every 100 per10ms cycles 
+	{
+		g_rtcTime++;
+		g_ms100 = 0;
+		wdt_feed();                  //! feed watchdog per 1000ms added by apple 26/07	
+	}
+	
+	sdPoll10ms();                         //! must be called per 10ms for sd card    
+	getBatVoltage(&g_eeGeneral.vBattery); //! get the voltage of RC battery just put it here to make sure run per 10ms
 }
 
 
@@ -149,25 +151,25 @@ OS_TCID systemTimer_10ms;
 void systemTimer_10msCallBack(void)
 {
 #if defined (VTOL_MODE_CONTROL)
-  setVtolMode(OPENTX_TR1);    //! vtol mode control  use channel 8
+	setVtolMode(OPENTX_TR1);    //! vtol mode control  use channel 8
 #elif defined (THROW_CONTROL)	
-  setThrowMode(OPENTX_TR1);   //! throw mode control  use channel 9
+	setThrowMode(OPENTX_TR1);   //! throw mode control  use channel 9
 #endif	
-  
-  mavlinkSendMessage();       //! send messages to uav
-  
-  displayNavigation();
-  
-  displayAttitude(mavData.attitude.pitch, mavData.attitude.roll, mavData.attitude.yaw, mavData.hud.alt, mavData.sysStatus.volBat);
-  // displayAirSpeed(15, 30, mavData.hud.airspeed);
-  // displayGroundSpeed(15, 80, mavData.hud.groundspeed);
-  // displayClimb(15, 130, mavData.hud.climb);
-  // displayThrottle(3, 180, mavData.hud.throttle);
-  
-  
-  view_information(true);
-  
-  menusProcess(OPENTX_CHOSE, OPENTX_ENTER);  
+
+	mavlinkSendMessage();       //! send messages to uav
+
+	displayNavigation();
+
+	displayAttitude(mavData.attitude.pitch, mavData.attitude.roll, mavData.attitude.yaw, mavData.hud.alt, mavData.sysStatus.volBat);
+	// displayAirSpeed(15, 30, mavData.hud.airspeed);
+	// displayGroundSpeed(15, 80, mavData.hud.groundspeed);
+	// displayClimb(15, 130, mavData.hud.climb);
+	// displayThrottle(3, 180, mavData.hud.throttle);
+
+
+	view_information(true);
+
+	menusProcess(OPENTX_CHOSE, OPENTX_ENTER);  
 
 }
 
@@ -179,18 +181,18 @@ void systemTimer_10msCallBack(void)
 OS_TCID systemTimer_100ms; //! 100ms timer / 10Hz
 void systemTimer_100msCallBack(void)
 {
-  powerLowWarn(240, 2, 10, OPENTX_POWER);	
-  
-  powerLowShutdown(5);                                   //! if bat is lower than 5, then shutdown the system 
- 
-  if(mavData.mavStatus.health < 30)
-  {
-	 mavData.mavStatus.health++;
-	 mavData.radioStatus.rssi = 99 - 3.3*mavData.mavStatus.health;		 
-     if(mavData.mavStatus.health == 30) mavlinkReset(); //! must be 30	  
-  }	
+	powerLowWarn(240, 2, 10, OPENTX_POWER);	
 
-  if(mavData.mavStatus.raspiHealth++ > 100) mavData.mavStatus.pdlState = 0;  //! check if raspi comn is ok or not 
+	powerLowShutdown(5);                                   //! if bat is lower than 5, then shutdown the system 
+
+	if(mavData.mavStatus.health < 30)
+	{
+		mavData.mavStatus.health++;
+		mavData.radioStatus.rssi = 99 - 3.3*mavData.mavStatus.health;		 
+		if(mavData.mavStatus.health == 30) mavlinkReset(); //! must be 30	  
+	}	
+
+	if(mavData.mavStatus.raspiHealth++ > 100) mavData.mavStatus.pdlState = 0;  //! check if raspi comn is ok or not 
 }
 
 
@@ -198,28 +200,28 @@ void systemTimer_100msCallBack(void)
 
 FlightModeData *flightModeAddress(uint8_t idx)
 {
-  return &g_model.flightModeData[idx];
+	return &g_model.flightModeData[idx];
 }
 
 ExpoData *expoAddress(uint8_t idx )
 {
-  return &g_model.expoData[idx];
+	return &g_model.expoData[idx];
 }
 
 MixData *mixAddress(uint8_t idx)
 {
-  return &g_model.mixData[idx];
+	return &g_model.mixData[idx];
 }
 
 LimitData *limitAddress(uint8_t idx)
 {
-  return &g_model.limitData[idx];
+	return &g_model.limitData[idx];
 }
 
 #if defined(CPUM64)
 void memclear(void *ptr, uint8_t size)
 {
-  memset(ptr, 0, size);
+	memset(ptr, 0, size);
 }
 #endif
 

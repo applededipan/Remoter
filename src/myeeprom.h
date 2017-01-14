@@ -786,7 +786,7 @@ PACK(typedef struct {
   uint16_t  throwMode;      //! set throw mode :1000 or 2000
   uint32_t  key;  
   bool      sdCardError;    //! ture:error   false:ok
-  uint8_t   ftpReady;
+  bool      ftpReady;
   uint8_t   vBattery;       //! 锂电池：vMin: 7.4:0%:900 vMax:8.2:100%:1000   ? %=anaIn(6)-900  ?        v=0.008*anaIn(6)+0.2   //! 18650 ：vMin: 7.0:0%:    vMax:8.2:100%:1000   ? %=anaIn(6)*0.67 - 567
   uint8_t   vCharge;
   uint8_t   powerState;     //! 1:power on   0:power off

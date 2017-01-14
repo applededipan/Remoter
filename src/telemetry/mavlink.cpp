@@ -179,7 +179,7 @@ static inline void handle_message_scaled_pressure(const mavlink_message_t *msg)
 static inline void handle_message_attitude(const mavlink_message_t *msg)
 {
 	if(msg->sysid != UAV_SYSTEM_ID) return;
-	if(mavData.mavStatus.health>10) mavData.mavStatus.health--; //! 璇ユ秷鎭鐜囧お楂橈紝鏀跺埌璇ユ秷鎭笉鑳戒唬琛ㄤ俊鍙峰緢濂斤紝閫氳繃health鑷噺鐨勬柟寮忚〃绀鸿娑堟伅瀵逛簬淇″彿妫?娴嬬殑鏉冮噸
+	if(mavData.mavStatus.health > 10) mavData.mavStatus.health--; //! 璇ユ秷鎭鐜囧お楂橈紝鏀跺埌璇ユ秷鎭笉鑳戒唬琛ㄤ俊鍙峰緢濂斤紝閫氳繃health鑷噺鐨勬柟寮忚〃绀鸿娑堟伅瀵逛簬淇″彿妫?娴嬬殑鏉冮噸
 
 	mavData.attitude.pitch_rad = mavlink_msg_attitude_get_pitch(msg);
 	mavData.attitude.roll_rad  = mavlink_msg_attitude_get_roll(msg);
@@ -336,7 +336,7 @@ static inline void handle_message_file_transfer_protocol(const mavlink_message_t
 	mavData.ftp.payload.hdr.size	  = payload->hdr.size;
 	memcpy(&mavData.ftp.payload.data, &payload->data, sizeof(mavData.ftp.payload.data));
 
-	g_eeGeneral.ftpReady = 1;	
+	g_eeGeneral.ftpReady = true;	
 }
 
 
@@ -499,6 +499,7 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		static mavlink_message_t  m_mavlink_message_0;
 		static mavlink_message_t* p_rxmsg_0 = &m_mavlink_message_0;
 		mavlink_status_t* p_status_0 = mavlink_get_channel_status(MAVLINK_COMM_0);	
+		
 		if(mavlink_parse_char(MAVLINK_COMM_0, c, p_rxmsg_0, p_status_0))
 		{	
 			handleMessage(p_rxmsg_0);	
