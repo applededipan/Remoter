@@ -514,9 +514,10 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		{	
 			if(g_eeGeneral.comlinkState != COMLINK_USB)
 			{
-			   usart4RspStop();
-			   usart3BthStop();	
-			   g_eeGeneral.comlinkState = COMLINK_USB;			   
+				usart4RspStop();
+				usart3BthStop();
+				bthPower(false);
+				g_eeGeneral.comlinkState = COMLINK_USB;			   
 			}
 		
 			handleMessage(p_rxmsg_1);	
@@ -532,9 +533,10 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		{
 			if(g_eeGeneral.comlinkState != COMLINK_RSP)
 			{
-			   usart1UsbStop();
-			   usart3BthStop();
-			   g_eeGeneral.comlinkState = COMLINK_RSP;				
+				usart1UsbStop();
+				usart3BthStop();
+				bthPower(false);
+				g_eeGeneral.comlinkState = COMLINK_RSP;				
 			}
 
 			handleMessage(p_rxmsg_2);	
@@ -551,9 +553,9 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		{
 			if(g_eeGeneral.comlinkState != COMLINK_BTH)
 			{
-			   usart1UsbStop();
-			   usart4RspStop();
-			   g_eeGeneral.comlinkState = COMLINK_BTH;				
+				usart1UsbStop();
+				usart4RspStop();
+				g_eeGeneral.comlinkState = COMLINK_BTH;				
 			}
 
 			handleMessage(p_rxmsg_3);		
