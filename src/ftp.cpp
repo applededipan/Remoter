@@ -62,65 +62,76 @@ void ftpProcess(void)
 	switch(mavData.ftp.payload.hdr.opcode)
 	{
 		case kCmdCreateFile:			 
-			 break;
-		
+			break;
+
 		case kCmdWriteFile:		
-             if(g_eeGeneral.firmwareUpdate != 1)
-			 {
-				 if(g_eeGeneral.vBattery>20) //! battery > 20, then can update
-				 {
-					g_eeGeneral.firmwareUpdate = 1; //! start firmware update!!!  
-				 }
-				 else
-				 {
-					ackGood = false;
-					g_eeGeneral.firmwareUpdate = 2; //! firmware update rejected!!!  
-				 }
-			 }	
-			 else
-			 {   //! 根据第一次的消息判断是不是进行更新，若更新，则需地面站重发一次才正式开始更新
-				 if(creatUpdateFile((uint8_t*)&mavData.ftp.payload.data, mavData.ftp.payload.hdr.offset, mavData.ftp.payload.hdr.size))
-				 {
-					 ackGood = false; //! write sdcard file failed!  
-				 }
-				 else
-				 {
-					 ackGood = true;  //! write sdcard file succeed!
-				 }				 
-			 }           			 
-			 break;
-		
+			if(g_eeGeneral.firmwareUpdate != FIRMWARE_UPDATE)
+			{
+				if(g_eeGeneral.vBattery > 20) //! battery > 20, then can update
+				{
+					if(g_eeGeneral.sdCardError) //! sdCard Error
+					{
+						g_eeGeneral.firmwareUpdate = FIRMWARE_REJECT; //! firmware update rejected!!! 
+						ackGood = false;
+					}
+					else
+					{
+						g_eeGeneral.firmwareUpdate = FIRMWARE_UPDATE; //! start firmware update!!!  
+						ackGood = true;						
+					}
+
+				}
+				else
+				{
+					g_eeGeneral.firmwareUpdate = FIRMWARE_REJECT; //! firmware update rejected!!!  
+					ackGood = false;					
+				}
+			}	
+			else
+			{   //! 根据第一次的消息判断是不是进行更新，若更新，则需地面站重发一次才正式开始更新
+				if(creatUpdateFile((uint8_t*)&mavData.ftp.payload.data, mavData.ftp.payload.hdr.offset, mavData.ftp.payload.hdr.size))
+				{
+					ackGood = false; //! write sdcard file failed!  
+				}
+				else
+				{
+					ackGood = true;  //! write sdcard file succeed!
+				}				 
+			}           			 
+			break;
+
 		case kCmdResetSessions: 
-		     break;
-		
+			break;
+
 		case kCmdSearchVersion:
-		     strcpy((char*)myFtp.payload.data, SMARTC_VERSION); //! send smartconsole version to QGC 
-		     break;
-	    
+			strcpy((char*)myFtp.payload.data, SMARTC_VERSION); //! send smartconsole version to QGC 
+			break;
+
 		case kCmdRemoveFile:
-			 break;
-			 
+			break;
+
 		case kCmdReboot: 
-		     if(g_eeGeneral.comlinkState == COMLINK_BTH) //! if connect to bth
-			 {
+			if(g_eeGeneral.comlinkState == COMLINK_BTH) //! if connect to bth
+			{
 				g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_3, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload); //! response to QGC then reboot	 
-			 }
-			 else                                        //! default via usb
-			 {
-                g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_1, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload); //! response to QGC then reboot					 
-			 }
-	
-			 eepromWriteBlock(&update, E_ADDR_UPDATE, 1);   //! set the update flag which means smartconsole will update when startup!
-			 systemReboot();
-		     break;
-			 
+			}
+			else                                        //! default via usb
+			{
+				g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_1, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload); //! response to QGC then reboot					 
+			}
+
+			eepromWriteBlock(&update, E_ADDR_UPDATE, 1);   //! set the update flag which means smartconsole will update when startup!
+			systemReboot();
+			break;
+
 		default: 
-		     break;
+			break;
 	}
-    //! only when wirte sdcard failed we will not response, otherwise we all have to response to the ftp message!!!
-    if(ackGood) 
+	
+	//! only when wirte sdcard failed we will not response, otherwise we all have to response to the ftp message!!!
+	if(ackGood) 
 	{
-	    if(g_eeGeneral.comlinkState == COMLINK_BTH)
+		if(g_eeGeneral.comlinkState == COMLINK_BTH)
 		{
 			g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_3, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload);
 		}
@@ -129,7 +140,7 @@ void ftpProcess(void)
 			g_mavlink_msg_file_transfer_protocol_send(MAVLINK_COMM_1, myFtp.network, myFtp.sysid, myFtp.cmpid, (uint8_t*)&myFtp.payload);
 		}
 	}
-		
+
 }
 
 

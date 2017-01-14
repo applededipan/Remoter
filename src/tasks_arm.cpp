@@ -192,118 +192,125 @@ void menusTask(void *pdata)
 
 void commnTask(void *pdata)
 {  
-  while(1) 
-  { 
-	  U64 start = CoGetOSTime(); 
-	  uint8_t tempdata;	
-      
-	  if(!g_eeGeneral.firmwareUpdate) //! normal operate
-	  {
-		 if(g_eeGeneral.comlinkState == COMLINK_USB)                       
-		 {
-		    while(telemetryrxFifo.pop(tempdata))
+	while(1) 
+	{ 
+		U64 start = CoGetOSTime(); 
+		uint8_t tempdata;	
+		// g_eeGeneral.firmwareUpdate
+
+		if(g_eeGeneral.comlinkState == COMLINK_USB)                       
+		{
+			if(g_eeGeneral.firmwareUpdate != FIRMWARE_UPDATE)
 			{
-				usart1UsbSendChar(tempdata);
-                mavlinkReceiver(MAVLINK_COMM_0, tempdata); 				
+				while(telemetryrxFifo.pop(tempdata))
+				{
+					usart1UsbSendChar(tempdata);
+					mavlinkReceiver(MAVLINK_COMM_0, tempdata); 				
+				}				
 			}
-			
-            while(usart1rxFifo.pop(tempdata))
+
+			while(usart1rxFifo.pop(tempdata))
 			{
 				usart2UavSendChar(tempdata); 
 				mavlinkReceiver(MAVLINK_COMM_1, tempdata);				
 			}
-            			
-		 }
-		 else if(g_eeGeneral.comlinkState == COMLINK_RSP)   
-		 {
-		    while(telemetryrxFifo.pop(tempdata))
+			
+		}
+		else if(g_eeGeneral.comlinkState == COMLINK_RSP)   
+		{
+			if(g_eeGeneral.firmwareUpdate != FIRMWARE_UPDATE)
 			{
-				usart4RspSendChar(tempdata); 
-                mavlinkReceiver(MAVLINK_COMM_0, tempdata); 				
-			}
+				while(telemetryrxFifo.pop(tempdata))
+				{
+					usart4RspSendChar(tempdata); 
+					mavlinkReceiver(MAVLINK_COMM_0, tempdata); 				
+				}				
+			}				
 
-            while(usart4rxFifo.pop(tempdata))
+			while(usart4rxFifo.pop(tempdata))
 			{
 				usart2UavSendChar(tempdata); 
-                mavlinkReceiver(MAVLINK_COMM_2, tempdata);				
+				mavlinkReceiver(MAVLINK_COMM_2, tempdata);				
 			}
-             			
-		 }
-		 else if(g_eeGeneral.comlinkState == COMLINK_BTH)   
-		 {
-		    while(telemetryrxFifo.pop(tempdata)) 
+			
+		}
+		else if(g_eeGeneral.comlinkState == COMLINK_BTH)   
+		{
+			if(g_eeGeneral.firmwareUpdate != FIRMWARE_UPDATE)
 			{
-				usart3BthSendChar(tempdata);
-                mavlinkReceiver(MAVLINK_COMM_0, tempdata); 				
-			}
+				while(telemetryrxFifo.pop(tempdata)) 
+				{
+					usart3BthSendChar(tempdata);
+					mavlinkReceiver(MAVLINK_COMM_0, tempdata); 				
+				}				
+			}				
 
 			while(usart3rxFifo.pop(tempdata)) 
 			{
 				usart2UavSendChar(tempdata);
-	            mavlinkReceiver(MAVLINK_COMM_3, tempdata); 				
+				mavlinkReceiver(MAVLINK_COMM_3, tempdata); 				
 			}
-              
-		 }
-		 else   //! no one plugged in: uav connection or unconnection
-		 {
-		    while(telemetryrxFifo.pop(tempdata))
-		    {  
-		       mavlinkReceiver(MAVLINK_COMM_0, tempdata);
-			   
-		       if(mavData.mavStatus.health == 30)   //! uav unconnection: for usb config the p900 
-			   {
-				  usart1UsbSendChar(tempdata);                                          
-			   }
-			   else                                 //! uav connection: try to connect to QGC
-			   {
-				   switch(g_rtcTime%3)
-				   {
-					  case 0: usart1UsbSendChar(tempdata); break;
-					  case 1: usart4RspSendChar(tempdata); break;
-					  case 2: usart3BthSendChar(tempdata); break;				  
-				   }				   
-			   }
 
-		    } 
-			
-            while(usart1rxFifo.pop(tempdata)) //! data form usb to uav	
+		}
+		else   //! no one plugged in: uav connection or unconnection
+		{
+			while(telemetryrxFifo.pop(tempdata))
+			{  
+				mavlinkReceiver(MAVLINK_COMM_0, tempdata);
+
+				if(mavData.mavStatus.health == 30)   //! uav unconnection: for usb config the p900 
+				{
+					usart1UsbSendChar(tempdata);                                          
+				}
+				else                                 //! uav connection: try to connect to QGC
+				{
+					switch(g_rtcTime%3)
+					{
+						case 0: usart1UsbSendChar(tempdata); break;
+						case 1: usart4RspSendChar(tempdata); break;
+						case 2: usart3BthSendChar(tempdata); break;				  
+					}				   
+				}
+
+			} 
+
+			while(usart1rxFifo.pop(tempdata)) //! data form usb to uav	
 			{
 				usart2UavSendChar(tempdata);    
 				mavlinkReceiver(MAVLINK_COMM_1, tempdata);
 			}          
-			
-            while(usart4rxFifo.pop(tempdata)) //! data form rsp to uav
+
+			while(usart4rxFifo.pop(tempdata)) //! data form rsp to uav
 			{
 				usart2UavSendChar(tempdata);    
 				mavlinkReceiver(MAVLINK_COMM_2, tempdata);
 			}          
-			
-            while(usart3rxFifo.pop(tempdata)) //! data form bth to uav 
+
+			while(usart3rxFifo.pop(tempdata)) //! data form bth to uav 
 			{
 				usart2UavSendChar(tempdata);    
 				mavlinkReceiver(MAVLINK_COMM_3, tempdata);
 			}          
-			
-		 }	 
-	  }	
-	  	  
-	  if(g_eeGeneral.ftpReady) //! firmware update
-      {
-	     ftpProcess();
-	     g_eeGeneral.ftpReady = 0;
-      }	
-	  
-	  uint8_t runtime = CoGetOSTime() - start; 
+
+		}	 	
+
+	if(g_eeGeneral.ftpReady) //! firmware update
+	{
+		ftpProcess();
+		g_eeGeneral.ftpReady = 0;
+	}	
+
+	uint8_t runtime = CoGetOSTime() - start; 
 #if defined APPLE_DEBUG
-	  lcd_ShowNum(35, 60, WHITE, 18, 2, runtime, 0);    
+	lcd_ShowNum(35, 60, WHITE, 18, 2, runtime, 0);    
 #endif
-	  if(runtime < COMN_TASK_PERIOD_TICKS) 
-	  {
-		 CoTickDelay(COMN_TASK_PERIOD_TICKS - runtime);
-	  }		  
-	   
-	  //! CoTickDelay(2);//! 4ms for now 
-  } 
+	if(runtime < COMN_TASK_PERIOD_TICKS) 
+	{
+		CoTickDelay(COMN_TASK_PERIOD_TICKS - runtime);
+	}		  
+
+	//! CoTickDelay(2);//! 4ms for now 
+	} 
 }
 
 

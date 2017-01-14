@@ -1631,6 +1631,7 @@ void view_information(uint16_t id)
  
 void displayTest(void)
 {  	
+
    #if defined APPLE_DEBUG
 
    lcd_ShowNum(40, 150,  RED, 24, 3, mavData.mavStatus.health, 0);   	   

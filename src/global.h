@@ -183,7 +183,12 @@ enum COMLINK_STATUS
 };
 
 
-
+enum FIRMWARE_STATUS 
+{
+  FIRMWARE_NAN    = 0,	
+  FIRMWARE_UPDATE = 1,
+  FIRMWARE_REJECT = 2,
+};
 
 
 
