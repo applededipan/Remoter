@@ -70,18 +70,18 @@ Fifo<1024> usart3rxFifo;
 
 enum BluetoothState
 {
-  BLUETOOTH_INIT,
-  BLUETOOTH_WAIT_TTM,
-  BLUETOOTH_WAIT_BAUDRATE_CHANGE,
-  BLUETOOTH_OK,
+	BLUETOOTH_INIT,
+	BLUETOOTH_WAIT_TTM,
+	BLUETOOTH_WAIT_BAUDRATE_CHANGE,
+	BLUETOOTH_OK,
 };
 
 enum BluetoothWriteState
 {
-  BLUETOOTH_WRITE_IDLE,
-  BLUETOOTH_WRITE_INIT,
-  BLUETOOTH_WRITING,
-  BLUETOOTH_WRITE_DONE
+	BLUETOOTH_WRITE_IDLE,
+	BLUETOOTH_WRITE_INIT,
+	BLUETOOTH_WRITING,
+	BLUETOOTH_WRITE_DONE
 };
 
 volatile uint8_t bluetoothState = BLUETOOTH_INIT;
@@ -89,35 +89,35 @@ volatile uint8_t bluetoothWriteState = BLUETOOTH_WRITE_IDLE;
 
 void usart3BthInit(uint32_t baudrate)
 {
-	
-  USART_DeInit(USART3_USART);
-  GPIO_InitTypeDef GPIO_InitStructure;
-  USART_InitTypeDef USART_InitStructure;
 
-  GPIO_PinAFConfig(USART3_GPIO, USART3_GPIO_PinSource_TX, USART3_GPIO_AF);
-  GPIO_PinAFConfig(USART3_GPIO, USART3_GPIO_PinSource_RX, USART3_GPIO_AF);
+	USART_DeInit(USART3_USART);
+	GPIO_InitTypeDef GPIO_InitStructure;
+	USART_InitTypeDef USART_InitStructure;
 
-  GPIO_InitStructure.GPIO_Pin = USART3_GPIO_PIN_TX | USART3_GPIO_PIN_RX;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(USART3_GPIO, &GPIO_InitStructure);
+	GPIO_PinAFConfig(USART3_GPIO, USART3_GPIO_PinSource_TX, USART3_GPIO_AF);
+	GPIO_PinAFConfig(USART3_GPIO, USART3_GPIO_PinSource_RX, USART3_GPIO_AF);
 
-  USART_InitStructure.USART_BaudRate = baudrate;
-  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-  USART_InitStructure.USART_StopBits = USART_StopBits_1;
-  USART_InitStructure.USART_Parity = USART_Parity_No;
-  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
-  
-  USART_Init(USART3_USART, &USART_InitStructure);
-  USART_GetFlagStatus(USART3_USART, USART_FLAG_TC); //! must to do or the first byte will send failed
-  USART_Cmd(USART3_USART, ENABLE);
-  USART_ITConfig(USART3_USART, USART_IT_RXNE, ENABLE);
+	GPIO_InitStructure.GPIO_Pin = USART3_GPIO_PIN_TX | USART3_GPIO_PIN_RX;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(USART3_GPIO, &GPIO_InitStructure);
 
-  NVIC_SetPriority(USART3_USART_IRQn, 6);
-  NVIC_EnableIRQ(USART3_USART_IRQn);
+	USART_InitStructure.USART_BaudRate = baudrate;
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;
+	USART_InitStructure.USART_Parity = USART_Parity_No;
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
+
+	USART_Init(USART3_USART, &USART_InitStructure);
+	USART_GetFlagStatus(USART3_USART, USART_FLAG_TC); //! must to do or the first byte will send failed
+	USART_Cmd(USART3_USART, ENABLE);
+	USART_ITConfig(USART3_USART, USART_IT_RXNE, ENABLE);
+
+	NVIC_SetPriority(USART3_USART_IRQn, 6);
+	NVIC_EnableIRQ(USART3_USART_IRQn);
 }
 
 
@@ -129,151 +129,152 @@ void usart3BthStop(void)
 
 void bluetoothDone()
 {
-  //annotated by apple
-  //GPIO_SetBits(BT_GPIO_EN, BT_GPIO_PIN_EN); // close bluetooth
+	//annotated by apple
+	//GPIO_SetBits(BT_GPIO_EN, BT_GPIO_PIN_EN); // close bluetooth
 }
 
 
 
 void usart3BthWriteWakeup(void)
 {
-  /* if (bluetoothWriteState == BLUETOOTH_WRITE_IDLE) {
-    if (!btTxFifo.isEmpty()) {
-      bluetoothWriteState = BLUETOOTH_WRITE_INIT;
+	/* if (bluetoothWriteState == BLUETOOTH_WRITE_IDLE) {
+	if (!btTxFifo.isEmpty()) {
+	  bluetoothWriteState = BLUETOOTH_WRITE_INIT;
 	  //annotate by apple
-      //GPIO_ResetBits(BT_GPIO_BRTS, BT_GPIO_PIN_BRTS);
-    }
-  }
-  else if (bluetoothWriteState == BLUETOOTH_WRITE_INIT) {
-    bluetoothWriteState = BLUETOOTH_WRITING;
-    USART_ITConfig(USART3_USART, USART_IT_TXE, ENABLE);
-  }
-  else if (bluetoothWriteState == BLUETOOTH_WRITE_DONE) {
-    bluetoothWriteState = BLUETOOTH_WRITE_IDLE;
+	  //GPIO_ResetBits(BT_GPIO_BRTS, BT_GPIO_PIN_BRTS);
+	}
+	}
+	else if (bluetoothWriteState == BLUETOOTH_WRITE_INIT) {
+	bluetoothWriteState = BLUETOOTH_WRITING;
+	USART_ITConfig(USART3_USART, USART_IT_TXE, ENABLE);
+	}
+	else if (bluetoothWriteState == BLUETOOTH_WRITE_DONE) {
+	bluetoothWriteState = BLUETOOTH_WRITE_IDLE;
 	//annotated by apple
-    //GPIO_SetBits(BT_GPIO_BRTS, BT_GPIO_PIN_BRTS);
-  } */
+	//GPIO_SetBits(BT_GPIO_BRTS, BT_GPIO_PIN_BRTS);
+	} */
 }
 
 void usart3BthWakeup(void)
-{/* 
-  if (!g_eeGeneral.bluetoothEnable) {
-    if (bluetoothState != BLUETOOTH_INIT) {
-      bluetoothDone();
-      bluetoothState = BLUETOOTH_INIT;
-    }
-  }
-  else {
-    if (bluetoothState != BLUETOOTH_OK) {
-      static tmr10ms_t waitEnd = 0;
+{
+	/* 
+	if (!g_eeGeneral.bluetoothEnable) {
+	if (bluetoothState != BLUETOOTH_INIT) {
+	  bluetoothDone();
+	  bluetoothState = BLUETOOTH_INIT;
+	}
+	}
+	else {
+	if (bluetoothState != BLUETOOTH_OK) {
+	  static tmr10ms_t waitEnd = 0;
 
-      if (bluetoothState == BLUETOOTH_INIT) {
-        usart3BthInit(57600);
-        const char btMessage[] = "TTM:REN-";
-        bluetoothWriteString(btMessage);
-        uint8_t len = ZLEN(g_eeGeneral.bluetoothName);
-        for (int i=0; i<len; i++) {
-          btTxFifo.push(idx2char(g_eeGeneral.bluetoothName[i]));
-        }
-        bluetoothState = BLUETOOTH_WAIT_TTM;
-        waitEnd = get_tmr10ms() + 25; // 250ms
-      }
-      else if (bluetoothState == BLUETOOTH_WAIT_TTM) {
-        if (get_tmr10ms() > waitEnd) {
-          char ttm[] = "TTM:REN";
-          int index = 0;
-          uint8_t c;
-          bool found = false;
-          while (usart3rxFifo.pop(c)) {
-            if (c == ttm[index]) {
-              index++;
-              if (index == sizeof(ttm)-1) {
-                found = true;
-                break;
-              }
-            }
-            else {
-              index = 0;
-            }
-          }
-          if (found) {
-            bluetoothState = BLUETOOTH_OK;
-          }
-          else {
-            usart3BthInit(9600);
-            const char btMessage[] = "TTM:BPS-115200";
-            bluetoothWriteString(btMessage);
-            bluetoothState = BLUETOOTH_WAIT_BAUDRATE_CHANGE;
-            waitEnd = get_tmr10ms() + 250; // 2.5s
-          }
-        }
-      }
-      else if (bluetoothState == BLUETOOTH_WAIT_BAUDRATE_CHANGE) {
-        if (get_tmr10ms() > waitEnd) {
-          bluetoothState = BLUETOOTH_INIT;
-        }
-      }
-    }
+	  if (bluetoothState == BLUETOOTH_INIT) {
+		usart3BthInit(57600);
+		const char btMessage[] = "TTM:REN-";
+		bluetoothWriteString(btMessage);
+		uint8_t len = ZLEN(g_eeGeneral.bluetoothName);
+		for (int i=0; i<len; i++) {
+		  btTxFifo.push(idx2char(g_eeGeneral.bluetoothName[i]));
+		}
+		bluetoothState = BLUETOOTH_WAIT_TTM;
+		waitEnd = get_tmr10ms() + 25; // 250ms
+	  }
+	  else if (bluetoothState == BLUETOOTH_WAIT_TTM) {
+		if (get_tmr10ms() > waitEnd) {
+		  char ttm[] = "TTM:REN";
+		  int index = 0;
+		  uint8_t c;
+		  bool found = false;
+		  while (usart3rxFifo.pop(c)) {
+			if (c == ttm[index]) {
+			  index++;
+			  if (index == sizeof(ttm)-1) {
+				found = true;
+				break;
+			  }
+			}
+			else {
+			  index = 0;
+			}
+		  }
+		  if (found) {
+			bluetoothState = BLUETOOTH_OK;
+		  }
+		  else {
+			usart3BthInit(9600);
+			const char btMessage[] = "TTM:BPS-115200";
+			bluetoothWriteString(btMessage);
+			bluetoothState = BLUETOOTH_WAIT_BAUDRATE_CHANGE;
+			waitEnd = get_tmr10ms() + 250; // 2.5s
+		  }
+		}
+	  }
+	  else if (bluetoothState == BLUETOOTH_WAIT_BAUDRATE_CHANGE) {
+		if (get_tmr10ms() > waitEnd) {
+		  bluetoothState = BLUETOOTH_INIT;
+		}
+	  }
+	}
 
-    usart3BthWriteWakeup();
-  }
-  */
+	usart3BthWriteWakeup();
+	}
+	*/
 }
 
 uint8_t usart3BthReady()
 {
-  // return (bluetoothState == BLUETOOTH_OK); //!annotated by apple
-  return BLUETOOTH_OK; //! modified by apple just for nothing 
+	// return (bluetoothState == BLUETOOTH_OK); //!annotated by apple
+	return BLUETOOTH_OK; //! modified by apple just for nothing 
 }
 
 int usart3BthRead(void * buffer, int len)
 {
-  /* int result = 0;
-  uint8_t * data = (uint8_t *)buffer;
-  while (result < len) {
-    uint8_t byte;
-    if (!usart3rxFifo.pop(byte)) {
-      break;
-    }
-    data[result++] = byte;
-  }
-  return result; */
-  return 0;//! modified by apple just for nothing
+	/* int result = 0;
+	uint8_t * data = (uint8_t *)buffer;
+	while (result < len) {
+	uint8_t byte;
+	if (!usart3rxFifo.pop(byte)) {
+	  break;
+	}
+	data[result++] = byte;
+	}
+	return result; */
+	return 0;//! modified by apple just for nothing
 }
 
 
 struct BtTxBuffer
 {
-  uint8_t *ptr;
-  uint16_t count;
+	uint8_t *ptr;
+	uint16_t count;
 } btTxBuffer;
 
 
 void usart3BthSendChar(uint8_t data)  
 {  
-    USART_SendData(USART3_USART, data);  
-    while(USART_GetFlagStatus(USART3_USART, USART_FLAG_TC) == RESET){}  
+	USART_SendData(USART3_USART, data);  
+	while(USART_GetFlagStatus(USART3_USART, USART_FLAG_TC) == RESET){}  
 } 
 
 
 void usart3BthSendBuffer(uint8_t *buffer, uint16_t count)
 {
-  btTxBuffer.ptr = buffer;
-  btTxBuffer.count = count;
-  USART3_USART->CR1 |= USART_CR1_TXEIE ;
+	btTxBuffer.ptr = buffer;
+	btTxBuffer.count = count;
+	USART3_USART->CR1 |= USART_CR1_TXEIE;
 }
 
 
 
 extern "C" void USART3_USART_IRQHandler()
 {
-  uint8_t data;
-  
-  if(USART_GetITStatus(USART3_USART, USART_IT_RXNE) != RESET)
-  { 
+	uint8_t data;
+
+	if(USART_GetITStatus(USART3_USART, USART_IT_RXNE) != RESET)
+	{ 
 	  data = USART_ReceiveData(USART3_USART);
 	  usart3rxFifo.push(data);
-  }
+	}
 }
 
 

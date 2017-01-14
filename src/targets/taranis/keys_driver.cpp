@@ -252,15 +252,6 @@ void beepActive(uint8_t state)
 
 
 
-
-
-
-
-
-
-
-
-
 /**********************************************************************/
 //MOTOR added by apple
 void motorInit()
@@ -296,6 +287,55 @@ void motorActive(uint8_t state)
 
 
 
+
+/**********************************************************************/
+//BTH added by apple
+void bthInit()
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+
+	#if defined(BTH_GPIOB_PINS)
+	GPIO_InitStructure.GPIO_Pin = BTH_GPIOB_PINS;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);  
+	#endif
+
+	#if defined(BTH_GPIOE_PINS)
+	GPIO_InitStructure.GPIO_Pin = BTH_GPIOE_PINS;
+	GPIO_Init(GPIOE, &GPIO_InitStructure);  
+	#endif
+
+}
+
+void bthPower(uint8_t state)
+{
+	if(state == 1)
+	{
+		GPIO_SetBits(BTH_GPIO_REG_POWER, BTH_GPIO_PIN_POWER);
+	}
+	else
+	{
+		GPIO_ResetBits(BTH_GPIO_REG_POWER, BTH_GPIO_PIN_POWER);
+	}
+
+}
+
+void bthAtCmd(uint8_t state)
+{
+	if(state == 1)
+	{
+		GPIO_SetBits(BTH_GPIO_REG_ATCMD, BTH_GPIO_PIN_ATCMD);
+	}
+	else
+	{
+		GPIO_ResetBits(BTH_GPIO_REG_ATCMD, BTH_GPIO_PIN_ATCMD);
+	}
+
+}
+/**********************************************************************/
 
 
 

@@ -234,6 +234,13 @@ void motorActive(uint8_t state);
 
 
 /****************************************************************************/
+//Bth driver
+void bthInit(void);
+void bthPower(uint8_t state);
+void bthAtCmd(uint8_t state);
+
+
+/****************************************************************************/
 // WDT driver
 #if !defined(SIMU)
 #define wdt_disable()

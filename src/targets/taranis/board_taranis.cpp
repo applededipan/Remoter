@@ -133,7 +133,7 @@ void boardInit()
 					     USART3_RCC_AHB1Periph    | LCD_RCC_AHB1Periph       | UART4_RCC_AHB1Periph     | 
 						 ADC_RCC_AHB1Periph       | I2C_RCC_AHB1Periph       | USART1_RCC_AHB1Periph    | 
 			             HAPTIC_RCC_AHB1Periph    | TELEMETRY_RCC_AHB1Periph | BEEP_RCC_AHB1Periph      |
-						 LED_RCC_AHB1Periph       | EXTMODULE_RCC_AHB1Periph | 
+						 LED_RCC_AHB1Periph       | EXTMODULE_RCC_AHB1Periph | BTH_RCC_AHB1Periph       |
 						 SPI_RCC_AHB1Periph       | FLASH_RCC_AHB1Periph     | MOTOR_RCC_AHB1Periph     | 
 						 HAPTIC_RCC_AHB1Periph    | SD_RCC_AHB1Periph        | HEARTBEAT_RCC_AHB1Periph, ENABLE); 						 
 						 

@@ -131,6 +131,27 @@
 
 
 
+/****************************************************************************/
+//! BTH_apple
+
+#define BTH_GPIO_REG_POWER              GPIOE
+#define BTH_GPIO_PIN_POWER              GPIO_Pin_0
+
+#define BTH_GPIO_REG_ATCMD              GPIOB
+#define BTH_GPIO_PIN_ATCMD              GPIO_Pin_8
+
+
+#define BTH_RCC_AHB1Periph             (RCC_AHB1Periph_GPIOB|RCC_AHB1Periph_GPIOE)
+#define BTH_GPIOB_PINS                 (BTH_GPIO_PIN_ATCMD)
+#define BTH_GPIOE_PINS                 (BTH_GPIO_PIN_POWER)
+
+/****************************************************************************/
+
+
+
+
+
+
 
 /****************************************************************************/
 //! LCD_apple
