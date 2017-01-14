@@ -42,17 +42,17 @@
 ************************************************/
 void keysInit(void)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;
 
-  GPIO_InitStructure.GPIO_Pin = KEYS_GPIOC_PINS;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = KEYS_GPIOC_PINS;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-  GPIO_InitStructure.GPIO_Pin = KEYS_GPIOE_PINS;
-  GPIO_Init(GPIOE, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = KEYS_GPIOE_PINS;
+	GPIO_Init(GPIOE, &GPIO_InitStructure);
 
 }
 
@@ -65,32 +65,32 @@ void keysInit(void)
 ************************************************/
 uint32_t readKeys(void)
 {
-  uint32_t result = 0;
+	uint32_t result = 0;
   
-  if (~KEYS_GPIO_REG_BUTTON_X & KEYS_GPIO_PIN_BUTTON_X)  result |= 1<<KEYS_MANUAL;
-  if (~KEYS_GPIO_REG_BUTTON_L & KEYS_GPIO_PIN_BUTTON_L)  result |= 1<<KEYS_AUTO;
-  if (~KEYS_GPIO_REG_BUTTON_H & KEYS_GPIO_PIN_BUTTON_H)  result |= 1<<KEYS_HOME;
-  if (~KEYS_GPIO_REG_BUTTON_A & KEYS_GPIO_PIN_BUTTON_A)  result |= 1<<KEYS_CHOSE;   
-  if (~KEYS_GPIO_REG_BUTTON_P & KEYS_GPIO_PIN_BUTTON_P)  result |= 1<<KEYS_ENTER;
-  if (~KEYS_GPIO_REG_BUTTON_POWER & KEYS_GPIO_PIN_BUTTON_POWER) result |= 1<<KEYS_POWER;  
+	if (~KEYS_GPIO_REG_BUTTON_X & KEYS_GPIO_PIN_BUTTON_X)  result |= 1<<KEYS_MANUAL;
+	if (~KEYS_GPIO_REG_BUTTON_L & KEYS_GPIO_PIN_BUTTON_L)  result |= 1<<KEYS_AUTO;
+	if (~KEYS_GPIO_REG_BUTTON_H & KEYS_GPIO_PIN_BUTTON_H)  result |= 1<<KEYS_HOME;
+	if (~KEYS_GPIO_REG_BUTTON_A & KEYS_GPIO_PIN_BUTTON_A)  result |= 1<<KEYS_CHOSE;   
+	if (~KEYS_GPIO_REG_BUTTON_P & KEYS_GPIO_PIN_BUTTON_P)  result |= 1<<KEYS_ENTER;
+	if (~KEYS_GPIO_REG_BUTTON_POWER & KEYS_GPIO_PIN_BUTTON_POWER) result |= 1<<KEYS_POWER;  
 
-  if (~KEYS_GPIO_REG_BUTTON_TL1 & KEYS_GPIO_PIN_BUTTON_TL1)  result |= 1<<KEYS_TL1;
-  if (~KEYS_GPIO_REG_BUTTON_TL2 & KEYS_GPIO_PIN_BUTTON_TL2)  result |= 1<<KEYS_TL2;
-  if (~KEYS_GPIO_REG_BUTTON_TR1 & KEYS_GPIO_PIN_BUTTON_TR1)  result |= 1<<KEYS_TR1;
-  if (~KEYS_GPIO_REG_BUTTON_TR2 & KEYS_GPIO_PIN_BUTTON_TR2)  result |= 1<<KEYS_TR2;  
-  return result;
+	if (~KEYS_GPIO_REG_BUTTON_TL1 & KEYS_GPIO_PIN_BUTTON_TL1)  result |= 1<<KEYS_TL1;
+	if (~KEYS_GPIO_REG_BUTTON_TL2 & KEYS_GPIO_PIN_BUTTON_TL2)  result |= 1<<KEYS_TL2;
+	if (~KEYS_GPIO_REG_BUTTON_TR1 & KEYS_GPIO_PIN_BUTTON_TR1)  result |= 1<<KEYS_TR1;
+	if (~KEYS_GPIO_REG_BUTTON_TR2 & KEYS_GPIO_PIN_BUTTON_TR2)  result |= 1<<KEYS_TR2;  
+	return result;
 }
 
 
 
 uint32_t trimDown(uint8_t idx)
 {
-  return 0; //! return readTrims() & (1 << idx);
+	return 0; //! return readTrims() & (1 << idx);
 }
 
 uint32_t keyDown(void)
 {
-  return readKeys();
+	return readKeys();
 }
 
 
@@ -151,64 +151,64 @@ bool switchState(EnumKeys enuk)
 //LEDS added by apple
 void ledsInit(void)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+
 #if defined(LED_GPIOA_PINS)
-  GPIO_InitStructure.GPIO_Pin = LED_GPIOA_PINS;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);  
+	GPIO_InitStructure.GPIO_Pin = LED_GPIOA_PINS;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);  
 #endif
 
 #if defined(LED_GPIOB_PINS)
-  GPIO_InitStructure.GPIO_Pin = LED_GPIOB_PINS;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = LED_GPIOB_PINS;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 #endif
 
 #if defined(LED_GPIOC_PINS)
-  GPIO_InitStructure.GPIO_Pin = LED_GPIOC_PINS;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = LED_GPIOC_PINS;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 #endif
 
 #if defined(LED_GPIOD_PINS)
-  GPIO_InitStructure.GPIO_Pin = LED_GPIOD_PINS;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = LED_GPIOD_PINS;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
 #endif
 
 #if defined(LED_GPIOE_PINS)
-  GPIO_InitStructure.GPIO_Pin = LED_GPIOE_PINS;
-  GPIO_Init(GPIOE, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = LED_GPIOE_PINS;
+	GPIO_Init(GPIOE, &GPIO_InitStructure);
 #endif
 
 #if defined(LED_GPIOF_PINS)
-  GPIO_InitStructure.GPIO_Pin = LED_GPIOF_PINS;
-  GPIO_Init(GPIOF, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = LED_GPIOF_PINS;
+	GPIO_Init(GPIOF, &GPIO_InitStructure);
 #endif
 
 #if defined(LED_GPIOG_PINS)
-  GPIO_InitStructure.GPIO_Pin = LED_GPIOG_PINS;
-  GPIO_Init(GPIOG, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = LED_GPIOG_PINS;
+	GPIO_Init(GPIOG, &GPIO_InitStructure);
 #endif
 
-  GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-  GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-  GPIO_SetBits(LED_GPIO_REG_H,   LED_GPIO_PIN_H);
-  
-  GPIO_SetBits(LED_GPIO_REG_A, LED_GPIO_PIN_A);
-  GPIO_SetBits(LED_GPIO_REG_P, LED_GPIO_PIN_P);
-  GPIO_SetBits(LED_GPIO_REG_POWER, LED_GPIO_PIN_POWER);  
-  
-  delayms(200);
-  
-  GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
-  GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
-  GPIO_ResetBits(LED_GPIO_REG_H,   LED_GPIO_PIN_H);
-  
-  GPIO_ResetBits(LED_GPIO_REG_A, LED_GPIO_PIN_A);
-  GPIO_ResetBits(LED_GPIO_REG_P, LED_GPIO_PIN_P);
-  GPIO_ResetBits(LED_GPIO_REG_POWER, LED_GPIO_PIN_POWER);    
+	GPIO_SetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
+	GPIO_SetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
+	GPIO_SetBits(LED_GPIO_REG_H,   LED_GPIO_PIN_H);
+
+	GPIO_SetBits(LED_GPIO_REG_A, LED_GPIO_PIN_A);
+	GPIO_SetBits(LED_GPIO_REG_P, LED_GPIO_PIN_P);
+	GPIO_SetBits(LED_GPIO_REG_POWER, LED_GPIO_PIN_POWER);  
+
+	delayms(200);
+
+	GPIO_ResetBits(LED_GPIO_REG_L_A, LED_GPIO_PIN_L_A);
+	GPIO_ResetBits(LED_GPIO_REG_X_M, LED_GPIO_PIN_X_M);
+	GPIO_ResetBits(LED_GPIO_REG_H,   LED_GPIO_PIN_H);
+
+	GPIO_ResetBits(LED_GPIO_REG_A, LED_GPIO_PIN_A);
+	GPIO_ResetBits(LED_GPIO_REG_P, LED_GPIO_PIN_P);
+	GPIO_ResetBits(LED_GPIO_REG_POWER, LED_GPIO_PIN_POWER);    
 }
 
 
@@ -220,15 +220,15 @@ void ledsInit(void)
 
 void beepInit(void)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+
 #if defined(BEEP_GPIOD_PINS)
-  GPIO_InitStructure.GPIO_Pin = BEEP_GPIOD_PINS;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);  
+	GPIO_InitStructure.GPIO_Pin = BEEP_GPIOD_PINS;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);  
 #endif
 
 }
@@ -256,15 +256,15 @@ void beepActive(bool state)
 //MOTOR added by apple
 void motorInit()
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  
+	GPIO_InitTypeDef GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+
 #if defined(MOTOR_GPIOB_PINS)
-  GPIO_InitStructure.GPIO_Pin = MOTOR_GPIOB_PINS;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);  
+	GPIO_InitStructure.GPIO_Pin = MOTOR_GPIOB_PINS;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);  
 #endif
 
 }
@@ -298,15 +298,15 @@ void bthInit()
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 
-	#if defined(BTH_GPIOB_PINS)
+#if defined(BTH_GPIOB_PINS)
 	GPIO_InitStructure.GPIO_Pin = BTH_GPIOB_PINS;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);  
-	#endif
+#endif
 
-	#if defined(BTH_GPIOE_PINS)
+#if defined(BTH_GPIOE_PINS)
 	GPIO_InitStructure.GPIO_Pin = BTH_GPIOE_PINS;
 	GPIO_Init(GPIOE, &GPIO_InitStructure);  
-	#endif
+#endif
 
 }
 
