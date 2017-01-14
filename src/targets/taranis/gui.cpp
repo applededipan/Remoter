@@ -22,7 +22,7 @@ void displayStartmenu(void)
     UINT br;        
     FRESULT fr;
 	
-	if(g_eeGeneral.sdCardError == 1) //! sdcard error
+	if(g_eeGeneral.sdCardError) //! sdcard error
 	{
 	   for(uint8_t i=0; i<5; i++)
 	   {

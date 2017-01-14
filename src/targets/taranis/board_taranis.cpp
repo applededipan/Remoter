@@ -107,20 +107,20 @@ extern "C" void INTERRUPT_5MS_IRQHandler()
 
 
 /******************************************
- *@ brief init the sdcard, if failed return 1 and reinit the spibus device; if succeed return 0
+ *@ brief init the sdcard, if failed return true and reinit the spibus device; if succeed return false
 ******************************************/
-void sdcardInit(uint8_t *sdCardError)
+void sdcardInit(bool *sdCardError)
 {
 	if(sdInit())
 	{
 	    spiInit();  
         hapticInit();
         spiFlashInit();
-        *sdCardError = 1; //! sdcard error			
+        *sdCardError = true; //! sdcard error			
 	}
 	else
 	{
-	    *sdCardError = 0; //! sdcard ok
+	    *sdCardError = false; //! sdcard ok
 	}
 }
 
