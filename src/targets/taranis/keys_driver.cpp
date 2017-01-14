@@ -308,6 +308,8 @@ void bthInit()
 	GPIO_Init(GPIOE, &GPIO_InitStructure);  
 #endif
 
+	GPIO_SetBits(BTH_GPIO_REG_POWER, BTH_GPIO_PIN_POWER); // default enable bth
+	GPIO_ResetBits(BTH_GPIO_REG_ATCMD, BTH_GPIO_PIN_ATCMD); // default disable at cmd mode
 }
 
 void bthPower(bool state)
