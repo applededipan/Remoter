@@ -1484,12 +1484,12 @@ void displayUpdating(uint16_t x, uint16_t y)
 	static uint8_t updateLast = 255;
 	if(g_eeGeneral.firmwareUpdate != updateLast)
 	{
-	  if(g_eeGeneral.firmwareUpdate == 1) //! updating!!!
+	  if(g_eeGeneral.firmwareUpdate == FIRMWARE_UPDATE) //! updating!!!
 	  {
 	    uint8_t UPDATING[]= "  UPDATING  ";					  
 	    lcd_ShowString(x-72, y, RED, 24, UPDATING); 		
 	  }	
-	  else if(g_eeGeneral.firmwareUpdate == 2) //! update rejected!!!
+	  else if(g_eeGeneral.firmwareUpdate == FIRMWARE_REJECT) //! update rejected!!!
 	  {
 	    uint8_t REJECTED[]= "  REJECTED  ";					  
 	    lcd_ShowString(x-72, y, RED, 24, REJECTED);		  
