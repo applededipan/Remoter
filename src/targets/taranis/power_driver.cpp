@@ -228,19 +228,19 @@ void powerLowWarn(uint16_t x, uint16_t y, uint8_t bat, uint32_t keyMute)
       if(t%2==0)
       {
 	    lcd_ShowString(x-72, y, RED, 24, LOWPOWER);	
-        beepActive(1);		
+        beepActive(true);		
       }
       else
       {
 	    lcd_ShowString(x-72, y, BACKCOLOR, 24, NONELOGO);
-	    beepActive(0);
+	    beepActive(false);
       }				
 	}
 	else if(t == 300)
 	{
 	  t = 200; 
 	  lcd_ShowString(x-72, y, RED, 24, LOWPOWER);
-	  beepActive(1);	  
+	  beepActive(true);	  
 	}  
     else 
 	{
@@ -251,7 +251,7 @@ void powerLowWarn(uint16_t x, uint16_t y, uint8_t bat, uint32_t keyMute)
 	{
 	  t = 0;
 	  lcd_ShowString(x-72, y, RED, 24, LOWPOWER);
-	  beepActive(0);
+	  beepActive(false);
 	}	
   }	
   else

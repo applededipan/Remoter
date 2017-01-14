@@ -38,6 +38,7 @@
 #define _BOARD_TARANIS_H_
 
 #include "stddef.h"
+#include <stdbool.h>
 #include "../../global.h"
 
 #if defined(__cplusplus) && !defined(SIMU)
@@ -222,22 +223,22 @@ uint8_t getMiddleValue(uint8_t a, uint8_t b, uint8_t c);
 /****************************************************************************/
 //Beep driver
 void beepInit(void);
-void beepActive(uint8_t state);
+void beepActive(bool state);
 
 
 
 /****************************************************************************/
 //Motor driver
 void motorInit(void);
-void motorActive(uint8_t state);
+void motorActive(bool state);
 
 
 
 /****************************************************************************/
 //Bth driver
 void bthInit(void);
-void bthPower(uint8_t state);
-void bthAtCmd(uint8_t state);
+void bthPower(bool state);
+void bthAtCmd(bool state);
 
 
 /****************************************************************************/

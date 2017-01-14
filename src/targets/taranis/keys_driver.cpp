@@ -233,9 +233,9 @@ void beepInit(void)
 
 }
 
-void beepActive(uint8_t state)
+void beepActive(bool state)
 {
-	if(state == 1)
+	if(state)
 	{
 		GPIO_SetBits(BEEP_GPIO_REG, BEEP_GPIO_PIN);
 	}
@@ -269,9 +269,9 @@ void motorInit()
 
 }
 
-void motorActive(uint8_t state)
+void motorActive(bool state)
 {
-	if(state == 1)
+	if(state)
 	{
 		GPIO_SetBits(MOTOR_GPIO_REG, MOTOR_GPIO_PIN);
 	}
@@ -310,9 +310,9 @@ void bthInit()
 
 }
 
-void bthPower(uint8_t state)
+void bthPower(bool state)
 {
-	if(state == 1)
+	if(state)
 	{
 		GPIO_SetBits(BTH_GPIO_REG_POWER, BTH_GPIO_PIN_POWER);
 	}
@@ -323,9 +323,9 @@ void bthPower(uint8_t state)
 
 }
 
-void bthAtCmd(uint8_t state)
+void bthAtCmd(bool state)
 {
-	if(state == 1)
+	if(state)
 	{
 		GPIO_SetBits(BTH_GPIO_REG_ATCMD, BTH_GPIO_PIN_ATCMD);
 	}
