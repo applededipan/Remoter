@@ -47,7 +47,7 @@ void ftpProcess(void)
 	myFtp.network  = 0;
 	myFtp.sysid    = 255;
 	myFtp.cmpid    = 250;
-	uint8_t ack    = 1;	
+	bool ackGood   = true;	
 	uint8_t update = 0x55;
 	
 	myFtp.payload.hdr.size    = sizeof(uint32_t);	
@@ -73,7 +73,7 @@ void ftpProcess(void)
 				 }
 				 else
 				 {
-					ack = 0;
+					ackGood = false;
 					g_eeGeneral.firmwareUpdate = 2; //! firmware update rejected!!!  
 				 }
 			 }	
@@ -81,11 +81,11 @@ void ftpProcess(void)
 			 {   //! 根据第一次的消息判断是不是进行更新，若更新，则需地面站重发一次才正式开始更新
 				 if(creatUpdateFile((uint8_t*)&mavData.ftp.payload.data, mavData.ftp.payload.hdr.offset, mavData.ftp.payload.hdr.size))
 				 {
-					 ack = 0; //! write sdcard file failed!  
+					 ackGood = false; //! write sdcard file failed!  
 				 }
 				 else
 				 {
-					 ack = 1; //! write sdcard file succeed!
+					 ackGood = true;  //! write sdcard file succeed!
 				 }				 
 			 }           			 
 			 break;
@@ -118,7 +118,7 @@ void ftpProcess(void)
 		     break;
 	}
     //! only when wirte sdcard failed we will not response, otherwise we all have to response to the ftp message!!!
-    if(ack) 
+    if(ackGood) 
 	{
 	    if(g_eeGeneral.comlinkState == COMLINK_BTH)
 		{
