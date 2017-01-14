@@ -152,6 +152,7 @@ void boardInit()
   rtcInit();
   powerInit();
   powerOn(); 
+  bthInit();
   keysInit();
   ledsInit();
   beepInit();
