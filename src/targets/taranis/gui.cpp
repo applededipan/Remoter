@@ -1611,53 +1611,53 @@ void view_information(uint16_t id)
 void displayTest(void)
 {  	
 
-   #if defined APPLE_DEBUG
+#if defined APPLE_DEBUG
 
-   lcd_ShowNum(40, 150,  RED, 24, 3, mavData.mavStatus.health, 0);   	   
-    // lcd_ShowNum(400, 30, RED, 24, 4, anaIn(1), 0);
-    // lcd_ShowNum(400, 60, RED, 24, 4, anaIn(0), 0);
-    // lcd_ShowNum(400, 90, RED, 24, 4, anaIn(2), 0);
-    // lcd_ShowNum(400,120, RED, 24, 4, anaIn(3), 0);
-    // lcd_ShowNum(400,150, RED, 24, 4, anaIn(4), 0);
-    // lcd_ShowNum(400,180, RED, 24, 4, anaIn(5), 0);
-    // lcd_ShowNum(400,210, RED, 24, 4, anaIn(6), 0);
-    // lcd_ShowNum(400,240, RED, 24, 4, anaIn(7), 0);	
-	
-    // lcd_ShowNum(40, 30, RED, 18, 4, g_eeGeneral.joyscale.ele_max, 0);
-    // lcd_ShowNum(40, 50, RED, 18, 4, g_eeGeneral.joyscale.ele_cen, 0);
-    // lcd_ShowNum(40, 70, RED, 18, 4, g_eeGeneral.joyscale.ele_min, 0);
-    // lcd_ShowNum(40, 90, RED, 18, 4, g_eeGeneral.joyscale.rud_max, 0);
-    // lcd_ShowNum(40,110, RED, 18, 4, g_eeGeneral.joyscale.rud_cen, 0);
-    // lcd_ShowNum(40,130, RED, 18, 4, g_eeGeneral.joyscale.rud_min, 0);
-    // lcd_ShowNum(40,150, RED, 18, 4, g_eeGeneral.joyscale.thr_max, 0);
-    // lcd_ShowNum(40,170, RED, 18, 4, g_eeGeneral.joyscale.thr_cen, 0);
-    // lcd_ShowNum(40,190, RED, 18, 4, g_eeGeneral.joyscale.thr_min, 0);
-    // lcd_ShowNum(40,210, RED, 18, 4, g_eeGeneral.joyscale.ail_max, 0);
-    // lcd_ShowNum(40,230, RED, 18, 4, g_eeGeneral.joyscale.ail_cen, 0);
-    // lcd_ShowNum(40,250, RED, 18, 4, g_eeGeneral.joyscale.ail_min, 0);
-    // lcd_ShowNum(40,270, RED, 18, 4, g_eeGeneral.joyscale.ltrm_max, 0);
-    // lcd_ShowNum(40,290, RED, 18, 4, g_eeGeneral.joyscale.ltrm_cen, 0);
-    // lcd_ShowNum(40,310, RED, 18, 4, g_eeGeneral.joyscale.ltrm_min, 0);
-	 //lcd_ShowNum(40,90, RED, 24, 2, g_eeGeneral.key, 0);   
-       // lcd_ShowNum(40,200, RED, 24, 3, mavData.mavStatus.pdlState, 0);
-	   // lcd_ShowNum(40,90, RED, 24, 2, g_eeGeneral.menuCurrent, 0);
+	lcd_ShowNum(40, 150,  RED, 24, 3, mavData.mavStatus.health, 0);   	   
+	// lcd_ShowNum(400, 30, RED, 24, 4, anaIn(1), 0);
+	// lcd_ShowNum(400, 60, RED, 24, 4, anaIn(0), 0);
+	// lcd_ShowNum(400, 90, RED, 24, 4, anaIn(2), 0);
+	// lcd_ShowNum(400,120, RED, 24, 4, anaIn(3), 0);
+	// lcd_ShowNum(400,150, RED, 24, 4, anaIn(4), 0);
+	// lcd_ShowNum(400,180, RED, 24, 4, anaIn(5), 0);
+	// lcd_ShowNum(400,210, RED, 24, 4, anaIn(6), 0);
+	// lcd_ShowNum(400,240, RED, 24, 4, anaIn(7), 0);	
+
+	// lcd_ShowNum(40, 30, RED, 18, 4, g_eeGeneral.joyscale.ele_max, 0);
+	// lcd_ShowNum(40, 50, RED, 18, 4, g_eeGeneral.joyscale.ele_cen, 0);
+	// lcd_ShowNum(40, 70, RED, 18, 4, g_eeGeneral.joyscale.ele_min, 0);
+	// lcd_ShowNum(40, 90, RED, 18, 4, g_eeGeneral.joyscale.rud_max, 0);
+	// lcd_ShowNum(40,110, RED, 18, 4, g_eeGeneral.joyscale.rud_cen, 0);
+	// lcd_ShowNum(40,130, RED, 18, 4, g_eeGeneral.joyscale.rud_min, 0);
+	// lcd_ShowNum(40,150, RED, 18, 4, g_eeGeneral.joyscale.thr_max, 0);
+	// lcd_ShowNum(40,170, RED, 18, 4, g_eeGeneral.joyscale.thr_cen, 0);
+	// lcd_ShowNum(40,190, RED, 18, 4, g_eeGeneral.joyscale.thr_min, 0);
+	// lcd_ShowNum(40,210, RED, 18, 4, g_eeGeneral.joyscale.ail_max, 0);
+	// lcd_ShowNum(40,230, RED, 18, 4, g_eeGeneral.joyscale.ail_cen, 0);
+	// lcd_ShowNum(40,250, RED, 18, 4, g_eeGeneral.joyscale.ail_min, 0);
+	// lcd_ShowNum(40,270, RED, 18, 4, g_eeGeneral.joyscale.ltrm_max, 0);
+	// lcd_ShowNum(40,290, RED, 18, 4, g_eeGeneral.joyscale.ltrm_cen, 0);
+	// lcd_ShowNum(40,310, RED, 18, 4, g_eeGeneral.joyscale.ltrm_min, 0);
+	// lcd_ShowNum(40,90, RED, 24, 2, g_eeGeneral.key, 0);   
+	// lcd_ShowNum(40,200, RED, 24, 3, mavData.mavStatus.pdlState, 0);
+	// lcd_ShowNum(40,90, RED, 24, 2, g_eeGeneral.menuCurrent, 0);
 	// lcd_ShowNum(40,60, RED, 24, 4, g_eeGeneral.joystick.ltrm, 0);
-    // lcd_ShowNum(40,90, RED, 24, 4, g_eeGeneral.joystick.rtrm, 0);	
-	
+	// lcd_ShowNum(40,90, RED, 24, 4, g_eeGeneral.joystick.rtrm, 0);	
+
 	// lcd_ShowNum(40,150, RED, 24, 4, g_eeGeneral.joystick.ele, 0);
-    // lcd_ShowNum(40,180, RED, 24, 4, g_eeGeneral.joystick.rud, 0);
-    // lcd_ShowNum(40,210, RED, 24, 4, g_eeGeneral.joystick.thr, 0);
-    // lcd_ShowNum(40,240, RED, 24, 4, g_eeGeneral.joystick.ail, 0);
+	// lcd_ShowNum(40,180, RED, 24, 4, g_eeGeneral.joystick.rud, 0);
+	// lcd_ShowNum(40,210, RED, 24, 4, g_eeGeneral.joystick.thr, 0);
+	// lcd_ShowNum(40,240, RED, 24, 4, g_eeGeneral.joystick.ail, 0);
 	// menuFlightMode();
-    lcd_ShowNum(40, 120,  RED, 24, 3, mavData.heartBeat.type, 0);
-    lcd_ShowNum(40, 150,  RED, 24, 3, mavData.sysStatus.vtolState, 0);
-	 
-    //displayBar(200, 186, 0, 14, g_eeGeneral.joystick.baseEle*0.3, BACKCOLOR);
+	// lcd_ShowNum(40, 120,  RED, 24, 3, mavData.heartBeat.type, 0);
+	// lcd_ShowNum(40, 150,  RED, 24, 3, mavData.sysStatus.vtolState, 0);
+
+	// displayBar(200, 186, 0, 14, g_eeGeneral.joystick.baseEle*0.3, BACKCOLOR);
 	// lcd_ShowNum(250, 120,  RED, 24, 4, mavData.mav_mode_v.custMode, 0);	 
 	// lcd_ShowNum(350,  30,  RED, 24, 4, mavData.radioStatus.remrssi, 0);
-    //displayBar(220, 200, 0, 20, g_eeGeneral.joystick.baseEle*0.3, GREEN);
-	
-   #endif
+	// displayBar(220, 200, 0, 20, g_eeGeneral.joystick.baseEle*0.3, GREEN);
+
+#endif
 }
  
 
