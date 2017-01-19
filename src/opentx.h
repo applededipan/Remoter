@@ -50,7 +50,7 @@
 /******************************************/
 
 //! define smartconsole version 
-#define SMARTC_VERSION     "V1.0.0rc" 
+#define SMARTC_VERSION     "V2.0.0" 
 
 //#define CHANNEL_EXTENED
 
