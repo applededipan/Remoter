@@ -208,13 +208,13 @@ void eeWriteJoyScale(void)
 	// joyScale[2]  = 997;
 	// joyScale[3]  = 50;
 	
-	// joyScale[4]  = 1950;
-	// joyScale[5]  = 1020;
-	// joyScale[6]  = 120;
+	// joyScale[4]  = 1900;
+	// joyScale[5]  = 993;
+	// joyScale[6]  = 95;
 	
 	// joyScale[7]  = 1870;
-	// joyScale[8]  = 865;
-	// joyScale[9]  = 0;
+	// joyScale[8]  = 930;
+	// joyScale[9]  = 50;
 	
 	// joyScale[10] = 1910;
 	// joyScale[11] = 1010;

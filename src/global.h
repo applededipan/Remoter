@@ -5,29 +5,30 @@
 
 #include <stdio.h>
 
-#define  COMMAX  30  //! the comstep to eval the input from usb or rsp 
+#define   ELE_MAX_EXT	1900
+#define   ELE_MAX		1800
+#define   ELE_MIN		200
 
-#define   ELE_MAX  1800
-#define   ELE_MIN  200
-#define   RUD_MAX  1800
-#define   RUD_MIN  200
-#define   THR_MAX  1800
-#define   THR_MIN  200
-#define   AIL_MAX  1800
-#define   AIL_MIN  200
-#define   LTRM_MAX 1800
-#define   LTRM_MIN 200
-#define   RTRM_MAX 1800
-#define   RTRM_MIN 200
+#define	  RUD_MAX_EXT	1900
+#define   RUD_MAX		1800
+#define   RUD_MIN		200
 
+#define   THR_MAX_EXT	1900
+#define   THR_MAX		1800
+#define   THR_MIN		200
 
-typedef struct
-{
-  int16_t   comStep;
-  uint16_t  comCut;
-}COMDATA;
+#define   AIL_MAX_EXT	1900
+#define   AIL_MAX		1800
+#define   AIL_MIN		200
 
-extern COMDATA comData;
+#define   LTRM_MAX_EXT	1250
+#define   LTRM_MAX		1200
+#define   LTRM_MIN		850
+
+#define   RTRM_MAX_EXT	1250
+#define   RTRM_MAX		1200
+#define   RTRM_MIN		850
+
 
 typedef struct 
 {

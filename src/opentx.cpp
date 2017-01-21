@@ -1691,7 +1691,8 @@ void globalDatelInit(void)
   g_eeGeneral.joyscale.thr_max  = THR_MAX;
   g_eeGeneral.joyscale.thr_min  = THR_MIN;   
   g_eeGeneral.joyscale.ail_max  = AIL_MAX;
-  g_eeGeneral.joyscale.ail_min  = AIL_MIN;   
+  g_eeGeneral.joyscale.ail_min  = AIL_MIN; 
+  
   g_eeGeneral.joyscale.ltrm_max = LTRM_MAX;
   g_eeGeneral.joyscale.ltrm_min = LTRM_MIN;    
   g_eeGeneral.joyscale.rtrm_max = RTRM_MAX;

@@ -488,24 +488,32 @@ void menu_calibJoystick(uint8_t state)
           lcd_ShowTriCursor(x+70+45, y+45-35,  1, LINEBLACK); 
           lcd_ShowCircle(x+70, y+45-35, LINEBLACK); 
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = SUB_STATE_NONE;          
-          break;     
+          break;   
+		  
      case SUB_STATE_START:
           showTitle(x-(sizeof(logo)-1)*6, y-35, WHITE, logo, GREEN);     
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_THRESHOLD;      
-          break;          
+          break;  
+		  
      case CALIB_STATE_THRESHOLD:
           g_eeGeneral.joyscale.threshold = 50;
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_STICK_LEFT_UP;           
-          break;        
+          break; 
+		  
      case CALIB_STATE_STICK_LEFT_UP:
           if(count%40 == 0)      lcd_ShowCircle(x-70, y+70-35, WHITE);          //! 左上
           else if(count%40 == 20) lcd_ShowCircle(x-70, y+70-35, BACKCOLOR); 
-          count++; //!          
-          if(anaIn(1)<=g_eeGeneral.joyscale.ele_min) g_eeGeneral.joyscale.ele_min = anaIn(1); 
-          //else error++;         
-          if(count>timers) //! 采样500次，大概是5s
+          count++; //!  
+		  
+          if(anaIn(1) <= g_eeGeneral.joyscale.ele_min) g_eeGeneral.joyscale.ele_min = anaIn(1); 
+          else if(anaIn(1) > ELE_MIN)
+		  {
+			error++;  
+		  } 
+		   
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3) //! calib failed!
+             if(error > timers/3) //! calib failed!
              {
                 lcd_ShowCircle(x-70, y+70-35, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;                                
@@ -518,16 +526,23 @@ void menu_calibJoystick(uint8_t state)
              count = 0;
              error = 0;          
           }
-          break;          
+          break; 
+		  
      case CALIB_STATE_STICK_LEFT_DOWN:
           if(count%40 == 0)      lcd_ShowCircle(x-70, y+70+35, WHITE);          //! 左下
           else if(count%40 == 20) lcd_ShowCircle(x-70, y+70+35, BACKCOLOR);
           count++;
-          if(anaIn(1)>=g_eeGeneral.joyscale.ele_max) g_eeGeneral.joyscale.ele_max = anaIn(1);
-          //else error++;           
-          if(count>timers) //! 采样500次，大概是5s
+		  
+		  if(g_eeGeneral.joyscale.ele_max > ELE_MAX_EXT) g_eeGeneral.joyscale.ele_max = ELE_MAX_EXT;
+          if(anaIn(1) >= g_eeGeneral.joyscale.ele_max) g_eeGeneral.joyscale.ele_max = anaIn(1); 
+		  else if (anaIn(1) < ELE_MAX)
+		  {
+			  error++;
+		  }
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3) //! calib failed!
+             if(error > timers/3) //! calib failed!
              {
                 lcd_ShowCircle(x-70, y+70+35, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;                
@@ -540,16 +555,23 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;              
           }          
-          break;          
+          break;
+          
      case CALIB_STATE_STICK_LEFT_LEFT:
           if(count%40 == 0)      lcd_ShowCircle(x-70-35, y+70, WHITE);          //! 左左
           else if(count%40 == 20) lcd_ShowCircle(x-70-35, y+70, BACKCOLOR); 
           count++;
-          if(anaIn(0)>=g_eeGeneral.joyscale.rud_max) g_eeGeneral.joyscale.rud_max = anaIn(0);  
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+		  
+		  if(g_eeGeneral.joyscale.rud_max > RUD_MAX_EXT) g_eeGeneral.joyscale.rud_max = RUD_MAX_EXT;
+          if(anaIn(0) >= g_eeGeneral.joyscale.rud_max) g_eeGeneral.joyscale.rud_max = anaIn(0);            
+		  else if (anaIn(0) < RUD_MAX)
+		  {
+			  error++;
+		  }
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3) //! calib failed!
+             if(error > timers/3) //! calib failed!
              {
                 lcd_ShowCircle(x-70-35, y+70, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -562,16 +584,22 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }           
-          break;          
+          break; 
+		  
      case CALIB_STATE_STICK_LEFT_RIGHT:
           if(count%40 == 0)      lcd_ShowCircle(x-70+35, y+70, WHITE);          //! 左右
           else if(count%40 == 20) lcd_ShowCircle(x-70+35, y+70, BACKCOLOR); 
           count++;
-          if(anaIn(0)<=g_eeGeneral.joyscale.rud_min) g_eeGeneral.joyscale.rud_min = anaIn(0);  
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+		  
+          if(anaIn(0) <= g_eeGeneral.joyscale.rud_min) g_eeGeneral.joyscale.rud_min = anaIn(0);  
+          else if(anaIn(0) > RUD_MIN)
+		  {
+			  error++;
+		  }
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowCircle(x-70+35, y+70, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -584,18 +612,21 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;            
           }          
-          break;          
+          break; 
+		  
      case CALIB_STATE_STICK_LEFT_CENTER: 
           if(count%40 == 0)      lcd_ShowCircle(x-70   , y+70, WHITE);       //! 左中 
           else if(count%40 == 20) lcd_ShowCircle(x-70   , y+70, BACKCOLOR); 
           count++;
-          if((anaIn(1)<=g_eeGeneral.joyscale.ele_max-600)&&(anaIn(1)>=g_eeGeneral.joyscale.ele_min+600)) g_eeGeneral.joyscale.ele_cen = anaIn(1); 
+		  
+          if((anaIn(1) <= g_eeGeneral.joyscale.ele_max-600)&&(anaIn(1)>=g_eeGeneral.joyscale.ele_min+600)) g_eeGeneral.joyscale.ele_cen = anaIn(1); 
           else error++;
-          if((anaIn(0)<=g_eeGeneral.joyscale.rud_max-600)&&(anaIn(0)>=g_eeGeneral.joyscale.rud_min+600)) g_eeGeneral.joyscale.rud_cen = anaIn(0); 
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+          if((anaIn(0) <= g_eeGeneral.joyscale.rud_max-600)&&(anaIn(0)>=g_eeGeneral.joyscale.rud_min+600)) g_eeGeneral.joyscale.rud_cen = anaIn(0); 
+          else error++;   
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowCircle(x-70   , y+70, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -608,16 +639,23 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }          
-          break;          
+          break; 
+		  
      case CALIB_STATE_STICK_RIGHT_UP: 
           if(count%40 == 0)      lcd_ShowCircle(x+70, y+70-35, WHITE);       //! 右上
           else if(count%40 == 20) lcd_ShowCircle(x+70, y+70-35, BACKCOLOR);
-          count++;    
-          if(anaIn(2)>=g_eeGeneral.joyscale.thr_max) g_eeGeneral.joyscale.thr_max = anaIn(2); 
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+          count++; 
+		  
+		  if(g_eeGeneral.joyscale.thr_max > THR_MAX_EXT) g_eeGeneral.joyscale.thr_max = THR_MAX_EXT;
+          if(anaIn(2) >= g_eeGeneral.joyscale.thr_max) g_eeGeneral.joyscale.thr_max = anaIn(2); 
+          else if (anaIn(2) < THR_MAX)
+		  {
+			  error++;
+		  }		
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowCircle(x+70, y+70-35, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -630,16 +668,22 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }          
-          break;          
+          break;  
+		  
      case CALIB_STATE_STICK_RIGHT_DOWN:     
           if(count%40 == 0)      lcd_ShowCircle(x+70, y+70+35, WHITE);          //! 右下
           else if(count%40 == 20) lcd_ShowCircle(x+70, y+70+35, BACKCOLOR); 
           count++; 
-          if(anaIn(2)<=g_eeGeneral.joyscale.thr_min) g_eeGeneral.joyscale.thr_min = anaIn(2);
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+		  
+          if(anaIn(2) <= g_eeGeneral.joyscale.thr_min) g_eeGeneral.joyscale.thr_min = anaIn(2);
+          else if(anaIn(2) > THR_MIN)
+		  {
+			  error++;
+		  }			  
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowCircle(x+70, y+70+35, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -652,16 +696,22 @@ void menu_calibJoystick(uint8_t state)
              error = 0;    
              count = 0;             
           }          
-          break;         
+          break; 
+		  
      case CALIB_STATE_STICK_RIGHT_LEFT:     
           if(count%40 == 0)      lcd_ShowCircle(x+70-35, y+70, WHITE);       //! 右左
           else if(count%40 == 20) lcd_ShowCircle(x+70-35, y+70, BACKCOLOR);
           count++;
-          if(anaIn(3)<=g_eeGeneral.joyscale.ail_min) g_eeGeneral.joyscale.ail_min = anaIn(3); 
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+		  
+          if(anaIn(3) <= g_eeGeneral.joyscale.ail_min) g_eeGeneral.joyscale.ail_min = anaIn(3); 
+          else if(anaIn(3) > AIL_MIN)
+		  {
+			  error++;
+		  }			  
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowCircle(x+70-35, y+70, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -674,16 +724,23 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }          
-          break;         
+          break; 
+		  
      case CALIB_STATE_STICK_RIGHT_RIGHT:
           if(count%40 == 0)      lcd_ShowCircle(x+70+35, y+70, WHITE);       //! 右右
           else if(count%40 == 20) lcd_ShowCircle(x+70+35, y+70, BACKCOLOR); 
           count++;
-          if(anaIn(3)>=g_eeGeneral.joyscale.ail_max) g_eeGeneral.joyscale.ail_max = anaIn(3);
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+		  
+		  if(g_eeGeneral.joyscale.ail_max > AIL_MAX_EXT) g_eeGeneral.joyscale.ail_max = AIL_MAX_EXT;
+          if(anaIn(3) >= g_eeGeneral.joyscale.ail_max) g_eeGeneral.joyscale.ail_max = anaIn(3);
+          else if(anaIn(3) < AIL_MAX)
+		  {
+			  error++;
+		  }			  
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowCircle(x+70+35, y+70, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -696,18 +753,21 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }           
-          break;          
+          break;  
+		  
      case CALIB_STATE_STICK_RIGHT_CENTER:
           if(count%40 == 0)      lcd_ShowCircle(x+70   , y+70, WHITE);       //! 右中
           else if(count%40 == 20) lcd_ShowCircle(x+70   , y+70, BACKCOLOR);
-          count++; 
-          if((anaIn(2)<=g_eeGeneral.joyscale.thr_max-600)&&(anaIn(2)>=g_eeGeneral.joyscale.thr_min+600)) g_eeGeneral.joyscale.thr_cen = anaIn(2);
-          //else error++;          
-          if((anaIn(3)<=g_eeGeneral.joyscale.ail_max-600)&&(anaIn(3)>=g_eeGeneral.joyscale.ail_min+600)) g_eeGeneral.joyscale.ail_cen = anaIn(3);
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+          count++;
+		  
+          if((anaIn(2) <= g_eeGeneral.joyscale.thr_max-600) && (anaIn(2) >= g_eeGeneral.joyscale.thr_min+600)) g_eeGeneral.joyscale.thr_cen = anaIn(2);
+          else error++;          
+          if((anaIn(3) <= g_eeGeneral.joyscale.ail_max-600) && (anaIn(3) >= g_eeGeneral.joyscale.ail_min+600)) g_eeGeneral.joyscale.ail_cen = anaIn(3);
+          else error++; 
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowCircle(x+70   , y+70, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -720,16 +780,23 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }           
-          break;          
+          break; 
+		  
      case CALIB_STATE_TRIM_LEFT_LEFT:
           if(count%40 == 0)     lcd_ShowTriCursor(x-70-45, y+45-35,  0, WHITE);        //! 左左箭头
           else if(count%40 == 20) lcd_ShowTriCursor(x-70-45, y+45-35,  0, BACKCOLOR); 
-          count++; 
-          if(anaIn(4)>=g_eeGeneral.joyscale.ltrm_max) g_eeGeneral.joyscale.ltrm_max = anaIn(4); 
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+          count++;
+		  
+		  if(g_eeGeneral.joyscale.ltrm_max > LTRM_MAX_EXT) g_eeGeneral.joyscale.ltrm_max = LTRM_MAX_EXT;
+          if(anaIn(4) >= g_eeGeneral.joyscale.ltrm_max) g_eeGeneral.joyscale.ltrm_max = anaIn(4); 
+		  else if(anaIn(4) < LTRM_MAX)
+		  {
+			  error++;
+		  }
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowTriCursor(x-70-45, y+45-35,  0, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;                
@@ -742,16 +809,22 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }          
-          break;           
+          break;  
+		  
      case CALIB_STATE_TRIM_LEFT_RIGHT:
           if(count%40 == 0)     lcd_ShowTriCursor(x-70+45, y+45-35,  1, WHITE);            //! 左右箭头
           else if(count%40 == 20) lcd_ShowTriCursor(x-70+45, y+45-35,  1, BACKCOLOR); 
-          count++; 
-          if(anaIn(4)<=g_eeGeneral.joyscale.ltrm_min) g_eeGeneral.joyscale.ltrm_min = anaIn(4); 
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+          count++;
+		  
+          if(anaIn(4) <= g_eeGeneral.joyscale.ltrm_min) g_eeGeneral.joyscale.ltrm_min = anaIn(4); 
+          else if(anaIn(4) > LTRM_MIN)
+		  {
+			  error++;
+		  }			  
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowTriCursor(x-70+45, y+45-35,  1, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;                
@@ -764,16 +837,19 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }          
-          break;          
+          break; 
+		  
      case CALIB_STATE_TRIM_LEFT_CENTER:
           if(count%40 == 0)     lcd_ShowCircle(x-70, y+45-35, WHITE);                      //! 左中 
           else if(count%40 == 20) lcd_ShowCircle(x-70, y+45-35, BACKCOLOR);
-          count++; 
-          if((anaIn(4)<=g_eeGeneral.joyscale.ltrm_max-150)&&(anaIn(4)>=g_eeGeneral.joyscale.ltrm_min+150)) g_eeGeneral.joyscale.ltrm_cen = anaIn(4); 
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+          count++;
+		  
+          if((anaIn(4) <= g_eeGeneral.joyscale.ltrm_max-150) && (anaIn(4) >= g_eeGeneral.joyscale.ltrm_min+150)) g_eeGeneral.joyscale.ltrm_cen = anaIn(4); 
+          else error++;
+          
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowCircle(x-70, y+45-35, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -786,16 +862,23 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }          
-          break;            
+          break; 
+		  
      case CALIB_STATE_TRIM_RIGHT_LEFT:
           if(count%40 == 0)     lcd_ShowTriCursor(x+70-45, y+45-35,  0, WHITE);            //! 右左箭头
           else if(count%40 == 20) lcd_ShowTriCursor(x+70-45, y+45-35,  0, BACKCOLOR);
-          count++; 
-          if(anaIn(5)>=g_eeGeneral.joyscale.rtrm_max) g_eeGeneral.joyscale.rtrm_max = anaIn(5);  
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+          count++;
+		  
+		  if(g_eeGeneral.joyscale.rtrm_max > RTRM_MAX_EXT) g_eeGeneral.joyscale.rtrm_max = RTRM_MAX_EXT;
+          if(anaIn(5) >= g_eeGeneral.joyscale.rtrm_max) g_eeGeneral.joyscale.rtrm_max = anaIn(5);  
+          else if(anaIn(5) < RTRM_MAX)
+		  {
+			  error++;
+		  }			  
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowTriCursor(x+70-45, y+45-35,  0, RED);
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -808,16 +891,22 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }          
-          break;           
+          break; 
+          
      case CALIB_STATE_TRIM_RIGHT_RIGHT:
           if(count%40 == 0)     lcd_ShowTriCursor(x+70+45, y+45-35,  1, WHITE);            //! 右右箭头
           else if(count%40 == 20) lcd_ShowTriCursor(x+70+45, y+45-35,  1, BACKCOLOR);
           count++; 
-          if(anaIn(5)<=g_eeGeneral.joyscale.rtrm_min) g_eeGeneral.joyscale.rtrm_min = anaIn(5);
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+		  
+          if(anaIn(5) <= g_eeGeneral.joyscale.rtrm_min) g_eeGeneral.joyscale.rtrm_min = anaIn(5);
+          else if(anaIn(5) > RTRM_MIN)
+		  {
+			  error++;
+		  }			  
+		  
+          if(count > timers) //! 采样500次，大概是5s
           {
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowTriCursor(x+70+45, y+45-35,  1, RED); 
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -830,16 +919,18 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;             
           }           
-          break;           
+          break; 
+          
      case CALIB_STATE_TRIM_RIGHT_CENTER:
           if(count%40 == 0)     lcd_ShowCircle(x+70, y+45-35, WHITE);                   //! 右中 
           else if(count%40 == 20) lcd_ShowCircle(x+70, y+45-35, BACKCOLOR);          
           count++;
-          if((anaIn(5)<=g_eeGeneral.joyscale.rtrm_max-150)&&(anaIn(5)>=g_eeGeneral.joyscale.rtrm_min+150)) g_eeGeneral.joyscale.rtrm_cen = anaIn(5);   
-          //else error++;          
-          if(count>timers) //! 采样500次，大概是5s
+		  
+          if((anaIn(5) <= g_eeGeneral.joyscale.rtrm_max-150) && (anaIn(5) >= g_eeGeneral.joyscale.rtrm_min+150)) g_eeGeneral.joyscale.rtrm_cen = anaIn(5);   
+          else error++;          
+          if(count > timers) //! 采样500次，大概是5s
           {         
-             if(error>timers/3)
+             if(error > timers/3)
              {
                 lcd_ShowCircle(x+70, y+45-35, RED); 
                 g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_ERROR;
@@ -852,18 +943,22 @@ void menu_calibJoystick(uint8_t state)
              error = 0;
              count = 0;              
           }           
-          break;         
+          break; 
+		  
      case CALIB_STATE_ERROR:
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = SUB_STATE_NONE; //! 临时赋空值
-          break;          
+          break;  
+		  
      case CALIB_STATE_WRITE: 
           eeWriteJoyScale();
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_READ; 
-          break;          
+          break; 
+		  
      case CALIB_STATE_READ:     
           eeReadJoyScale();
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_FINISH;
-          break;                    
+          break;  
+		  
      case CALIB_STATE_FINISH:       
           lcd_DrawCicle(x-70, y+70, 45, GREEN);
           lcd_DrawCicle(x+70, y+70, 45, GREEN);
@@ -884,493 +979,18 @@ void menu_calibJoystick(uint8_t state)
           lcd_ShowTriCursor(x+70+45, y+45-35,  1, GREEN);   //! 右右箭头
           lcd_ShowCircle(x+70, y+45-35, GREEN);             //! 右中              
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = CALIB_STATE_EXIT;
-          break;         
+          break; 
+		  
      case CALIB_STATE_EXIT:
           count = 0;
           error = 0; 
           g_eeGeneral.menus[MENU_CALIBJOYSTICK].subState = SUB_STATE_NONE;          
           break; 
+		  
      case SUB_STATE_NONE:
           break;          
     }
 
-
-   
-   
-   
-   
-/*    static uint8_t painted = 0; 
-   const uint16_t x = 240;        //! 区域坐标：(240-140, 200)(240+140, 200)
-   const uint16_t y = 200;        //! 区域坐标：(240-140, 320)(240+140, 320)
-   const uint16_t timers = 499;   //! 采样摇杆次数
-
-   static uint16_t count = 0;
-   static uint16_t error = 0;   
-   
-   if(event == MENU_CALIBJOYSTICK) 
-   {            
-       if(painted == 0)
-       {
-          painted = 1;
-          lcd_DrawFillRectangle(101, 164, 379, 318, BACKCOLOR); //清屏
-          uint8_t logo[]= "CALIBRATION";          
-	      lcd_ShowString(x-66, y-35, RED, 24, logo); 
-          
-          lcd_DrawCicle(x-70, y+70, 45, LINEBLACK);
-          lcd_DrawCicle(x+70, y+70, 45, LINEBLACK);
-          
-          lcd_ShowCircle(x-70, y+70-35, LINEBLACK); 
-          lcd_ShowCircle(x-70, y+70+35, LINEBLACK);
-          lcd_ShowCircle(x-70-35, y+70, LINEBLACK);   
-          lcd_ShowCircle(x-70+35, y+70, LINEBLACK); 
-          lcd_ShowCircle(x-70   , y+70, LINEBLACK); 
-          lcd_ShowCircle(x+70, y+70-35, LINEBLACK);
-          lcd_ShowCircle(x+70, y+70+35, LINEBLACK); 
-          lcd_ShowCircle(x+70-35, y+70, LINEBLACK);  
-          lcd_ShowCircle(x+70+35, y+70, LINEBLACK);
-          lcd_ShowCircle(x+70   , y+70, LINEBLACK);
-          
-          lcd_ShowTriCursor(x-70-45, y+45-35,  0, LINEBLACK);  
-          lcd_ShowTriCursor(x-70+45, y+45-35,  1, LINEBLACK);
-          lcd_ShowCircle(x-70, y+45-35, LINEBLACK);
-          lcd_ShowTriCursor(x+70-45, y+45-35,  0, LINEBLACK); 
-          lcd_ShowTriCursor(x+70+45, y+45-35,  1, LINEBLACK); 
-          lcd_ShowCircle(x+70, y+45-35, LINEBLACK); 
-       }
-       
-       switch(g_eeGeneral.calibState)
-       {
-         case CALIB_STATE_NONE:
-              break;
-              
-         case CALIB_STATE_START: 
-              g_eeGeneral.calibState = CALIB_STATE_THRESHOLD;      
-              break;
-              
-         case CALIB_STATE_THRESHOLD:
-              g_eeGeneral.joyscale.threshold = 25;
-              g_eeGeneral.calibState = CALIB_STATE_STICK_LEFT_UP;           
-              break;
-              
-         case CALIB_STATE_STICK_LEFT_UP:
-              if(count%40 == 0)      lcd_ShowCircle(x-70, y+70-35, WHITE);          //! 左上
-              else if(count%40 == 20) lcd_ShowCircle(x-70, y+70-35, BACKCOLOR); 
-              count++; //!          
-              if(anaIn(1)<=g_eeGeneral.joyscale.ele_min) g_eeGeneral.joyscale.ele_min = anaIn(1); 
-              //else error++;         
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3) //! calib failed!
-                 {
-                    lcd_ShowCircle(x-70, y+70-35, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;                                
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x-70, y+70-35, WHITE); //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_STICK_LEFT_DOWN;                     
-                 }
-                 count = 0;
-                 error = 0;          
-              }
-              break;
-              
-         case CALIB_STATE_STICK_LEFT_DOWN:
-              if(count%40 == 0)      lcd_ShowCircle(x-70, y+70+35, WHITE);          //! 左下
-              else if(count%40 == 20) lcd_ShowCircle(x-70, y+70+35, BACKCOLOR);
-              count++;
-              if(anaIn(1)>=g_eeGeneral.joyscale.ele_max) g_eeGeneral.joyscale.ele_max = anaIn(1);
-              //else error++;           
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3) //! calib failed!
-                 {
-                    lcd_ShowCircle(x-70, y+70+35, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;                
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x-70, y+70+35, WHITE); //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_STICK_LEFT_LEFT;                 
-                 }
-                 error = 0;
-                 count = 0;              
-              }          
-              break;
-              
-         case CALIB_STATE_STICK_LEFT_LEFT:
-              if(count%40 == 0)      lcd_ShowCircle(x-70-35, y+70, WHITE);          //! 左左
-              else if(count%40 == 20) lcd_ShowCircle(x-70-35, y+70, BACKCOLOR); 
-              count++;
-              if(anaIn(0)>=g_eeGeneral.joyscale.rud_max) g_eeGeneral.joyscale.rud_max = anaIn(0);  
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3) //! calib failed!
-                 {
-                    lcd_ShowCircle(x-70-35, y+70, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x-70-35, y+70, WHITE); //! OK   
-                    g_eeGeneral.calibState = CALIB_STATE_STICK_LEFT_RIGHT;               
-                 } 
-                 error = 0;
-                 count = 0;             
-              }           
-              break;
-              
-         case CALIB_STATE_STICK_LEFT_RIGHT:
-              if(count%40 == 0)      lcd_ShowCircle(x-70+35, y+70, WHITE);          //! 左右
-              else if(count%40 == 20) lcd_ShowCircle(x-70+35, y+70, BACKCOLOR); 
-              count++;
-              if(anaIn(0)<=g_eeGeneral.joyscale.rud_min) g_eeGeneral.joyscale.rud_min = anaIn(0);  
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowCircle(x-70+35, y+70, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x-70+35, y+70, WHITE); //! OK  
-                    g_eeGeneral.calibState = CALIB_STATE_STICK_LEFT_CENTER;                  
-                 } 
-                 error = 0;
-                 count = 0;            
-              }          
-              break;
-              
-         case CALIB_STATE_STICK_LEFT_CENTER: 
-              if(count%40 == 0)      lcd_ShowCircle(x-70   , y+70, WHITE);       //! 左中 
-              else if(count%40 == 20) lcd_ShowCircle(x-70   , y+70, BACKCOLOR); 
-              count++;
-              if((anaIn(1)<=g_eeGeneral.joyscale.ele_max-600)&&(anaIn(1)>=g_eeGeneral.joyscale.ele_min+600)) g_eeGeneral.joyscale.ele_cen = anaIn(1); 
-              else error++;
-              if((anaIn(0)<=g_eeGeneral.joyscale.rud_max-600)&&(anaIn(0)>=g_eeGeneral.joyscale.rud_min+600)) g_eeGeneral.joyscale.rud_cen = anaIn(0); 
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowCircle(x-70   , y+70, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x-70, y+70, WHITE);    //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_STICK_RIGHT_UP;                 
-                 }  
-                 error = 0;
-                 count = 0;             
-              }          
-              break;
-              
-         case CALIB_STATE_STICK_RIGHT_UP: 
-              if(count%40 == 0)      lcd_ShowCircle(x+70, y+70-35, WHITE);       //! 右上
-              else if(count%40 == 20) lcd_ShowCircle(x+70, y+70-35, BACKCOLOR);
-              count++;    
-              if(anaIn(2)>=g_eeGeneral.joyscale.thr_max) g_eeGeneral.joyscale.thr_max = anaIn(2); 
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowCircle(x+70, y+70-35, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x+70, y+70-35, WHITE); //! OK 
-                    g_eeGeneral.calibState = CALIB_STATE_STICK_RIGHT_DOWN;                  
-                 } 
-                 error = 0;
-                 count = 0;             
-              }          
-              break;
-              
-         case CALIB_STATE_STICK_RIGHT_DOWN:     
-              if(count%40 == 0)      lcd_ShowCircle(x+70, y+70+35, WHITE);          //! 右下
-              else if(count%40 == 20) lcd_ShowCircle(x+70, y+70+35, BACKCOLOR); 
-              count++; 
-              if(anaIn(2)<=g_eeGeneral.joyscale.thr_min) g_eeGeneral.joyscale.thr_min = anaIn(2);
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowCircle(x+70, y+70+35, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x+70, y+70+35, WHITE); //! OK 
-                    g_eeGeneral.calibState = CALIB_STATE_STICK_RIGHT_LEFT;                  
-                 }
-                 error = 0;    
-                 count = 0;             
-              }          
-              break;
-              
-         case CALIB_STATE_STICK_RIGHT_LEFT:     
-              if(count%40 == 0)      lcd_ShowCircle(x+70-35, y+70, WHITE);       //! 右左
-              else if(count%40 == 20) lcd_ShowCircle(x+70-35, y+70, BACKCOLOR);
-              count++;
-              if(anaIn(3)<=g_eeGeneral.joyscale.ail_min) g_eeGeneral.joyscale.ail_min = anaIn(3); 
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowCircle(x+70-35, y+70, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x+70-35, y+70, WHITE); //! OK 
-                    g_eeGeneral.calibState = CALIB_STATE_STICK_RIGHT_RIGHT;                 
-                 }  
-                 error = 0;
-                 count = 0;             
-              }          
-              break;
-              
-         case CALIB_STATE_STICK_RIGHT_RIGHT:
-              if(count%40 == 0)      lcd_ShowCircle(x+70+35, y+70, WHITE);       //! 右右
-              else if(count%40 == 20) lcd_ShowCircle(x+70+35, y+70, BACKCOLOR); 
-              count++;
-              if(anaIn(3)>=g_eeGeneral.joyscale.ail_max) g_eeGeneral.joyscale.ail_max = anaIn(3);
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowCircle(x+70+35, y+70, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x+70+35, y+70, WHITE); //! OK 
-                    g_eeGeneral.calibState = CALIB_STATE_STICK_RIGHT_CENTER;                 
-                 }   
-                 error = 0;
-                 count = 0;             
-              }           
-              break;
-              
-         case CALIB_STATE_STICK_RIGHT_CENTER:
-              if(count%40 == 0)      lcd_ShowCircle(x+70   , y+70, WHITE);       //! 右中
-              else if(count%40 == 20) lcd_ShowCircle(x+70   , y+70, BACKCOLOR);
-              count++; 
-              if((anaIn(2)<=g_eeGeneral.joyscale.thr_max-600)&&(anaIn(2)>=g_eeGeneral.joyscale.thr_min+600)) g_eeGeneral.joyscale.thr_cen = anaIn(2);
-              //else error++;          
-              if((anaIn(3)<=g_eeGeneral.joyscale.ail_max-600)&&(anaIn(3)>=g_eeGeneral.joyscale.ail_min+600)) g_eeGeneral.joyscale.ail_cen = anaIn(3);
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowCircle(x+70   , y+70, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x+70   , y+70, WHITE); //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_TRIM_LEFT_LEFT;                 
-                 } 
-                 error = 0;
-                 count = 0;             
-              }           
-              break;
-              
-         case CALIB_STATE_TRIM_LEFT_LEFT:
-              if(count%40 == 0)     lcd_ShowTriCursor(x-70-45, y+45-35,  0, WHITE);        //! 左左箭头
-              else if(count%40 == 20) lcd_ShowTriCursor(x-70-45, y+45-35,  0, BACKCOLOR); 
-              count++; 
-              if(anaIn(4)>=g_eeGeneral.joyscale.ltrm_max) g_eeGeneral.joyscale.ltrm_max = anaIn(4); 
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowTriCursor(x-70-45, y+45-35,  0, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;                
-                 }
-                 else
-                 {
-                    lcd_ShowTriCursor(x-70-45, y+45-35,  0, WHITE); //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_TRIM_LEFT_RIGHT;                   
-                 } 
-                 error = 0;
-                 count = 0;             
-              }          
-              break; 
-              
-         case CALIB_STATE_TRIM_LEFT_RIGHT:
-              if(count%40 == 0)     lcd_ShowTriCursor(x-70+45, y+45-35,  1, WHITE);            //! 左右箭头
-              else if(count%40 == 20) lcd_ShowTriCursor(x-70+45, y+45-35,  1, BACKCOLOR); 
-              count++; 
-              if(anaIn(4)<=g_eeGeneral.joyscale.ltrm_min) g_eeGeneral.joyscale.ltrm_min = anaIn(4); 
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowTriCursor(x-70+45, y+45-35,  1, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;                
-                 }
-                 else
-                 {
-                    lcd_ShowTriCursor(x-70+45, y+45-35,  1, WHITE); //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_TRIM_LEFT_CENTER;                  
-                 }  
-                 error = 0;
-                 count = 0;             
-              }          
-              break;
-              
-         case CALIB_STATE_TRIM_LEFT_CENTER:
-              if(count%40 == 0)     lcd_ShowCircle(x-70, y+45-35, WHITE);                      //! 左中 
-              else if(count%40 == 20) lcd_ShowCircle(x-70, y+45-35, BACKCOLOR);
-              count++; 
-              if((anaIn(4)<=g_eeGeneral.joyscale.ltrm_max-150)&&(anaIn(4)>=g_eeGeneral.joyscale.ltrm_min+150)) g_eeGeneral.joyscale.ltrm_cen = anaIn(4); 
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowCircle(x-70, y+45-35, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x-70, y+45-35, WHITE);           //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_TRIM_RIGHT_LEFT;                  
-                 }  
-                 error = 0;
-                 count = 0;             
-              }          
-              break;  
-              
-         case CALIB_STATE_TRIM_RIGHT_LEFT:
-              if(count%40 == 0)     lcd_ShowTriCursor(x+70-45, y+45-35,  0, WHITE);            //! 右左箭头
-              else if(count%40 == 20) lcd_ShowTriCursor(x+70-45, y+45-35,  0, BACKCOLOR);
-              count++; 
-              if(anaIn(5)>=g_eeGeneral.joyscale.rtrm_max) g_eeGeneral.joyscale.rtrm_max = anaIn(5);  
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowTriCursor(x+70-45, y+45-35,  0, RED);
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowTriCursor(x+70-45, y+45-35,  0, WHITE); //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_TRIM_RIGHT_RIGHT;                 
-                 }
-                 error = 0;
-                 count = 0;             
-              }          
-              break; 
-              
-         case CALIB_STATE_TRIM_RIGHT_RIGHT:
-              if(count%40 == 0)     lcd_ShowTriCursor(x+70+45, y+45-35,  1, WHITE);            //! 右右箭头
-              else if(count%40 == 20) lcd_ShowTriCursor(x+70+45, y+45-35,  1, BACKCOLOR);
-              count++; 
-              if(anaIn(5)<=g_eeGeneral.joyscale.rtrm_min) g_eeGeneral.joyscale.rtrm_min = anaIn(5);
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {
-                 if(error>timers/3)
-                 {
-                    lcd_ShowTriCursor(x+70+45, y+45-35,  1, RED); 
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowTriCursor(x+70+45, y+45-35,  1, WHITE); //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_TRIM_RIGHT_CENTER;                
-                 } 
-                 error = 0;
-                 count = 0;             
-              }           
-              break; 
-              
-         case CALIB_STATE_TRIM_RIGHT_CENTER:
-              if(count%40 == 0)     lcd_ShowCircle(x+70, y+45-35, WHITE);                   //! 右中 
-              else if(count%40 == 20) lcd_ShowCircle(x+70, y+45-35, BACKCOLOR);          
-              count++;
-              if((anaIn(5)<=g_eeGeneral.joyscale.rtrm_max-150)&&(anaIn(5)>=g_eeGeneral.joyscale.rtrm_min+150)) g_eeGeneral.joyscale.rtrm_cen = anaIn(5);   
-              //else error++;          
-              if(count>timers) //! 采样500次，大概是5s
-              {         
-                 if(error>timers/3)
-                 {
-                    lcd_ShowCircle(x+70, y+45-35, RED); 
-                    g_eeGeneral.calibState = CALIB_STATE_ERROR;
-                 }
-                 else
-                 {
-                    lcd_ShowCircle(x+70, y+45-35, WHITE);        //! OK
-                    g_eeGeneral.calibState = CALIB_STATE_WRITE; 
-                 } 
-                 error = 0;
-                 count = 0;              
-              }           
-              break; 
-              
-         case CALIB_STATE_ERROR:
-              g_eeGeneral.calibState = CALIB_STATE_NONE; //! 临时赋空值
-              break; 
-              
-         case CALIB_STATE_WRITE: 
-              eeWriteJoyScale();
-              g_eeGeneral.calibState = CALIB_STATE_READ; 
-              break;
-              
-         case CALIB_STATE_READ:     
-              eeReadJoyScale();
-              g_eeGeneral.calibState = CALIB_STATE_FINISH;
-              break;          
-              
-         case CALIB_STATE_FINISH:       
-              lcd_DrawCicle(x-70, y+70, 45, GREEN);
-              lcd_DrawCicle(x+70, y+70, 45, GREEN);
-              lcd_ShowCircle(x-70, y+70-35, GREEN);             //! 左上 
-              lcd_ShowCircle(x-70, y+70+35, GREEN);             //! 左下   
-              lcd_ShowCircle(x-70-35, y+70, GREEN);             //! 左左
-              lcd_ShowCircle(x-70+35, y+70, GREEN);             //! 左右
-              lcd_ShowCircle(x-70   , y+70, GREEN);             //! 左中 
-              lcd_ShowCircle(x+70, y+70-35, GREEN);             //! 右上
-              lcd_ShowCircle(x+70, y+70+35, GREEN);             //! 右下
-              lcd_ShowCircle(x+70-35, y+70, GREEN);             //! 右左
-              lcd_ShowCircle(x+70+35, y+70, GREEN);             //! 右右
-              lcd_ShowCircle(x+70   , y+70, GREEN);             //! 右中
-              lcd_ShowTriCursor(x-70-45, y+45-35,  0, GREEN);   //! 左左箭头
-              lcd_ShowTriCursor(x-70+45, y+45-35,  1, GREEN);   //! 左右箭头
-              lcd_ShowCircle(x-70, y+45-35, GREEN);             //! 左中
-              lcd_ShowTriCursor(x+70-45, y+45-35,  0, GREEN);   //! 右左箭头
-              lcd_ShowTriCursor(x+70+45, y+45-35,  1, GREEN);   //! 右右箭头
-              lcd_ShowCircle(x+70, y+45-35, GREEN);             //! 右中              
-              g_eeGeneral.calibState = CALIB_STATE_NONE;
-              break;
-              
-         case CALIB_STATE_EXIT:
-              break;         
-       }
-   }
-   else
-   {
-       count = 0;
-       error = 0;
-       painted = 0;       
-       g_eeGeneral.calibState = CALIB_STATE_NONE;
-   } */
 }
 
 
