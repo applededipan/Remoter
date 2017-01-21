@@ -1171,14 +1171,14 @@ void autopilot_gimbal_control_send(uint16_t pitch, uint16_t roll, uint16_t yaw, 
 *******************************************************/
 void autopilot_set_digicam_zoom(uint32_t keyZoomIn, uint32_t keyZoomOut)
 {
-	static uint8_t state = 0;
+	static bool state = false;
 
 	if(g_eeGeneral.key == keyZoomIn)        //! keyZoomIn pressed down and set digicam zoom in
 	{
 		if(!state) 
 		{
 			g_mavlink_msg_camera_trigger_send(0X80); 
-			state = 1;
+			state = true;
 		}	  
 	}
 	else if(g_eeGeneral.key == keyZoomOut)  //! keyZoomOut pressed down and set digicam zoom out
@@ -1186,7 +1186,7 @@ void autopilot_set_digicam_zoom(uint32_t keyZoomIn, uint32_t keyZoomOut)
 		if(!state) 
 		{
 			g_mavlink_msg_camera_trigger_send(0XA0);	
-			state = 1;		
+			state = true;		
 		}
 	} 
 	else                                    //! keyZoomIn/Out has been pressed down and set digicam zoom stop
@@ -1194,7 +1194,7 @@ void autopilot_set_digicam_zoom(uint32_t keyZoomIn, uint32_t keyZoomOut)
 		if(state) 
 		{
 			g_mavlink_msg_camera_trigger_send(0X10); 
-			state = 0;		  
+			state = false;		  
 		}	  		  
 	}
 }
