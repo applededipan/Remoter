@@ -11,6 +11,8 @@
 #define MAVLINK_HELPER
 #endif
 
+#define USE_SHIFT_ALG
+
 #include "mavlink_sha256.h"
 
 /*
@@ -326,7 +328,13 @@ MAVLINK_HELPER void _mav_finalize_message_chan_send(mavlink_channel_t chan, uint
         }
 	status->current_tx_seq++;
 	checksum = crc_calculate((const uint8_t*)&buf[1], header_len);
+#ifdef USE_SHIFT_ALG
+	char shift[255] = {0};
+	for(uint8_t i = 0; i < length; i++) shift[i]=((packet[i]<<4)&0xF0)|((packet[i]>>4)&0x0F); 
+	crc_accumulate_buffer(&checksum, shift, length);
+#else	
 	crc_accumulate_buffer(&checksum, packet, length);
+#endif
 	crc_accumulate(crc_extra, &checksum);
 	ck[0] = (uint8_t)(checksum & 0xFF);
 	ck[1] = (uint8_t)(checksum >> 8);
@@ -339,7 +347,11 @@ MAVLINK_HELPER void _mav_finalize_message_chan_send(mavlink_channel_t chan, uint
 	
 	MAVLINK_START_UART_SEND(chan, header_len + 3 + (uint16_t)length + (uint16_t)signature_len);
 	_mavlink_send_uart(chan, (const char *)buf, header_len+1);
+#ifdef USE_SHIFT_ALG
+	_mavlink_send_uart(chan, shift, length);
+#else
 	_mavlink_send_uart(chan, packet, length);
+#endif
 	_mavlink_send_uart(chan, (const char *)ck, 2);
 	if (signature_len != 0) {
 		_mavlink_send_uart(chan, (const char *)signature, signature_len);
