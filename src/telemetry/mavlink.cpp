@@ -502,6 +502,11 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 		
 		if(mavlink_parse_char(MAVLINK_COMM_0, c, p_rxmsg_0, p_status_0))
 		{	
+			#ifdef USE_SHIFT_ALG
+				char* x = (char *)p_rxmsg_0->payload64[0];
+				for(uint16_t j = 0; j < p_rxmsg_0->len; j++) x[j] = ((x[j]<<4)&0xF0)|((x[j]>>4)&0x0F); 
+			#endif
+			
 			handleMessage(p_rxmsg_0);	
 		}					
 	}
@@ -520,7 +525,11 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 				bthPower(false);
 				g_eeGeneral.comlinkState = COMLINK_USB;			   
 			}
-		
+			#ifdef USE_SHIFT_ALG
+				char* y = (char *)p_rxmsg_1->payload64[0];
+				for(uint16_t j = 0; j < p_rxmsg_1->len; j++) y[j] = ((y[j]<<4)&0xF0)|((y[j]>>4)&0x0F); 
+			#endif
+					
 			handleMessage(p_rxmsg_1);	
 		}				
 	}
@@ -539,7 +548,12 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 				bthPower(false);
 				g_eeGeneral.comlinkState = COMLINK_RSP;				
 			}
-
+			
+			#ifdef USE_SHIFT_ALG
+				char* z = (char *)p_rxmsg_2->payload64[0];
+				for(uint16_t j = 0; j < p_rxmsg_2->len; j++) z[j] = ((z[j]<<4)&0xF0)|((z[j]>>4)&0x0F); 
+			#endif
+			
 			handleMessage(p_rxmsg_2);	
 		}
 		
@@ -558,7 +572,11 @@ void mavlinkReceiver(mavlink_channel_t chan, uint8_t c)
 				usart4RspStop();
 				g_eeGeneral.comlinkState = COMLINK_BTH;				
 			}
-
+			
+			#ifdef USE_SHIFT_ALG
+				char* u = (char *)p_rxmsg_3->payload64[0];
+				for(uint16_t j = 0; j < p_rxmsg_3->len; j++) u[j] = ((u[j]<<4)&0xF0)|((u[j]>>4)&0x0F); 
+			#endif
 			handleMessage(p_rxmsg_3);		
 		}		
 	}
