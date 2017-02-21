@@ -38,8 +38,8 @@
 #include "global.h"
 /****************************************************************************/
 #define MENUS_STACK_SIZE       2000 //! define each task's stack size
-#define MIXER_STACK_SIZE       1200 //! default 500
-#define COMMN_STACK_SIZE       1200 //! default 500
+#define MIXER_STACK_SIZE       1500 //! default 500
+#define COMMN_STACK_SIZE       1500 //! default 500
 
 
 #if defined(_MSC_VER)

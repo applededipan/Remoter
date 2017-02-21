@@ -48,6 +48,8 @@
 //added by apple
 
 /******************************************/
+#define USE_SHIFT_ALG
+
 
 //! define smartconsole version 
 #define SMARTC_VERSION     "V2.0.0" 

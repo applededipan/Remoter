@@ -36,6 +36,7 @@
 #ifndef _MAVLINK_H_
 #define _MAVLINK_H_
 
+#define USE_SHIFT_ALG
 
 #define UAV_SYSTEM_ID       1  //!PIXHAWK and APM firmware both default are 1
 #define UAV_COMPON_ID       1  //!PIXHAWK and APM firmware both default are 1
