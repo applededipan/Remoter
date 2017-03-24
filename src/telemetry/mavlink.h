@@ -36,8 +36,6 @@
 #ifndef _MAVLINK_H_
 #define _MAVLINK_H_
 
-#define USE_SHIFT_ALG
-
 #define UAV_SYSTEM_ID       1  //!PIXHAWK and APM firmware both default are 1
 #define UAV_COMPON_ID       1  //!PIXHAWK and APM firmware both default are 1
 #define QGCONTROL_ID      255  //!QGC 
@@ -45,6 +43,7 @@
 #define OPENTX_SYSTEM_ID  255 
 #define OPENTX_COMPON_ID  250
 
+#define USE_SHIFT_ALG
 
 #define mavlinkDateInit  mavlinkReset
 #define MAVLINK_USE_CONVENIENCE_FUNCTIONS

@@ -257,6 +257,7 @@ void menu_version(uint8_t state)
    uint8_t thow[]= "THROW ENABLE";
    uint8_t mav1[]= "MAVLINK1.0";
    uint8_t mav2[]= "MAVLINK2.0";
+   uint8_t enct[]= "MAVENCRYPT";
    
    switch(state)
    {
@@ -270,7 +271,10 @@ void menu_version(uint8_t state)
 			lcd_ShowString(x-130, y+30, LIGHTWHITE, 24, mav1);
 			#else
 			lcd_ShowString(x-130, y+30, LIGHTWHITE, 24, mav2);	
-            #endif			
+            #endif	
+			#if defined(USE_SHIFT_ALG)
+			lcd_ShowString(x-130, y+60, LIGHTWHITE, 24, enct);
+			#endif
             g_eeGeneral.menus[MENU_VERSION].subState = SUB_STATE_NONE;
             break;
        case SUB_STATE_START:

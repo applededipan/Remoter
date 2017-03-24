@@ -429,14 +429,7 @@ static inline void handle_message_debug(const mavlink_message_t* msg)
  * @ 
 *******************************************************************************/
 static inline void handleMessage(mavlink_message_t *msg) 
-{  
-#ifdef USE_SHIFT_ALG
-	char* m = (char *)&msg->payload64[0];
-	for(uint16_t j = 0; j < msg->len; j++)
-	{
-		m[j] = ((m[j]<<4)&0xF0)|((m[j]>>4)&0x0F); 		
-	}
-#endif  
+{   
 	switch (msg->msgid) 
 	{
 	case MAVLINK_MSG_ID_HEARTBEAT:                        
@@ -500,6 +493,9 @@ static inline void handleMessage(mavlink_message_t *msg)
 *******************************************************************************/
 void mavlinkReceiver(mavlink_channel_t chan, uint8_t c) 
 {
+#ifdef USE_SHIFT_ALG
+	c = ((c<<4)&0xF0)|((c>>4)&0x0F);
+#endif	
 	if(chan == MAVLINK_COMM_0)      //! date from usart2UavPort
 	{
 		static mavlink_message_t  m_mavlink_message_0;
